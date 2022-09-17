@@ -5,7 +5,7 @@
 
 void task7(void)
 {
-    int upPrime = 0;
+    int upperPrimeNumber = 0;
     bool primers[arraySize] = { false };
 
     int scan_res = 0;
@@ -16,26 +16,22 @@ void task7(void)
         flagNumber = true;
 
         printf("\nEnter the number to which you want to output prime numbers: ");
-        scan_res = scanf_s("%d", &upPrime);
+        scan_res = scanf_s("%d", &upperPrimeNumber);
 
-        if (upPrime <= 2 || upPrime >= 10000)
-        {
-            flagNumber = false;
-        }
-
-        if (!scan_res || !flagNumber)
+        if (!scan_res || upperPrimeNumber <= 2 || upperPrimeNumber >= 10000)
         {
             printf("Incorrect input (number must be greater than 2 and less than 10000). Try again! ");
             scanf_s("%*[^\n]");
+            flagNumber = false;
         }
     } while (!scan_res || !flagNumber);
 
     //Решето Эратосфена
-    for (int i = 2; i * i < upPrime; ++i)
+    for (int i = 2; i * i < upperPrimeNumber; ++i)
     {
         if (!primers[i])
         {
-            for (int j = i * 2; j < upPrime; j += i)
+            for (int j = i * 2; j < upperPrimeNumber; j += i)
             {
                 primers[j] = true;
             }
@@ -44,7 +40,7 @@ void task7(void)
 
     printf("Prime numbers: ");
 
-    for (int i = 2; i < upPrime; ++i)
+    for (int i = 2; i < upperPrimeNumber; ++i)
     {
         if (!primers[i])
         {

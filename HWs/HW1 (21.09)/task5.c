@@ -8,7 +8,7 @@ const char* checkBalanced(char string[])
     int counterBalanceLine = 0;
     bool flagBracket = false;
 
-    if (string[0] == '\0')
+    if (string[0] == '\n')
     {
         return "This is not a sequence.";
     }
@@ -47,7 +47,8 @@ void task5(void)
 
     printf("\nEnter bracket sequence (not more than %d): \n", lengthString);
 
-    scanf_s("%s", &stringBracket, lengthString);
+    getchar();
+    fgets(stringBracket, lengthString, stdin);
 
     printf("%s\n\n", checkBalanced(stringBracket));
 }

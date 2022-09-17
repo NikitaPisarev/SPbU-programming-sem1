@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <math.h>
 
@@ -8,7 +7,7 @@ void task2(void)
     int divider = 0;
     int quotient = 0;
 
-    printf("\nEnter dividend then divider: ");
+    printf("\nEnter a dividend and divider separated by a space: ");
     scanf_s("%d%d", &dividend, &divider);
 
     if (divider == 0)
@@ -27,19 +26,14 @@ void task2(void)
             ++quotient;
         }
 
-        if (((dividend > 0) && (divider < 0)) || ((dividend < 0) && (divider > 0) && (absDividend == 0)))
-        {
-            quotient = -quotient;
-        }
-
-        if ((dividend < 0) && (divider > 0) && (absDividend > 0))
-        {
-            quotient = -(quotient + 1);
-        }
-
-        if ((dividend < 0) && (divider < 0) && (absDividend > 0))
+        if (dividend < 0 && absDividend != 0)
         {
             ++quotient;
+        }
+
+        if ((dividend < 0 && divider > 0) || (dividend > 0 && divider < 0))
+        {
+            quotient = -quotient;
         }
 
         printf("The quotient %d by %d is %d.\n\n", dividend, divider, quotient);
