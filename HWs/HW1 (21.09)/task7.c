@@ -20,7 +20,7 @@ void task7(void)
 
         if (!scan_res || upperPrimeNumber <= 2 || upperPrimeNumber >= 10000)
         {
-            printf("Incorrect input (number must be greater than 2 and less than 10000). Try again! ");
+            printf("Incorrect input (number must be greater than 2 and no more than %d). Try again! ", arraySize);
             scanf_s("%*[^\n]");
             flagNumber = false;
         }

@@ -10,7 +10,7 @@ void task6(void)
     char string[lengthString] = { '\0' };
     char subString[lengthString] = { '\0' };
     
-    printf("\nEnter a string(S1) and substring(S2) separated by a space, with 1 <= S1 <= S2 <= 100:\n");
+    printf("\nEnter a string(S1) and substring(S2) separated by a space, with 1 <= S1 <= S2 <= %d:\n", lengthString);
 
     scanf_s("%s", &string, lengthString);
     scanf_s("%s", &subString, lengthString);

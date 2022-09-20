@@ -1,12 +1,10 @@
 #include <stdio.h>
-#include <stdbool.h>
 
 #define lengthString 100
 
 const char* checkBalanced(char string[])
 {
     int counterBalanceLine = 0;
-    bool flagBracket = false;
 
     if (string[0] == '\n')
     {
@@ -23,7 +21,6 @@ const char* checkBalanced(char string[])
         if (string[i] == '(')
         {
             ++counterBalanceLine;
-            flagBracket = true; 
         }
         else if (string[i] == ')')
         {
@@ -31,7 +28,7 @@ const char* checkBalanced(char string[])
         }
     }
 
-    if (counterBalanceLine == 0 && flagBracket) //Условие на то, что хотя бы одна скобка появилась
+    if (counterBalanceLine == 0)
     {
         return "Good sequence!";
     }
