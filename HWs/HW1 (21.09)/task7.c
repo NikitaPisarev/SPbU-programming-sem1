@@ -15,7 +15,7 @@ void task7(void)
     {
         flagNumber = true;
 
-        printf("\nEnter the number to which you want to output prime numbers: ");
+        printf("\nEnter the number up to which you want to see prime numbers: ");
         scan_res = scanf_s("%d", &upperPrimeNumber);
 
         if (!scan_res || upperPrimeNumber <= 2 || upperPrimeNumber >= 10000)
@@ -27,11 +27,11 @@ void task7(void)
     } while (!scan_res || !flagNumber);
 
     //Решето Эратосфена
-    for (int i = 2; i * i < upperPrimeNumber; ++i)
+    for (int i = 2; i * i <= upperPrimeNumber; ++i)
     {
         if (!primers[i])
         {
-            for (int j = i * 2; j < upperPrimeNumber; j += i)
+            for (int j = i * 2; j <= upperPrimeNumber; j += i)
             {
                 primers[j] = true;
             }
@@ -40,7 +40,7 @@ void task7(void)
 
     printf("Prime numbers: ");
 
-    for (int i = 2; i < upperPrimeNumber; ++i)
+    for (int i = 2; i <= upperPrimeNumber; ++i)
     {
         if (!primers[i])
         {
