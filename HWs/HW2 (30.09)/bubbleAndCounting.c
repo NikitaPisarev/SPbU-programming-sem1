@@ -2,6 +2,7 @@
 #include <stdbool.h>
 
 #define arraySizeBound 100
+#define maximumValues 9999
 
 void printArr(int array[], int lengthArray)
 {
@@ -30,6 +31,26 @@ void bubbleSort(int array[], int lengthArray)
             {
                 swap(&array[j], &array[j + 1]);
             }
+        }
+    }
+}
+
+void countingSort(int array[], int lengthArray)
+{
+    int arrayAux[maximumValues] = { 0 };
+
+    for (int i = 0; i < lengthArray; ++i)
+    {
+        ++arrayAux[array[i]];
+    }
+
+    int temp = 0;
+
+    for (int i = 0; i < maximumValues; ++i)
+    {
+        for (int j = 0; j < arrayAux[i]; ++j)
+        {
+            array[temp++] = i;
         }
     }
 }
@@ -95,7 +116,11 @@ void main()
 
     if (typeSort == 'B')
     {
-      bubbleSort(array, arraySize);  
+        bubbleSort(array, arraySize);  
+    }
+    else
+    {
+        countingSort(array, arraySize);
     }
     
     printf("Sorted array:\n");
