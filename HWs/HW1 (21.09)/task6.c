@@ -4,16 +4,16 @@
 
 #define lengthString 100
 
-void task6(void)
+int main()
 {
     int counterEntry = 0;
     char string[lengthString] = { '\0' };
     char subString[lengthString] = { '\0' };
     
-    printf("\nEnter a string(S1) and substring(S2) separated by a space, with 1 <= S1 <= S2 <= %d:\n", lengthString);
+    printf("Enter a string(S1) and substring(S2) separated by a space, with 1 <= S1 <= S2 <= %d:\n", lengthString);
 
-    scanf_s("%s", &string, lengthString);
-    scanf_s("%s", &subString, lengthString);
+    scanf("%s", &string, lengthString);
+    scanf("%s", &subString, lengthString);
     
     const int lengthSubStr = strlen(subString);
     const int lengthStr = strlen(string) - lengthSubStr + 1;
@@ -38,5 +38,7 @@ void task6(void)
         flagStr = true;
     }
 
-    printf("Amount of occurrence of \"%s\" in \"%s\": %d\n\n", subString, string, counterEntry);
+    printf("Amount of occurrence of \"%s\" in \"%s\": %d", subString, string, counterEntry);
+
+    return 0;
 }

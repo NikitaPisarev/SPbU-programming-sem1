@@ -1,18 +1,18 @@
 #include <stdio.h>
 #include <math.h>
 
-void task2(void)
+int main()
 {
     int dividend = 0;
     int divider = 0;
     int quotient = 0;
 
-    printf("\nEnter a dividend and divider separated by a space: ");
-    scanf_s("%d%d", &dividend, &divider);
+    printf("Enter a dividend and divider separated by a space: ");
+    scanf("%d%d", &dividend, &divider);
 
     if (divider == 0)
     {
-        printf("Divider can't be zero.\n\n");
+        printf("Divider can't be zero.\n");
     }
     else
     {
@@ -36,6 +36,8 @@ void task2(void)
             quotient = -quotient;
         }
 
-        printf("The quotient %d by %d is %d.\n\n", dividend, divider, quotient);
+        printf("The quotient %d by %d is %d.", dividend, divider, quotient);
     }
+    
+    return 0;
 }
