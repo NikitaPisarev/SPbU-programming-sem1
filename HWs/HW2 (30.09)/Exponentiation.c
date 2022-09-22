@@ -51,10 +51,21 @@ void main()
 {
     int number = 0;
     int degree = 0;
+    int scan_resNumber = 0;
+    int scan_resDegree = 0;
 
-    printf("Enter the number and degree: ");
-    scanf("%d", &number);
-    scanf("%d", &degree);
+    do
+    {
+        printf("Enter the number and degree: ");
+        scan_resNumber = scanf("%d", &number);
+        scan_resDegree= scanf("%d", &degree);
+
+        if (!scan_resNumber || !scan_resDegree)
+        {
+            printf("Incorrect input. Try again!\n");
+            scanf_s("%*[^\n]");
+        }
+    } while (!scan_resNumber || !scan_resDegree);
 
     if (number == 0 && degree == 0)
     {
