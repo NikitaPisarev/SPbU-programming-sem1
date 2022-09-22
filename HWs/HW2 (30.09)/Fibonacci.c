@@ -8,13 +8,11 @@ int iteratFibonacci(int number)
     int firstNumber = 0;
     int secondNumber = 1;
     int counter = 0;
-    int temp = 0;
 
     while (counter < number)
     {
-        temp = secondNumber;
         secondNumber = secondNumber + firstNumber;
-        firstNumber = temp;
+        firstNumber = secondNumber - firstNumber;
 
         ++counter;
     }
