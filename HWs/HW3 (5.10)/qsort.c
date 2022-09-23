@@ -49,7 +49,6 @@ void insertsSort(int array[], int firstIndex, int secondIndex)
             --j;
         }
     }
-
 }
 
 void quickSort(int array[], int firstIndex, int secondIndex)
