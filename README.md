@@ -1,1 +1,1 @@
-# programming_sem1
+SPbU Programming Homework 1 semester
