@@ -1,26 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
-#include <stdlib.h>
 
-#define arraySize 999
-
-void printArr(int array[], int lengthArray)
-{
-    printf("[ ");
-    for (int i = 0; i < lengthArray; ++i)
-    {
-        printf("%d ", array[i]);
-    }
-    printf("]");
-}
-
-void arrayRandom(int array[], int length)
-{
-    for (int i = 0; i < length; ++i)
-    {
-        array[i] = rand();
-    }
-}
+#define arraySizeBound 999
 
 void swap(int *firstNumber, int *secondNumber)
 {
@@ -99,52 +80,79 @@ bool binarySearch(int array[], int firstIndex, int secondIndex, int key)
 
 void main()
 {
-    int lengthN = 0;
-    int lengthK = 0;
-    int scan_resN = 0;
-    int scan_resK = 0;
+    int array[arraySizeBound] = { 0 };
+    int arraySize = 0;
+    int scan_res = 0;
     bool flagInput = true;
 
     do
     {
-        printf("Enter \"N\" and \"K\": ");
-        scan_resN = scanf("%d", &lengthN);
-        scan_resK= scanf("%d", &lengthK);
+        printf("Enter size array: ");
+        scan_res = scanf("%d", &arraySize);
 
         flagInput = true;
 
-        if (!scan_resN || !scan_resK || lengthK <= 0 || lengthN <= 0)
+        if (!scan_res || arraySize < 1 || arraySize > arraySizeBound)
         {
-            printf("Incorrect input (\"N\" and \"K\" are positive and less than %d). Try again!\n", arraySize);
+            printf("Incorrect input (The size is positive and no more than %d). Try again!\n", arraySizeBound);
             scanf_s("%*[^\n]");
 
             flagInput = false;
         }
-    } while (!scan_resN || !scan_resK);
-
-    int arrayN[arraySize] = { 0 };
-    int arrayK[arraySize] = { 0 };
-
-    arrayRandom(arrayK, lengthK);
-    arrayRandom(arrayN, lengthN);
-
-    printf("\nThe array \"N\" looks like this:\n");
-    printArr(arrayN, lengthN);
-    printf("\nThe array \"K\" looks like this:\n");
-    printArr(arrayK, lengthK);
-    printf("\n\n");
-
-    quickSort(arrayN, 0, lengthN - 1);
+    } while (!scan_res || !flagInput);
     
-    for (int i = 0; i < lengthK; ++i)
+
+    printf("Enter a array:\n");
+    for (int i = 0; i < arraySize; ++i)
     {
-        if (binarySearch(arrayN, 0, lengthN - 1, arrayK[i]))
+        do
         {
-            printf("\"%d\" is present in the array \"N\".\n", arrayK[i]);
-        }
-        else
+            scan_res = scanf("%d", &array[i]);
+
+            if (!scan_res)
+            {
+                printf("Incorrect input. Try again!\n");
+                scanf_s("%*[^\n]");
+            }
+        } while (!scan_res);
+    }
+
+    quickSort(array, 0, arraySize - 1);
+
+    int mostCommon = array[0];
+    int counter = 1;
+    int counterMaximum = 1;
+
+    for (int i = 1; i < arraySize; ++i)
+    {
+        if (array[i] == array[i - 1])
         {
-            printf("\"%d\" is missing in the array \"N\".\n", arrayK[i]);
+            ++counter;
         }
+        else 
+        {
+            if (counter > counterMaximum)
+            {
+                mostCommon = array[i - 1];
+                counterMaximum = counter;
+            }
+
+            counter = 1;
+        }
+    }
+
+    if (counter > counterMaximum)  // If the most common number is at the end, then we never check the last element for the maximum
+        {
+            mostCommon = array[arraySize - 2]; 
+            counterMaximum = counter;
+        }
+
+    if (counterMaximum == 1)
+    {
+        printf("All elements occur once.");
+    }
+    else
+    {
+        printf("The most common element is %d.", mostCommon);
     }
 }
