@@ -69,7 +69,7 @@ void main()
 
         flagInput = true;
 
-        if (!scan_res || arraySize < 1)
+        if (!scan_res || arraySize < 1 || arraySize > arraySizeBound)
         {
             printf("Incorrect input (The size is positive and no more than %d). Try again!\n", arraySizeBound);
             scanf_s("%*[^\n]");

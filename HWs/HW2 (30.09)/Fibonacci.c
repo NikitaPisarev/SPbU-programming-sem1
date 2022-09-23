@@ -40,15 +40,12 @@ void main()
         printf("Enter which Fibonacci number you want to output: ");
         scan_res = scanf("%d", &number);
 
-        if (number < 0 || number >= bound)
-        {
-            flagNumber = false;
-        }
-
-        if (!scan_res || !flagNumber)
+        if (!scan_res || !flagNumber || number < 0 || number >= bound)
         {
             printf("Incorrect input (the number must be non-negative and less than %d). Try again!\n", bound);
             scanf("%*[^\n]");
+
+            flagNumber = false;
         }
     } while (!scan_res || !flagNumber);
 
