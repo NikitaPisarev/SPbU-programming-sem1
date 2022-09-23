@@ -7,14 +7,11 @@ int iteratFibonacci(int number)
 {
     int firstNumber = 0;
     int secondNumber = 1;
-    int counter = 0;
 
-    while (counter < number)
+    for (int i = 0; i < number; ++i)
     {
         secondNumber = secondNumber + firstNumber;
         firstNumber = secondNumber - firstNumber;
-
-        ++counter;
     }
 
     return firstNumber;
