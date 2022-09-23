@@ -3,7 +3,6 @@
 
 #define arraySizeBound 1000
 
-
 void printArr(int array[], int lengthArray)
 {
     printf("[ ");
@@ -72,7 +71,7 @@ void main()
     int scan_res = 0;
     bool flagInput = true; 
 
-     do
+    do
     {
         printf("Enter size array: ");
         scan_res = scanf("%d", &arraySize);
