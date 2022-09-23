@@ -10,14 +10,7 @@ double power(int number, int degree)
         result = result * number;
     }
 
-    if (degree > 0)
-    {
-        return result;  
-    }
-    else
-    {
-        return 1.0 / result;
-    }
+    return (degree > 0) ? result : 1.0 / result;
 }
 
 double binaryPower(int number, int degree)
@@ -37,14 +30,7 @@ double binaryPower(int number, int degree)
         absDegree /= 2;
     }
 
-    if (degree > 0)
-    {
-        return result;
-    }
-    else
-    {
-        return 1.0 / result;
-    }
+    return (degree > 0) ? result : 1.0 / result;
 }
 
 void main()
