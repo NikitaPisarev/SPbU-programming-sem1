@@ -5,7 +5,7 @@ int main()
 {
     int arrayLength = 0;
     int counterZero = 0;
-    int sub = 1;
+    int current = 1;
     int scan_res = 0;
     bool flagNumber = true;
 
@@ -32,8 +32,8 @@ int main()
 
     for (int i = 0; i < arrayLength; ++i)
     {
-        scanf("%d", &sub);
-        if (sub == 0)
+        scanf("%d", &current);
+        if (current == 0)
         {
             ++counterZero;
         }
