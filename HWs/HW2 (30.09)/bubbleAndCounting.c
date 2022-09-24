@@ -99,8 +99,8 @@ void main()
 
     printf("Choose the type of sorting by Bubble or Counting (B/C)?\n");
     do
-        {
-            flagInputChar = true;
+    {
+        flagInputChar = true;
 
         getchar();
         scan_res = scanf("%c", &typeSort);
