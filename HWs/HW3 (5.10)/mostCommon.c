@@ -142,10 +142,10 @@ void main()
     }
 
     if (counter > counterMaximum)  // If the most common number is at the end, then we never check the last element for the maximum
-        {
-            mostCommon = array[arraySize - 2]; 
-            counterMaximum = counter;
-        }
+    {
+        mostCommon = array[arraySize - 2]; 
+        counterMaximum = counter;
+    }
 
     if (counterMaximum == 1)
     {
