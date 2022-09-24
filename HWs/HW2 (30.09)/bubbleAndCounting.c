@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 #define arraySizeBound 100
-#define maximumValues 9999
 
 void printArr(int array[], int lengthArray)
 {
@@ -35,24 +35,49 @@ void bubbleSort(int array[], int lengthArray)
     }
 }
 
-void countingSort(int array[], int lengthArray)
+int countingSort(int array[], int lengthArray)
 {
-    int arrayAux[maximumValues] = { 0 };
+    int maximumElement = array[0];
+    int minimumElement = array[0];
+
+    for (int i = 1; i < lengthArray; ++i)
+    {
+        if (array[i] > maximumElement)
+        {
+            maximumElement = array[i];
+        }
+
+        if (array[i] < minimumElement)
+        {
+            minimumElement = array[i];
+        }
+    }
+
+    int *arrayAux = calloc(maximumElement - minimumElement + 1, sizeof(int));
+
+    if (arrayAux == NULL)
+    {
+        return -1;
+    }
 
     for (int i = 0; i < lengthArray; ++i)
     {
-        ++arrayAux[array[i]];
+        ++arrayAux[array[i] - minimumElement];
     }
 
     int temp = 0;
 
-    for (int i = 0; i < maximumValues; ++i)
+    for (int i = 0; i < (maximumElement - minimumElement + 1); ++i)
     {
         for (int j = 0; j < arrayAux[i]; ++j)
         {
-            array[temp++] = i;
+            array[temp++] = i + minimumElement;
         }
     }
+
+    free(arrayAux);
+
+    return 0;
 }
 
 void main()
@@ -114,8 +139,20 @@ void main()
         }
     } while (!scan_res || !flagInputChar);
 
-    (typeSort == 'B') ? bubbleSort(array, arraySize) : countingSort(array, arraySize);
-    
-    printf("Sorted array:\n");
-    printArr(array, arraySize);
+    if (typeSort == 'B') 
+    {
+        bubbleSort(array, arraySize);
+
+        printf("Sorted array:\n");
+        printArr(array, arraySize);
+    } 
+    else if (countingSort(array, arraySize) == 0)
+    {
+        printf("Sorted array:\n");
+        printArr(array, arraySize);
+    }
+    else
+    {
+        printf("Error :(");
+    }
 }
