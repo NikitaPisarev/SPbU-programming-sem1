@@ -114,14 +114,7 @@ void main()
             }
         } while (!scan_res || !flagInputChar);
 
-    if (typeSort == 'B')
-    {
-        bubbleSort(array, arraySize);  
-    }
-    else
-    {
-        countingSort(array, arraySize);
-    }
+    (typeSort == 'B') ? bubbleSort(array, arraySize) : countingSort(array, arraySize);
     
     printf("Sorted array:\n");
     printArr(array, arraySize);
