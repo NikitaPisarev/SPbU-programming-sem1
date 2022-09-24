@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #define arraySize 150
+#define maximumNumber 150
 
 void printArr(int array[])
 {
@@ -42,7 +43,7 @@ void main()
 
     for (int i = 0; i < arraySize; ++i)
     {
-        array[i] = rand();
+        array[i] = rand() % maximumNumber;
     }
 
     printf("The array was like this:\n");
