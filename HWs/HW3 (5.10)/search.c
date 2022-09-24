@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #define arraySize 999
+#define maximumNumber 100
 
 void printArr(int array[], int lengthArray)
 {
@@ -18,7 +19,7 @@ void arrayRandom(int array[], int length)
 {
     for (int i = 0; i < length; ++i)
     {
-        array[i] = rand();
+        array[i] = rand() % maximumNumber;
     }
 }
 
