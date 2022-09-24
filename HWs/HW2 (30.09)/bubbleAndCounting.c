@@ -102,17 +102,17 @@ void main()
         {
             flagInputChar = true;
 
-            getchar();
-            scan_res = scanf("%c", &typeSort);
+        getchar();
+        scan_res = scanf("%c", &typeSort);
 
-            if (!scan_res || (typeSort != 'B' && typeSort != 'C'))
-            {
-                printf("Incorrect input (Only \"B\" or \"C\"). Try again!\n");
-                scanf_s("%*[^\n]");
+        if (!scan_res || (typeSort != 'B' && typeSort != 'C'))
+        {
+            printf("Incorrect input (Only \"B\" or \"C\"). Try again!\n");
+            scanf_s("%*[^\n]");
 
-                flagInputChar = false;
-            }
-        } while (!scan_res || !flagInputChar);
+            flagInputChar = false;
+        }
+    } while (!scan_res || !flagInputChar);
 
     (typeSort == 'B') ? bubbleSort(array, arraySize) : countingSort(array, arraySize);
     
