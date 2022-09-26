@@ -16,10 +16,10 @@ int main()
     scanf("%s", &subString, lengthString);
     
     const int lengthSubStr = strlen(subString);
-    const int lengthStr = strlen(string) - lengthSubStr + 1;
+    const int border = strlen(string) - lengthSubStr + 1;
     bool flagStr = true;
     
-    for (int i = 0; i < lengthStr; ++i)
+    for (int i = 0; i < border; ++i)
     {
         for (int j = 0; j < lengthSubStr; ++j)
         {
