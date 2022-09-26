@@ -39,17 +39,17 @@ int main()
     } while (!scanf_res || !flagInput);
 
     printf("Enter an array, exactly %d element(s):\n", lengthM + lengthN);
-    for (int i = 0; i < (lengthM + lengthN); ++i)
+    for (int i = 0; i < lengthM + lengthN; ++i)
     {
         scanf("%d", &array[i]);
     }
    
 
     printf("\nThe array was like this:\n[ ");
-    for (int k = 0; k < (lengthN + lengthM); ++k)
+    for (int k = 0; k < lengthN + lengthM; ++k)
     {
         printf("%d ", array[k]);
-        if (k == (lengthM - 1))
+        if (k == lengthM - 1)
         {
             printf("| ");
         }
@@ -61,10 +61,10 @@ int main()
     reverse(array, lengthN);
   
     printf("\nThe array become like this:\n[ ");
-    for (int k = 0; k < (lengthN + lengthM); ++k)
+    for (int k = 0; k < lengthN + lengthM; ++k)
     {
         printf("%d ", array[k]);
-        if (k == (lengthN - 1))
+        if (k == lengthN - 1)
         {
             printf("| ");
         }
