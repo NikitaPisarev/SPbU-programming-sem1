@@ -39,7 +39,7 @@ int main()
         }
     }
 
-    printf("Number of zero elements: %d", counterZero);
+    printf("Number of zero elements: %d\n", counterZero);
 
     return 0;
 }

@@ -38,7 +38,7 @@ int main()
         flagStr = true;
     }
 
-    printf("Amount of occurrence of \"%s\" in \"%s\": %d", subString, string, counterEntry);
+    printf("Amount of occurrence of \"%s\" in \"%s\": %d\n", subString, string, counterEntry);
 
     return 0;
 }

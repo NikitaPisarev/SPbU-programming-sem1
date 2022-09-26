@@ -23,7 +23,7 @@ int main()
         countLuckyTickets += countSums[i] * countSums[i];
     }
 
-    printf("Amount of lucky tickets: %d", countLuckyTickets);
+    printf("Amount of lucky tickets: %d\n", countLuckyTickets);
 
     return 0;
 }

@@ -12,7 +12,7 @@ int main()
 
     if (divider == 0)
     {
-        printf("Divider can't be zero.");
+        printf("Divider can't be zero.\n");
         return 0;
     }
 
@@ -35,7 +35,7 @@ int main()
         quotient = -quotient;
     }
 
-    printf("The quotient %d by %d is %d.", dividend, divider, quotient);
+    printf("The quotient %d by %d is %d.\n", dividend, divider, quotient);
     
     return 0;
 }
