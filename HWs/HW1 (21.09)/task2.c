@@ -12,7 +12,7 @@ int main()
 
     if (divider == 0)
     {
-        printf("Divider can't be zero.\n");
+        printf("Divider can't be zero.");
         return 0;
     }
 
