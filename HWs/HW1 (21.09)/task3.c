@@ -15,6 +15,7 @@ void reverse(int array[], int length)
     }
 
 }
+
 int main()
 {
     int lengthN = 0;
@@ -30,7 +31,7 @@ int main()
         printf("Enter length \"N\" then length \"M\": ");
         scanf_res = scanf("%d%d", &lengthN, &lengthM);
 
-        if (!scanf_res || lengthM <= 0 || lengthN <= 0 || ((lengthN + lengthM) > arraySize))
+        if (!scanf_res || lengthM <= 0 || lengthN <= 0 || (lengthN + lengthM > arraySize))
         {
             printf("Invalid values (length N and length M must be positive and in total no more than %d). Try again!\n", arraySize);
             scanf("%*[^\n]");
