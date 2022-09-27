@@ -33,7 +33,7 @@ double binaryPower(int number, int degree)
     return (degree > 0) ? result : 1.0 / result;
 }
 
-void main()
+int main()
 {
     int number = 0;
     int degree = 0;
@@ -55,30 +55,24 @@ void main()
 
     if (number == 0 && degree == 0)
     {
-        printf("Uncertainty");
+        printf("Uncertainty.\n");
+        return 0;
+    }
+    
+    if (degree >= 0)
+    {
+        printf("Binary search: ");
+        printf("%d^%d is %.0lf\n", number, degree, binaryPower(number, degree));
+        printf("Linear search: ");
+        printf("%d^%d is %.0lf\n", number, degree, power(number, degree));
     }
     else
     {
         printf("Binary search: ");
-        if (degree >= 0)
-        {
-            printf("%d^%d is %.0lf\n", number, degree, binaryPower(number, degree));
-
-        }
-        else
-        {
-            printf("%d^(%d) is %.15lf\n", number, degree, binaryPower(number, degree));
-        }
-
+        printf("%d^(%d) is %.15lf\n", number, degree, binaryPower(number, degree));
         printf("Linear search: ");
-        if (degree >= 0)
-        {
-            printf("%d^%d is %.0lf\n", number, degree, power(number, degree));
-
-        }
-        else
-        {
-            printf("%d^(%d) is %.15lf\n", number, degree, power(number, degree));
-        }
+        printf("%d^(%d) is %.15lf\n", number, degree, power(number, degree));
     }
+
+    return 0;
 }
