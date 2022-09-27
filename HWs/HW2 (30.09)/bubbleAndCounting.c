@@ -153,6 +153,6 @@ void main()
     }
     else
     {
-        printf("Error :(");
+        printf("Error :(\n");
     }
 }
