@@ -50,5 +50,5 @@ void main()
     } while (!scan_res || !flagNumber);
 
     printf("The Fibonacci number of %d is %d\n", number, iteratFibonacci(number));
-    printf("And also the %d Fibonacci number is %d", number + 1, recursFibonacci(number + 1));
+    printf("And also the %d Fibonacci number is %d\n", number + 1, recursFibonacci(number + 1));
 }
