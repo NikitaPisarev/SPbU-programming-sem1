@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <time.h>
 
 #define arraySize 999
 #define maximumNumber 100
@@ -108,7 +109,7 @@ void main()
 
     do
     {
-        printf("Enter \"N\" and \"K\": ");
+        printf("Enter the length of the array \"N\" then the array \"K\": ");
         scan_resN = scanf("%d", &lengthN);
         scan_resK= scanf("%d", &lengthK);
 
@@ -126,6 +127,7 @@ void main()
     int arrayN[arraySize] = { 0 };
     int arrayK[arraySize] = { 0 };
 
+    srand(time(0));
     arrayRandom(arrayK, lengthK);
     arrayRandom(arrayN, lengthN);
 
