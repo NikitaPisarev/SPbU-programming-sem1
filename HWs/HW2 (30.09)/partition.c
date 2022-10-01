@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
-#define arraySize 150
+#define arraySize 30
 #define maximumNumber 150
 
 void printArr(int array[])
@@ -40,6 +41,8 @@ void partition(int array[], int index, int rigthElement)
 void main()
 {
     int array[arraySize] = { 0 };
+
+    srand(time(0));
 
     for (int i = 0; i < arraySize; ++i)
     {
