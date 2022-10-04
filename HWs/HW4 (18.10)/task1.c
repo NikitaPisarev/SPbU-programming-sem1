@@ -24,10 +24,6 @@ void addBinaryNumbers(unsigned char firstNumber[], unsigned char secondNimber[],
         answer[i] = temp % 2;
         remainder = temp / 2;
     }
-    if (remainder > 0)
-    {
-        answer[0] = 0;
-    }
 }
 
  int conversionFromBinaryDecimal(unsigned char array[])
