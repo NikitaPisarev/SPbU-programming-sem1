@@ -43,7 +43,7 @@ void addBinaryNumbers(unsigned char firstNumber[], unsigned char secondNimber[],
 
 void main()
 {
-    setlocale(LC_ALL, "");
+    setlocale(LC_ALL, "RU-ru");
 
     int firstNumber = 0;
     int secondNumber = 0;
@@ -76,7 +76,7 @@ void main()
     for (int i = 0; i < lengthBinaryNumber; ++i)
     {
         printf("%d", sumTwoNumbers[i]);
-    }
+    }   
     
     printf("\n\nСумма %d и %d равна %d\n", firstNumber, secondNumber, conversionFromBinaryDecimal(sumTwoNumbers));
 }
