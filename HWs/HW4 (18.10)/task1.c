@@ -18,6 +18,7 @@ void addBinaryNumbers(unsigned char firstNumber[], unsigned char secondNimber[],
 {
     int temp = 0;
     int remainder = 0;
+
     for (int i = lengthBinaryNumber - 1; i >= 0; --i)
     {
         temp = firstNumber[i] + secondNimber[i] + remainder;
