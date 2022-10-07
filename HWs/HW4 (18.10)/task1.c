@@ -3,6 +3,14 @@
 
 #define lengthBinaryNumber sizeof(int) * 8
 
+void printArray(unsigned char array[], char length)
+{
+    for (int i = 0; i < length; ++i)
+    {
+        printf("%d", array[i]);
+    }
+}
+
 void binaryRepresentation(unsigned char array[], int number)
 {
     int bit = 1;
@@ -27,12 +35,12 @@ void addBinaryNumbers(unsigned char firstNumber[], unsigned char secondNimber[],
     }
 }
 
- int conversionFromBinaryDecimal(unsigned char array[])
+ int conversionFromBinaryDecimal(unsigned char array[], char length)
  {
     int decimalResult = 0;
     int power = 1;
 
-    for (int i = lengthBinaryNumber - 1; i >= 0; --i)
+    for (int i = length - 1; i >= 0; --i)
     {
         decimalResult += array[i] * power;
         power *= 2;
@@ -47,36 +55,41 @@ void main()
 
     int firstNumber = 0;
     int secondNumber = 0;
+    int scan_resFirstNumber = 0;
+    int scan_resSecondNumber = 0;
 
     printf("Привет, введи два числа: ");
-    scanf("%d", &firstNumber);
-    scanf("%d", &secondNumber);
+    do
+    {
+        scan_resFirstNumber = scanf("%d", &firstNumber);
+        scan_resSecondNumber = scanf("%d", &secondNumber);
+
+        if (!scan_resFirstNumber || !scan_resSecondNumber)
+        {
+            printf("Ошибка ввода. Вводить можно только целые числа. Попробуй еще раз!\n");
+            scanf("%*[^\n]");
+        }
+
+    } while (!scan_resFirstNumber || !scan_resSecondNumber);
 
     unsigned char binaryFirstNumber[lengthBinaryNumber] = { 0 };
     unsigned char binarySecondNumber[lengthBinaryNumber] = { 0 };
     binaryRepresentation(binaryFirstNumber, firstNumber);
     binaryRepresentation(binarySecondNumber, secondNumber);
 
-
     printf("\n ");
-    for (int i = 0; i < lengthBinaryNumber; ++i)
-    {
-        printf("%d", binaryFirstNumber[i]);
-    }
-    printf("\n+\n ");
-    for (int i = 0; i < lengthBinaryNumber; ++i)
-    {
-        printf("%d", binarySecondNumber[i]);
-    }
-    printf("\n --------------------------------\n ");
+    printArray(binaryFirstNumber, lengthBinaryNumber);
+    printf(" (%d)\n+\n ", firstNumber);
+    printArray(binarySecondNumber, lengthBinaryNumber);
+    printf(" (%d) \n --------------------------------\n ", secondNumber);
 
-    unsigned char sumTwoNumbers[lengthBinaryNumber] = { 0 };
-    addBinaryNumbers(binaryFirstNumber, binarySecondNumber, sumTwoNumbers);
+    unsigned char binarySum[lengthBinaryNumber] = { 0 };
+    addBinaryNumbers(binaryFirstNumber, binarySecondNumber, binarySum);
 
-    for (int i = 0; i < lengthBinaryNumber; ++i)
-    {
-        printf("%d", sumTwoNumbers[i]);
-    }   
+    int decimalSum = conversionFromBinaryDecimal(binarySum, lengthBinaryNumber);
+
+    printArray(binarySum, lengthBinaryNumber);
+    printf(" (%d)", decimalSum);
     
-    printf("\n\nСумма %d и %d равна %d\n", firstNumber, secondNumber, conversionFromBinaryDecimal(sumTwoNumbers));
+    printf("\n\nСумма %d и %d равна %d.\n", firstNumber, secondNumber, decimalSum);
 }
