@@ -54,27 +54,43 @@ void quickSort(int array[], int firstIndex, int secondIndex)
     }  
 }
 
-bool binarySearch(int array[], int firstIndex, int secondIndex, int key)
+void mostCommon(int array[], int length)
 {
-    int middle = (firstIndex + secondIndex) / 2;
-    
-    if (array[middle] == key)
+    int mostCommon = array[0];
+    int counter = 1;
+    int counterMaximum = 1;
+
+    for (int i = 1; i < length; ++i)
     {
-        return true;
+        if (array[i] == array[i - 1])
+        {
+            ++counter;
+        }
+        else 
+        {
+            if (counter > counterMaximum)
+            {
+                mostCommon = array[i - 1];
+                counterMaximum = counter;
+            }
+
+            counter = 1;
+        }
     }
 
-    if (firstIndex >= secondIndex)
+    if (counter > counterMaximum)  // If the most common number is at the end, then we never check the last element for the maximum
     {
-        return false;
-    }   
+        mostCommon = array[length - 2]; 
+        counterMaximum = counter;
+    }
 
-    if (array[middle] < key)
+    if (counterMaximum == 1)
     {
-        binarySearch(array, middle + 1, secondIndex, key);
+        printf("All elements occur once.");
     }
     else
     {
-        binarySearch(array, firstIndex, middle - 1, key);
+        printf("The most common element is %d.", mostCommon);
     }
 }
 
@@ -118,41 +134,5 @@ void main()
     }
 
     quickSort(array, 0, arraySize - 1);
-
-    int mostCommon = array[0];
-    int counter = 1;
-    int counterMaximum = 1;
-
-    for (int i = 1; i < arraySize; ++i)
-    {
-        if (array[i] == array[i - 1])
-        {
-            ++counter;
-        }
-        else 
-        {
-            if (counter > counterMaximum)
-            {
-                mostCommon = array[i - 1];
-                counterMaximum = counter;
-            }
-
-            counter = 1;
-        }
-    }
-
-    if (counter > counterMaximum)  // If the most common number is at the end, then we never check the last element for the maximum
-    {
-        mostCommon = array[arraySize - 2]; 
-        counterMaximum = counter;
-    }
-
-    if (counterMaximum == 1)
-    {
-        printf("All elements occur once.");
-    }
-    else
-    {
-        printf("The most common element is %d.", mostCommon);
-    }
+    mostCommon(array, arraySize);
 }
