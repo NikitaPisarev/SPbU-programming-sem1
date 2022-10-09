@@ -1,7 +1,9 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <locale.h>
 
 #define maximumSize 256
+#define recordSize 100
 
 int printList(FILE *file, char amountRecord)
 {
@@ -39,6 +41,58 @@ void printActions(void)
     printf(" ------------------------------------\n");
 }
 
+char amountRecord(FILE *file)
+{
+    char amount = 0;
+    char temp[maximumSize] = { 0 };
+
+    while (!feof(file))
+    {
+        if (fgets(temp, maximumSize, file) != NULL)
+        {
+            ++amount;
+        }
+    }
+    fseek(file, 0, SEEK_SET);
+
+    return amount;
+}
+
+char *addRecord(char current)
+{
+    char *buffer = calloc(maximumSize ,sizeof(char));
+    printf("\nВведи телефон и номер (Например: +79123456789 Александр Сергеевич):\n");
+    getchar();
+    fgets(buffer, recordSize, stdin);
+
+    printf("Запись успешна добавлена.\n\n");
+
+    return buffer;
+}
+
+int saveData(FILE *file, char *data[], char lengthData)
+{
+    if (lengthData == 0)
+    {
+        printf("\nИзменения отсутствуют.\n\n");
+        return 1;
+    }
+
+    fseek(file, 0, SEEK_END);
+
+    for (int i = 0; i < lengthData; ++i)
+    {
+        fputs(data[i], file);
+        data[i] = 0;
+    }
+
+    fseek(file, 0, SEEK_SET);
+
+    printf("\nИзменения успешно сохранены!\n\n");
+
+    return 0;
+}
+
 int main()
 {
     setlocale(LC_ALL, "RU-ru");
@@ -51,17 +105,8 @@ int main()
         return 0;
     }
 
-    char amountRecord = 0;
-    char temp[maximumSize] = { 0 };
-
-    while (!feof(file))
-    {
-        if (fgets(temp, maximumSize, file) != NULL)
-        {
-            ++amountRecord;
-        }
-    }
-    fseek(file, 0, SEEK_SET);
+    char *data[recordSize] = { 0 };
+    char current = 0;
 
     printf("Привет, это телефонный справочник!\nВот что я умею:\n");
     printActions();
@@ -79,8 +124,19 @@ int main()
             printf("Удачи!\n");
             break;
         
+        case 1:
+            data[current] = addRecord(current);
+            ++current;
+            break;
+        
         case 2:
-            printList(file, amountRecord);
+            char amount = amountRecord(file);
+            printList(file, amount);
+            break;
+        
+        case 5:
+            saveData(file, data, current);
+            current = 0;
             break;
 
         case 6:
