@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <locale.h>
+#include <string.h>
 
-#define maximumSize 256
+#define maximumSize 255
 #define recordSize 100
 
-int printList(FILE *file, char amountRecord)
+int printList(FILE *file, unsigned char amountRecord)
 {
     if (amountRecord == 0)
     {
@@ -41,7 +43,7 @@ void printActions(void)
     printf(" ------------------------------------\n");
 }
 
-char amountRecord(FILE *file)
+unsigned char amountRecord(FILE *file)
 {
     char amount = 0;
     char temp[maximumSize] = { 0 };
@@ -93,6 +95,34 @@ int saveData(FILE *file, char *data[], char lengthData)
     return 0;
 }
 
+void nameByPhone(FILE *file, char number[])
+{
+    bool flagNumber = false;
+    char currentNumber[maximumSize] = { 0 };
+    char currentName[maximumSize] = { 0 };
+
+
+    while (!feof(file))
+    {
+        fscanf(file, "%s", &currentNumber);
+        fgets(currentName, maximumSize, file);
+
+        if (!strcmp(currentNumber, number))
+        {
+            printf("\nНомер %s принадлежит%s\n", currentNumber, currentName);
+            flagNumber = true;
+            break;
+        }        
+    }
+
+    fseek(file, 0, SEEK_SET);
+
+    if (!flagNumber)
+    {
+        printf("\nТакого номена нет в справочнике.\n\n");
+    }
+}
+
 int main()
 {
     setlocale(LC_ALL, "RU-ru");
@@ -130,13 +160,30 @@ int main()
             break;
         
         case 2:
-            char amount = amountRecord(file);
+            unsigned char amount = amountRecord(file);
             printList(file, amount);
             break;
         
         case 5:
             saveData(file, data, current);
             current = 0;
+            break;
+        
+        case 4:
+            char number[maximumSize] = { 0 };
+
+            printf("Введите телефон, по которому хотите найти абонента: ");
+            scanf("%s", &number);
+
+            char temp[] = "+";
+
+            if (number[0] != '+')
+            {
+                strcat(temp, number);
+                strcpy(number, temp);
+            }
+
+            nameByPhone(file, number);
             break;
 
         case 6:
