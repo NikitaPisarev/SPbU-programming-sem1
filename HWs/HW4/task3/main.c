@@ -25,7 +25,7 @@ int printList(FILE *file, unsigned char amountRecord)
         printf("%d. %s", i + 1, record);
     }
     fseek(file, 0 , SEEK_SET);
-    printf("\n\n");
+    printf("\n");
 
     return 0;
 }
@@ -105,21 +105,49 @@ void nameByPhone(FILE *file, char number[])
     while (!feof(file))
     {
         fscanf(file, "%s", &currentNumber);
-        fgets(currentName, maximumSize, file);
-
-        if (!strcmp(currentNumber, number))
+        if (fgets(currentName, maximumSize, file) != NULL)
         {
-            printf("\nНомер %s принадлежит%s\n", currentNumber, currentName);
-            flagNumber = true;
-            break;
-        }        
+            if (!strcmp(currentNumber, number))
+            {
+                printf("\nНомер %s принадлежит%s\n", currentNumber, currentName);
+                flagNumber = true;
+            }        
+        }      
     }
 
     fseek(file, 0, SEEK_SET);
 
     if (!flagNumber)
     {
-        printf("\nТакого номена нет в справочнике.\n\n");
+        printf("\nТакого номера нет в справочнике.\n\n");
+    }
+}
+
+void phoneByName(FILE *file, char name[])
+{
+    bool flagName= false;
+    char currentNumber[maximumSize] = { 0 };
+    char currentName[maximumSize] = { 0 };
+
+
+    while (!feof(file))
+    {
+        fscanf(file, "%s", &currentNumber);
+        if (fgets(currentName, maximumSize, file) != NULL)
+        {
+            if (!strncmp(currentName, name, strlen(name)))
+            {
+                printf("\nУ абонента%s номер %s\n\n", name, currentNumber);
+                flagName = true;
+            }     
+        }   
+    }
+
+    fseek(file, 0, SEEK_SET);
+
+    if (!flagName)
+    {
+        printf("\nТакого имени нет в справочнике.\n\n");
     }
 }
 
@@ -164,26 +192,39 @@ int main()
             printList(file, amount);
             break;
         
-        case 5:
-            saveData(file, data, current);
-            current = 0;
+        case 3:
+            char name[maximumSize] = { 0 };
+
+            printf("Введите имя абонента, по которому хотите найти телефон: ");
+            scanf("%s", &name);
+
+            char tempName[] = " ";
+            strcat(tempName, name); // ...................
+            strcpy(name, tempName);
+
+            phoneByName(file, name);
             break;
-        
+
         case 4:
             char number[maximumSize] = { 0 };
 
             printf("Введите телефон, по которому хотите найти абонента: ");
             scanf("%s", &number);
 
-            char temp[] = "+";
-
             if (number[0] != '+')
             {
-                strcat(temp, number);
-                strcpy(number, temp);
+                char tempNumber[] = "+";
+
+                strcat(tempNumber, number);
+                strcpy(number, tempNumber);
             }
 
             nameByPhone(file, number);
+            break;
+        
+        case 5:
+            saveData(file, data, current);
+            current = 0;
             break;
 
         case 6:
