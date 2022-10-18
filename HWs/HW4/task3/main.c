@@ -1,28 +1,27 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <locale.h>
 #include <string.h>
 
 #define maximumSize 255
-#define recordSize 100
+#define entrySize 100
 
-int printList(FILE *file, unsigned char amountRecord)
+int printList(FILE *file, unsigned char amountEntry)
 {
-    if (amountRecord == 0)
+    if (amountEntry == 0)
     {
-        printf("\nCправочник пуст.\n\n");
+        printf("\nPhone book is empty.\n\n");
         return 1;
     }
 
-    printf("\nСправочник:\n");
+    printf("\nPhone book:\n");
 
-    char record[maximumSize] = { 0 };
+    char entry[maximumSize] = { 0 };
 
-    for (int i = 0; i < amountRecord; ++i)
+    for (int i = 0; i < amountEntry; ++i)
     {
-        fgets(record, maximumSize, file);
-        printf("%d. %s", i + 1, record);
+        fgets(entry, maximumSize, file);
+        printf("%d. %s", i + 1, entry);
     }
     fseek(file, 0 , SEEK_SET);
     printf("\n");
@@ -33,17 +32,17 @@ int printList(FILE *file, unsigned char amountRecord)
 void printActions(void)
 {
     printf(" ------------------------------------\n");
-    printf(" 0 — Выход\n");
-    printf(" 1 — Добавить запись (имя и телефон)\n");
-    printf(" 2 — Распечатать все имеющиеся записи\n");
-    printf(" 3 — Найти телефон по имени\n");
-    printf(" 4 — Найти имя по телефону\n");
-    printf(" 5 — Сохранить текущие данные в файл\n");
-    printf(" 6 - Посмотреть список команд\n");
+    printf(" 0 — Exit\n");
+    printf(" 1 — Add an entry (name and phone number)\n");
+    printf(" 2 — Print all available entries\n");
+    printf(" 3 — Find a phone by namen\n");
+    printf(" 4 — Find a name by phone\n");
+    printf(" 5 — Save current data to a file\n");
+    printf(" 6 - View the list of commands\n");
     printf(" ------------------------------------\n");
 }
 
-unsigned char amountRecord(FILE *file)
+unsigned char amountEntries(FILE *file)
 {
     char amount = 0;
     char temp[maximumSize] = { 0 };
@@ -60,14 +59,14 @@ unsigned char amountRecord(FILE *file)
     return amount;
 }
 
-char *addRecord(char current)
+char *addEntry(char current)
 {
     char *buffer = calloc(maximumSize ,sizeof(char));
-    printf("\nВведи телефон и номер (Например: +79123456789 Александр Сергеевич):\n");
+    printf("\nEnter the phone and number (For example: +79123456789 Alex):\n");
     getchar();
-    fgets(buffer, recordSize, stdin);
+    fgets(buffer, entrySize, stdin);
 
-    printf("Запись успешна добавлена.\n\n");
+    printf("Entry successfully added.\n\n");
 
     return buffer;
 }
@@ -76,7 +75,7 @@ int saveData(FILE *file, char *data[], char lengthData)
 {
     if (lengthData == 0)
     {
-        printf("\nИзменения отсутствуют.\n\n");
+        printf("\nNo changes.\n\n");
         return 1;
     }
 
@@ -90,7 +89,7 @@ int saveData(FILE *file, char *data[], char lengthData)
 
     fseek(file, 0, SEEK_SET);
 
-    printf("\nИзменения успешно сохранены!\n\n");
+    printf("\nChanges saved successfully!\n\n");
 
     return 0;
 }
@@ -107,9 +106,9 @@ void nameByPhone(FILE *file, char number[])
         fscanf(file, "%s", &currentNumber);
         if (fgets(currentName, maximumSize, file) != NULL)
         {
-            if (!strcmp(currentNumber, number))
+            if (!strncmp(currentNumber, number, strlen(number)))
             {
-                printf("\nНомер %s принадлежит%s\n", currentNumber, currentName);
+                printf("\nNumber %s belongs to%s\n", currentNumber, currentName);
                 flagNumber = true;
             }        
         }      
@@ -119,7 +118,7 @@ void nameByPhone(FILE *file, char number[])
 
     if (!flagNumber)
     {
-        printf("\nТакого номера нет в справочнике.\n\n");
+        printf("\nThere is no such number in phone book.\n\n");
     }
 }
 
@@ -137,7 +136,7 @@ void phoneByName(FILE *file, char name[])
         {
             if (!strncmp(currentName, name, strlen(name)))
             {
-                printf("\nУ абонента%s номер %s\n\n", name, currentNumber);
+                printf("\nSubscriber has%s number %s\n\n", name, currentNumber);
                 flagName = true;
             }     
         }   
@@ -147,59 +146,59 @@ void phoneByName(FILE *file, char name[])
 
     if (!flagName)
     {
-        printf("\nТакого имени нет в справочнике.\n\n");
+        printf("\nThere is no such name in the phone book.\n\n");
     }
 }
 
 int main()
 {
-    setlocale(LC_ALL, "RU-ru");
-
     FILE *file = fopen("database.txt", "a+");
 
     if (file == NULL)
     {
-        printf("Ошибка работы с файлом.\n");
+        printf("Error working with the file.\n");
         return 0;
     }
 
-    char *data[recordSize] = { 0 };
+    char *data[entrySize] = { 0 };
     char current = 0;
 
-    printf("Привет, это телефонный справочник!\nВот что я умею:\n");
+    printf("Hi, this is a Phone Book!\nThat's what I can do:\n");
     printActions();
 
     int action = -1;
+    bool isContinue = true;
 
-    while (action != 0)
+    while (isContinue)
     {
-        printf("Введи номер команды: ");
+        printf("Enter the command number: ");
         scanf("%d", &action);
 
         switch (action)
         {
         case 0:
-            printf("Удачи!\n");
+            printf("Good luck!\n");
+            isContinue = false;
             break;
         
         case 1:
-            data[current] = addRecord(current);
+            data[current] = addEntry(current);
             ++current;
             break;
         
         case 2:
-            unsigned char amount = amountRecord(file);
+            unsigned char amount = amountEntries(file);
             printList(file, amount);
             break;
         
         case 3:
             char name[maximumSize] = { 0 };
 
-            printf("Введите имя абонента, по которому хотите найти телефон: ");
+            printf("Enter the name of the subscriber whose number to show: ");
             scanf("%s", &name);
 
             char tempName[] = " ";
-            strcat(tempName, name); // ...................
+            strcat(tempName, name);
             strcpy(name, tempName);
 
             phoneByName(file, name);
@@ -208,7 +207,7 @@ int main()
         case 4:
             char number[maximumSize] = { 0 };
 
-            printf("Введите телефон, по которому хотите найти абонента: ");
+            printf("Enter the phone whose name of the subscriber to show(For example: +102): ");
             scanf("%s", &number);
 
             if (number[0] != '+')
@@ -232,7 +231,7 @@ int main()
             break;
 
         default:
-            printf("Такой команды нет :(\n");
+            printf("There is no such command :(\n");
             break;
         }
     }
