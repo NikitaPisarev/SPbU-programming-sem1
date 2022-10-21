@@ -85,10 +85,9 @@ bool testQuickSort1()
 bool testQuickSort2()
 {
     int array[4] = {-3, 0, -1, -2};
+    int correctArray[4] = {-3, -2, -1, 0};
 
     quickSort(array, 0, 3);
-
-    int correctArray[4] = {-3, -2, -1, 0};
 
     for (int i = 0; i < 4; ++i)
     {

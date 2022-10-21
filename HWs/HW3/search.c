@@ -6,7 +6,7 @@
 #define arraySize 999
 #define maximumNumber 100
 
-void printArr(int array[], int lengthArray)
+void printArray(int array[], int lengthArray)
 {
     printf("[ ");
     for (int i = 0; i < lengthArray; ++i)
@@ -31,29 +31,29 @@ void swap(int *firstNumber, int *secondNumber)
     *secondNumber = temp;
 }
 
-int partition(int array[], int firstIndex, int secondIndex)
+int partition(int array[], int leftIndex, int rightIndex)
 {
-    for (int current = firstIndex; current < secondIndex; ++current)
+    for (int current = leftIndex; current < rightIndex; ++current)
     {
-        if (array[secondIndex] > array[current])
+        if (array[rightIndex] > array[current])
         {
-            swap(&array[current], &array[firstIndex]);
-            ++firstIndex;
+            swap(&array[current], &array[leftIndex]);
+            ++leftIndex;
         }
     }
 
-    swap(&array[secondIndex], &array[firstIndex]);
+    swap(&array[rightIndex], &array[leftIndex]);
 
-    return firstIndex;
+    return leftIndex;
 }
 
-void insertsSort(int array[], int firstIndex, int secondIndex)
+void insertsSort(int array[], int leftIndex, int rightIndex)
 {
-    for (int i = firstIndex; i < secondIndex; ++i)
+    for (int i = leftIndex; i < rightIndex; ++i)
     {
         int j = i + 1;
 
-        while (j > firstIndex && array[j - 1] > array[j])
+        while (j > leftIndex && array[j - 1] > array[j])
         {
             swap(&array[j - 1], &array[j]);
             --j;
@@ -61,66 +61,192 @@ void insertsSort(int array[], int firstIndex, int secondIndex)
     }
 }
 
-void quickSort(int array[], int firstIndex, int secondIndex)
+void quickSort(int array[], int leftIndex, int rightIndex)
 {
-    if (secondIndex - firstIndex <= 8)
+    if (rightIndex - leftIndex <= 8)
     {
-        insertsSort(array, firstIndex, secondIndex);
+        insertsSort(array, leftIndex, rightIndex);
     }
     else
     {
-        int reference = partition(array, firstIndex, secondIndex);
-        quickSort(array, firstIndex, reference - 1);
-        quickSort(array, reference + 1, secondIndex);
+        int reference = partition(array, leftIndex, rightIndex);
+        quickSort(array, leftIndex, reference - 1);
+        quickSort(array, reference + 1, rightIndex);
     }  
 }
 
-bool binarySearch(int array[], int firstIndex, int secondIndex, int key)
+bool binarySearch(int array[], int leftIndex, int rightIndex, int key)
 {
-    int middle = (firstIndex + secondIndex) / 2;
+    int middle = (leftIndex + rightIndex) / 2;
     
     if (array[middle] == key)
     {
         return true;
     }
 
-    if (firstIndex >= secondIndex)
+    if (leftIndex >= rightIndex)
     {
         return false;
     }   
 
     if (array[middle] < key)
     {
-        binarySearch(array, middle + 1, secondIndex, key);
+        binarySearch(array, middle + 1, rightIndex, key);
     }
     else
     {
-        binarySearch(array, firstIndex, middle - 1, key);
+        binarySearch(array, leftIndex, middle - 1, key);
     }
 }
 
-void main()
+bool testQuickSort1()
 {
-    int lengthN = 0;
-    int lengthK = 0;
+    int array[5] = {5, 4, 3, 2, 1};
+
+    quickSort(array, 0, 4);
+
+    for (int i = 0; i < 5; ++i)
+    {
+        if (array[i] != i + 1)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool testQuickSort2()
+{
+    int array[4] = {-3, 0, -1, -2};
+    int correctArray[4] = {-3, -2, -1, 0};
+
+    quickSort(array, 0, 3);
+
+    for (int i = 0; i < 4; ++i)
+    {
+        if (array[i] != correctArray[i])
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool testQuickSort3()
+{
+    int array[6] = {2, 2, 2, 2, 2, 2};
+
+    quickSort(array, 0, 5);
+
+    for (int i = 0; i < 6; ++i)
+    {
+        if (array[i] != 2)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+int testQuickSort()
+{
+    if (!testQuickSort1())
+    {
+        return -1;
+    }
+    
+    if (!testQuickSort2())
+    {
+        return -2;
+    }
+
+    if (!testQuickSort3())
+    {
+        return -3;
+    }
+
+    return 0;   
+}
+
+bool testBinarySearch1()
+{
+    int array[5] = {1, 2, 3, 4, 5};
+    return binarySearch(array, 0, 4, 4);
+}
+
+bool testBinarySearch2()
+{
+    int array[5] = {5, 4, 3, 2, 1};
+    quickSort(array, 0, 4);
+    return binarySearch(array, 0, 4, 2);
+}
+
+bool testBinarySearch3()
+{
+    int array[6] = {15, 4, -3, 0, 11};
+    quickSort(array, 0, 5);
+    return !binarySearch(array, 0, 5, 2);
+}
+
+int testBinarySearch()
+{
+    if (!testBinarySearch1())
+    {
+        return -1;
+    }
+    
+    if (!testBinarySearch2())
+    {
+        return -2;
+    }
+
+    if (!testBinarySearch3())
+    {
+        return -3;
+    }
+
+    return 0; 
+}
+
+int main()
+{
+    int errorCode = testQuickSort();
+    if (errorCode != 0)
+    {
+        printf("QuickSort function tests failed! Error code %d.\n", errorCode);
+        return 0;
+    }
+
+    errorCode = testBinarySearch();
+    if (errorCode != 0)
+    {
+        printf("BinarySearch function tests failed! Error code %d.\n", errorCode);
+        return 0;
+    }
+
+    int lengthArrayN = 0;
+    int lengthArrayK = 0;
     int scan_resN = 0;
     int scan_resK = 0;
-    bool flagInput = true;
+    bool isCorrectInput = true;
 
     do
     {
         printf("Enter the length of the array \"N\" then the array \"K\": ");
-        scan_resN = scanf("%d", &lengthN);
-        scan_resK= scanf("%d", &lengthK);
+        scan_resN = scanf("%d", &lengthArrayN);
+        scan_resK= scanf("%d", &lengthArrayK);
 
-        flagInput = true;
+        isCorrectInput = true;
 
-        if (!scan_resN || !scan_resK || lengthK <= 0 || lengthN <= 0)
+        if (!scan_resN || !scan_resK || lengthArrayK <= 0 || lengthArrayN <= 0)
         {
             printf("Incorrect input (\"N\" and \"K\" are positive and less than %d). Try again!\n", arraySize);
             scanf_s("%*[^\n]");
 
-            flagInput = false;
+            isCorrectInput = false;
         }
     } while (!scan_resN || !scan_resK);
 
@@ -128,20 +254,20 @@ void main()
     int arrayK[arraySize] = { 0 };
 
     srand(time(0));
-    arrayRandom(arrayK, lengthK);
-    arrayRandom(arrayN, lengthN);
+    arrayRandom(arrayK, lengthArrayK);
+    arrayRandom(arrayN, lengthArrayN);
 
     printf("\nThe array \"N\" looks like this:\n");
-    printArr(arrayN, lengthN);
+    printArray(arrayN, lengthArrayN);
     printf("\nThe array \"K\" looks like this:\n");
-    printArr(arrayK, lengthK);
+    printArray(arrayK, lengthArrayK);
     printf("\n\n");
 
-    quickSort(arrayN, 0, lengthN - 1);
+    quickSort(arrayN, 0, lengthArrayN - 1);
     
-    for (int i = 0; i < lengthK; ++i)
+    for (int i = 0; i < lengthArrayK; ++i)
     {
-        if (binarySearch(arrayN, 0, lengthN - 1, arrayK[i]))
+        if (binarySearch(arrayN, 0, lengthArrayN - 1, arrayK[i]))
         {
             printf("\"%d\" is present in the array \"N\".\n", arrayK[i]);
         }
@@ -150,4 +276,6 @@ void main()
             printf("\"%d\" is missing in the array \"N\".\n", arrayK[i]);
         }
     }
+
+    return 0;
 }
