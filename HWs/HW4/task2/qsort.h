@@ -1,3 +1,3 @@
 #pragma once
 
-void quickSort(int array[], int firstIndex, int secondIndex);
+void quickSort(int array[], int leftIndex, int rightIndex);

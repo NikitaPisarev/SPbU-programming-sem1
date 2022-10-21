@@ -3,11 +3,9 @@
 #include <stdlib.h>
 #include "qsort.h"
 
-void mostCommon(int array[], int length)
+void mostCommon(int array[], int length, int *mostCommon, int *counterMaximum)
 {
-    int mostCommon = array[0];
     int counter = 1;
-    int counterMaximum = 1;
 
     for (int i = 1; i < length; ++i)
     {
@@ -17,34 +15,41 @@ void mostCommon(int array[], int length)
         }
         else 
         {
-            if (counter > counterMaximum)
+            if (counter > *counterMaximum)
             {
-                mostCommon = array[i - 1];
-                counterMaximum = counter;
+                *mostCommon = array[i - 1];
+                *counterMaximum = counter;
             }
 
             counter = 1;
         }
     }
 
-    if (counter > counterMaximum)  // If the most common number is at the end, then we never check the last element for the maximum
+    if (counter > *counterMaximum)  // If the most common number is at the end, then we never check the last element for the maximum
     {
-        mostCommon = array[length - 2]; 
-        counterMaximum = counter;
+        *mostCommon = array[length - 2]; 
+        *counterMaximum = counter;
     }
+}
 
-    if (counterMaximum == 1)
-    {
-        printf("All elements occur once.\n");
-    }
-    else
-    {
-        printf("The most common element is %d, it has been encountered %d times.\n", mostCommon, counterMaximum);
-    }
+bool testMostCommon()
+{
+    int array[5] = {0, 1, 1, 1, 0};
+    int counterMaximum = 1;
+    int mostCommonNumber = array[0];
+    mostCommon(array, 5, &mostCommonNumber, &counterMaximum);
+
+    return mostCommonNumber == 1 && counterMaximum == 3;
 }
 
 int main()
 {
+    if (!testMostCommon())
+    {
+        printf("MostCommon function tests failed!\n");
+        return 0;
+    }
+
     FILE *file = fopen("array.txt", "r");
 
     if (file == NULL)
@@ -85,7 +90,19 @@ int main()
     fclose(file);
 
     quickSort(array, 0, arraySize - 1);
-    mostCommon(array, arraySize);
+
+    int counterMaximum = 1;
+    int mostCommonNumber = array[0];
+    mostCommon(array, arraySize, &mostCommonNumber, &counterMaximum);
+
+    if (counterMaximum == 1)
+    {
+        printf("All elements occur once.");
+    }
+    else
+    {
+        printf("The most common element is \"%d\", which has been encountered %d time(s).\n", mostCommonNumber, counterMaximum);
+    }
 
     free(array);
 
