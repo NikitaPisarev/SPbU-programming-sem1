@@ -10,29 +10,29 @@ void swap(int *firstNumber, int *secondNumber)
     *secondNumber = temp;
 }
 
-int partition(int array[], int firstIndex, int secondIndex)
+int partition(int array[], int leftIndex, int rightIndex)
 {
-    for (int current = firstIndex; current < secondIndex; ++current)
+    for (int current = leftIndex; current < rightIndex; ++current)
     {
-        if (array[secondIndex] > array[current])
+        if (array[rightIndex] > array[current])
         {
-            swap(&array[current], &array[firstIndex]);
-            ++firstIndex;
+            swap(&array[current], &array[leftIndex]);
+            ++leftIndex;
         }
     }
 
-    swap(&array[secondIndex], &array[firstIndex]);
+    swap(&array[rightIndex], &array[leftIndex]);
 
-    return firstIndex;
+    return leftIndex;
 }
 
-void insertsSort(int array[], int firstIndex, int secondIndex)
+void insertsSort(int array[], int leftIndex, int rightIndex)
 {
-    for (int i = firstIndex; i < secondIndex; ++i)
+    for (int i = leftIndex; i < rightIndex; ++i)
     {
         int j = i + 1;
 
-        while (j > firstIndex && array[j - 1] > array[j])
+        while (j > leftIndex && array[j - 1] > array[j])
         {
             swap(&array[j - 1], &array[j]);
             --j;
@@ -40,25 +40,23 @@ void insertsSort(int array[], int firstIndex, int secondIndex)
     }
 }
 
-void quickSort(int array[], int firstIndex, int secondIndex)
+void quickSort(int array[], int leftIndex, int rightIndex)
 {
-    if (secondIndex - firstIndex <= 8)
+    if (rightIndex - leftIndex <= 8)
     {
-        insertsSort(array, firstIndex, secondIndex);
+        insertsSort(array, leftIndex, rightIndex);
     }
     else
     {
-        int reference = partition(array, firstIndex, secondIndex);
-        quickSort(array, firstIndex, reference - 1);
-        quickSort(array, reference + 1, secondIndex);
+        int reference = partition(array, leftIndex, rightIndex);
+        quickSort(array, leftIndex, reference - 1);
+        quickSort(array, reference + 1, rightIndex);
     }  
 }
 
-void mostCommon(int array[], int length)
+void mostCommon(int array[], int length, int *mostCommon, int *counterMaximum)
 {
-    int mostCommon = array[0];
     int counter = 1;
-    int counterMaximum = 1;
 
     for (int i = 1; i < length; ++i)
     {
@@ -68,54 +66,140 @@ void mostCommon(int array[], int length)
         }
         else 
         {
-            if (counter > counterMaximum)
+            if (counter > *counterMaximum)
             {
-                mostCommon = array[i - 1];
-                counterMaximum = counter;
+                *mostCommon = array[i - 1];
+                *counterMaximum = counter;
             }
 
             counter = 1;
         }
     }
 
-    if (counter > counterMaximum)  // If the most common number is at the end, then we never check the last element for the maximum
+    if (counter > *counterMaximum)  // If the most common number is at the end, then we never check the last element for the maximum
     {
-        mostCommon = array[length - 2]; 
-        counterMaximum = counter;
-    }
-
-    if (counterMaximum == 1)
-    {
-        printf("All elements occur once.");
-    }
-    else
-    {
-        printf("The most common element is %d.", mostCommon);
+        *mostCommon = array[length - 2]; 
+        *counterMaximum = counter;
     }
 }
 
-void main()
+bool testQuickSort1()
 {
+    int array[5] = {5, 4, 3, 2, 1};
+
+    quickSort(array, 0, 4);
+
+    for (int i = 0; i < 5; ++i)
+    {
+        if (array[i] != i + 1)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool testQuickSort2()
+{
+    int array[4] = {-3, 0, -1, -2};
+    int correctArray[4] = {-3, -2, -1, 0};
+
+    quickSort(array, 0, 3);
+
+    for (int i = 0; i < 4; ++i)
+    {
+        if (array[i] != correctArray[i])
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool testQuickSort3()
+{
+    int array[6] = {2, 2, 2, 2, 2, 2};
+
+    quickSort(array, 0, 5);
+
+    for (int i = 0; i < 6; ++i)
+    {
+        if (array[i] != 2)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+int testQuickSort()
+{
+    if (!testQuickSort1())
+    {
+        return -1;
+    }
+    
+    if (!testQuickSort2())
+    {
+        return -2;
+    }
+
+    if (!testQuickSort3())
+    {
+        return -3;
+    }
+
+    return 0;
+}
+
+bool testMostCommon()
+{
+    int array[5] = {0, 1, 1, 1, 0};
+    int counterMaximum = 1;
+    int mostCommonNumber = array[0];
+    mostCommon(array, 5, &mostCommonNumber, &counterMaximum);
+
+    return mostCommonNumber == 1 && counterMaximum == 3;
+}
+
+int main()
+{
+    int errorCode = testQuickSort();
+    if (errorCode != 0)
+    {
+        printf("QuickSort function tests failed! Error code %d.\n", errorCode);
+        return 0;
+    }
+
+    if (!testMostCommon())
+    {
+        printf("MostCommon function tests failed!\n");
+        return 0;
+    }
+
     int array[arraySizeBound] = { 0 };
     int arraySize = 0;
     int scan_res = 0;
-    bool flagInput = true;
+    bool isCorrectInput = true;
 
     do
     {
         printf("Enter size array: ");
         scan_res = scanf("%d", &arraySize);
 
-        flagInput = true;
+        isCorrectInput = true;
 
         if (!scan_res || arraySize < 1 || arraySize > arraySizeBound)
         {
             printf("Incorrect input (The size is positive and no more than %d). Try again!\n", arraySizeBound);
             scanf_s("%*[^\n]");
 
-            flagInput = false;
+            isCorrectInput = false;
         }
-    } while (!scan_res || !flagInput);
+    } while (!scan_res || !isCorrectInput);
     
 
     printf("Enter a array:\n");
@@ -134,5 +218,19 @@ void main()
     }
 
     quickSort(array, 0, arraySize - 1);
-    mostCommon(array, arraySize);
+
+    int counterMaximum = 1;
+    int mostCommonNumber = array[0];
+    mostCommon(array, arraySize, &mostCommonNumber, &counterMaximum);
+
+    if (counterMaximum == 1)
+    {
+        printf("All elements occur once.");
+    }
+    else
+    {
+        printf("The most common element is \"%d\", which has been encountered %d time(s).\n", mostCommonNumber, counterMaximum);
+    }
+
+    return 0;
 }
