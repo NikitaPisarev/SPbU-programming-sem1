@@ -25,7 +25,7 @@ void bubbleSort(int array[], int lengthArray)
 {
     for (int i = 0; i < lengthArray - 1; ++i)
     {
-        for (int j = 0; j < lengthArray - 1; ++j)
+        for (int j = 0; j < lengthArray - (i + 1); ++j)
         {
             if (array[j] > array[j + 1])
             {
