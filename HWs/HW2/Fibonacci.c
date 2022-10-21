@@ -3,52 +3,52 @@
 
 #define bound 47
 
-int iteratFibonacci(int number)
+int iterativeFibonacci(int number)
 {
-    int firstNumber = 0;
-    int secondNumber = 1;
+    int previousNumber = 0;
+    int currentNumber = 1;
 
-    for (int i = 0; i < number; ++i)
+    for (int i = 0; i < number ; ++i)
     {
-        secondNumber = secondNumber + firstNumber;
-        firstNumber = secondNumber - firstNumber;
+        currentNumber = currentNumber + previousNumber;
+        previousNumber = currentNumber - previousNumber;
     }
 
-    return firstNumber;
+    return previousNumber;
 }
 
-int recursFibonacci(int number)
+int recursiveFibonacci(int number)
 {
     if (number == 0 || number == 1)
     {
         return number;
     }
 
-    return recursFibonacci(number - 1) + recursFibonacci(number - 2);
+    return recursiveFibonacci(number - 1) + recursiveFibonacci(number - 2);
 }
 
 void main()
 {
     int number = 0;
     int scan_res = 0;
-    bool flagNumber = true;
+    bool isIncorrectInput = true;
 
     do
     {
-        flagNumber = true;
+        isIncorrectInput = true;
 
         printf("Enter which Fibonacci number you want to output: ");
         scan_res = scanf("%d", &number);
 
-        if (!scan_res || !flagNumber || number < 0 || number >= bound)
+        if (!scan_res || !isIncorrectInput || number < 0 || number >= bound)
         {
             printf("Incorrect input (the number must be non-negative and less than %d). Try again!\n", bound);
             scanf("%*[^\n]");
 
-            flagNumber = false;
+            isIncorrectInput = false;
         }
-    } while (!scan_res || !flagNumber);
+    } while (!scan_res || !isIncorrectInput);
 
-    printf("The Fibonacci number of %d is %d\n", number, iteratFibonacci(number));
-    printf("And also the %d Fibonacci number is %d\n", number + 1, recursFibonacci(number + 1));
+    printf("The Fibonacci number of %d is %d\n", number, iterativeFibonacci(number));
+    printf("And also the %d Fibonacci number is %d\n", number + 1, recursiveFibonacci(number + 1));
 }
