@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define arraySize 30
+#define arraySize 20
 #define maximumNumber 150
 
 void printArr(int array[])
@@ -22,20 +22,20 @@ void swap(int *firstNumber, int *secondNumber)
     *secondNumber = temp;
 }
 
-void partition(int array[], int index, int rigthElement)
+void partition(int array[], int leftIndex, int rigthIndex)
 {
-    int leftElement = index + 1;
+    int leftElement = leftIndex + 1;
 
-    for (int current = leftElement; current < rigthElement; ++current)
+    for (int current = leftElement; current < rigthIndex; ++current)
     {
-        if (array[index] > array[current])
+        if (array[leftIndex] > array[current])
         {
             swap(&array[current], &array[leftElement]);
             ++leftElement;
         }
     }
 
-    swap(&array[index], &array[leftElement - 1]);
+    swap(&array[leftIndex], &array[leftElement - 1]);
 }
 
 void main()
