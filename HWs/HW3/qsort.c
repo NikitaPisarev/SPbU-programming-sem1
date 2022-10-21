@@ -2,6 +2,7 @@
 #include <stdbool.h>
 
 #define arraySizeBound 1000
+#define sizeInsertionSort 10
 
 void printArray(int array[], int lengthArray)
 {
@@ -52,7 +53,7 @@ void insertsSort(int array[], int leftIndex, int rigthIndex)
 
 void quickSort(int array[], int leftIndex, int rigthIndex)
 {
-    if (rigthIndex - leftIndex <= 8)
+    if (rigthIndex - leftIndex <= sizeInsertionSort - 2)
     {
         insertsSort(array, leftIndex, rigthIndex);
     }
