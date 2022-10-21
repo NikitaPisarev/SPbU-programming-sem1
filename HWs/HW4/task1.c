@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdbool.h>
 #include <locale.h>
 
 #define lengthBinaryNumber sizeof(int) * 8
@@ -35,8 +36,8 @@ void addBinaryNumbers(unsigned char firstNumber[], unsigned char secondNimber[],
     }
 }
 
- int conversionFromBinaryDecimal(unsigned char array[], char length)
- {
+int conversionFromBinaryDecimal(unsigned char array[], char length)
+{
     int decimalResult = 0;
     int power = 1;
 
@@ -47,11 +48,84 @@ void addBinaryNumbers(unsigned char firstNumber[], unsigned char secondNimber[],
     }
 
     return decimalResult;
- } 
+}
 
-void main()
+bool testBinaryRepresentation()
+{
+    int number = 12;
+    unsigned char binaryNumber[lengthBinaryNumber] = { 0 };
+    unsigned char correctBinaryNumber[lengthBinaryNumber] = { 0 };
+    correctBinaryNumber[lengthBinaryNumber - 3] = 1; // 000100 = 4
+    correctBinaryNumber[lengthBinaryNumber - 4] = 1; // 001000 = 8
+
+    binaryRepresentation(binaryNumber, number);
+
+    for (int i; i < lengthBinaryNumber; ++i)
+    {
+        if (binaryNumber[i] != correctBinaryNumber[i])
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool testAddBinaryNumbers()
+{
+    unsigned char binaryNumber1[lengthBinaryNumber] = { 0 };
+    unsigned char binaryNumber2[lengthBinaryNumber] = { 0 };
+
+    binaryNumber1[lengthBinaryNumber - 3] = 1; // 000100 = 4
+    binaryNumber2[lengthBinaryNumber - 3] = 1; // 000100 = 4
+
+    unsigned char result[lengthBinaryNumber] = { 0 };
+    unsigned char correctResult[lengthBinaryNumber] = { 0 };
+    correctResult[lengthBinaryNumber - 4] = 1; // 001000 = 8
+
+    addBinaryNumbers(binaryNumber1, binaryNumber2, result);
+
+    for (int i = 0; i < lengthBinaryNumber; ++i)
+    {
+        if (result[i] != correctResult[i])
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool testConversionFromBinaryDecimal()
+{
+    unsigned char binaryNumber[lengthBinaryNumber] = { 0 };
+    binaryNumber[lengthBinaryNumber - 3] = 1; // 000100 = 4
+    binaryNumber[lengthBinaryNumber - 4] = 1; // 001000 = 8
+
+    return conversionFromBinaryDecimal(binaryNumber, lengthBinaryNumber) == 12;
+}
+
+int main()
 {
     setlocale(LC_ALL, "RU-ru");
+
+    if (!testBinaryRepresentation())
+    {
+        printf("Ошибка работы функции BinaryRepresentation.\n");
+        return 0;
+    }
+
+    if (!testAddBinaryNumbers())
+    {
+        printf("Ошибка работы функции AddBinaryNumbers.\n");
+        return 0;
+    }
+
+    if (!testConversionFromBinaryDecimal())
+    {
+        printf("Ошибка работы функции ConversionFromBinaryDecimal.\n");
+        return 0;
+    }
 
     int firstNumber = 0;
     int secondNumber = 0;
@@ -92,4 +166,6 @@ void main()
     printf(" (%d)", decimalSum);
     
     printf("\n\nСумма %d и %d равна %d.\n", firstNumber, secondNumber, decimalSum);
+
+    return 0;
 }
