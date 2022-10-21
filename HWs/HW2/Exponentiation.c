@@ -61,16 +61,16 @@ int main()
     
     if (degree >= 0)
     {
-        printf("Binary search: ");
+        printf("Binary exponentiation ");
         printf("%d^%d is %.0lf\n", number, degree, binaryPower(number, degree));
-        printf("Linear search: ");
+        printf("Linear exponentiation ");
         printf("%d^%d is %.0lf\n", number, degree, power(number, degree));
     }
     else
     {
-        printf("Binary search: ");
+        printf("Binary exponentiation ");
         printf("%d^(%d) is %.15lf\n", number, degree, binaryPower(number, degree));
-        printf("Linear search: ");
+        printf("Linear exponentiation ");
         printf("%d^(%d) is %.15lf\n", number, degree, power(number, degree));
     }
 
