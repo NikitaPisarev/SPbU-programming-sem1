@@ -53,29 +53,30 @@ int countingSort(int array[], int lengthArray)
         }
     }
 
-    int *arrayAux = calloc(maximumElement - minimumElement + 1, sizeof(int));
+    int lengthAuxiliaryArray = maximumElement - minimumElement + 1;
+    int *arrayAuxiliary = calloc(lengthAuxiliaryArray, sizeof(int));
 
-    if (arrayAux == NULL)
+    if (arrayAuxiliary == NULL)
     {
         return -1;
     }
 
     for (int i = 0; i < lengthArray; ++i)
     {
-        ++arrayAux[array[i] - minimumElement];
+        ++arrayAuxiliary[array[i] - minimumElement];
     }
 
-    int temp = 0;
+    int currentPosition = 0;
 
-    for (int i = 0; i < (maximumElement - minimumElement + 1); ++i)
+    for (int i = 0; i < lengthAuxiliaryArray; ++i)
     {
-        for (int j = 0; j < arrayAux[i]; ++j)
+        for (int j = 0; j < arrayAuxiliary[i]; ++j)
         {
-            array[temp++] = i + minimumElement;
+            array[currentPosition++] = i + minimumElement;
         }
     }
 
-    free(arrayAux);
+    free(arrayAuxiliary);
 
     return 0;
 }
@@ -85,26 +86,26 @@ void main()
     int array[arraySizeBound] = { 0 };
     int arraySize = 0;
     int scan_res = 0;
-    bool flagInput = true; 
+    bool isIncorrectInput = true; 
 
     do
     {
         printf("Enter size array: ");
         scan_res = scanf("%d", &arraySize);
 
-        flagInput = true;
+        isIncorrectInput = true;
 
         if (!scan_res || arraySize < 1 || arraySize > arraySizeBound)
         {
             printf("Incorrect input (The size is positive and no more than %d). Try again!\n", arraySizeBound);
             scanf_s("%*[^\n]");
 
-            flagInput = false;
+            isIncorrectInput = false;
         }
-    } while (!scan_res || !flagInput);
+    } while (!scan_res || !isIncorrectInput);
     
 
-    printf("Enter a array:\n");
+    printf("Enter an array:\n");
     for (int i = 0; i < arraySize; ++i)
     {
         do
@@ -120,12 +121,12 @@ void main()
     }
 
     char typeSort = '\0';
-    bool flagInputChar = true;
+    bool isIncorrectInputChar = true;
 
     printf("Choose the type of sorting by Bubble or Counting (B/C)?\n");
     do
     {
-        flagInputChar = true;
+        isIncorrectInputChar = true;
 
         getchar();
         scan_res = scanf("%c", &typeSort);
@@ -135,9 +136,9 @@ void main()
             printf("Incorrect input (Only \"B\" or \"C\"). Try again!\n");
             scanf_s("%*[^\n]");
 
-            flagInputChar = false;
+            isIncorrectInputChar = false;
         }
-    } while (!scan_res || !flagInputChar);
+    } while (!scan_res || !isIncorrectInputChar);
 
     if (typeSort == 'B') 
     {
