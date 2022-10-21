@@ -3,7 +3,7 @@
 
 #define bound 47
 
-int iterativeFibonacci(int number)
+int iterativeFibonacci(unsigned int number)
 {
     int previousNumber = 0;
     int currentNumber = 1;
@@ -17,7 +17,7 @@ int iterativeFibonacci(int number)
     return previousNumber;
 }
 
-int recursiveFibonacci(int number)
+int recursiveFibonacci(unsigned int number)
 {
     if (number == 0 || number == 1)
     {
@@ -29,7 +29,7 @@ int recursiveFibonacci(int number)
 
 void main()
 {
-    int number = 0;
+    unsigned int number = 0;
     int scan_res = 0;
     bool isIncorrectInput = true;
 
