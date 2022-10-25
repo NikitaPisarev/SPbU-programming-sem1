@@ -1,3 +1,4 @@
+#include "stack.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -34,8 +35,12 @@ int push(Stack *stack, int value)
     if (stack->head == NULL)
     {
         stack->head = calloc(1, sizeof(StackElement));
-        stack->head->value = value;
+        if (stack->head == NULL)
+        {
+            return -2;
+        }
 
+        stack->head->value = value;
         return 0;
     }
 
@@ -43,7 +48,7 @@ int push(Stack *stack, int value)
 
     if (newElement == NULL)
     {
-        return -2;
+        return -3;
     }
 
     newElement->value = value;
@@ -53,26 +58,82 @@ int push(Stack *stack, int value)
     return 0;
 }
 
-int pop(Stack *stack)
+int pop(Stack *stack, int *resultingValue)
 {
-    if (stack == NULL || stack->head == NULL)
+    if (stack == NULL)
     {
         return -1;
     }
 
-    int element = stack->head->value;
+    if (stack->head == NULL)
+    {
+        return -2;
+    }
 
+    StackElement *nextElement = stack->head->next;
 
+    *resultingValue = stack->head->value;
+    free(stack->head);
+
+    stack->head = nextElement;
+
+    return 0;
 }
 
-int top(Stack *stack)
+int lengthStack(Stack *stack)
 {
-    if (stack == NULL || stack->head == NULL)
+    if (stack == NULL)
     {
         return -1;
     }
 
-    return stack->head->value;
+    int length = 0;
+    StackElement *currentElement = stack->head;
+
+    while (currentElement != NULL)
+    {
+        ++length;
+        currentElement = currentElement->next;
+    }
+
+    return length;
+}
+
+int top(Stack *stack, int *value)
+{
+    if (stack == NULL)
+    {
+        return -1;
+    }
+
+    if (stack->head == NULL)
+    {
+        return -2;
+    }
+
+    *value = stack->head->value;
+
+    return 0;
+}
+
+int freeStack(Stack *stack)
+{
+    if (stack == NULL)
+    {
+        return -1;
+    }
+
+    StackElement *currentElement = stack->head;
+
+    while (currentElement != NULL)
+    {
+        StackElement *nextElement = currentElement->next;
+        free(currentElement);
+        currentElement = nextElement;
+    }
+    stack->head = NULL;
+
+    return 0;
 }
 
 int isEmpty(Stack *stack)
@@ -85,7 +146,22 @@ int isEmpty(Stack *stack)
     return stack->head == NULL;
 }
 
-void main()
+int printStack(Stack *stack)
 {
-    Stack *stack = stackCreate();
+    if (stack == NULL)
+    {
+        return -1;
+    }
+
+    StackElement *currentElement = stack->head;
+
+    while (currentElement != NULL)
+    {
+        printf("%d ", currentElement->value);
+
+        currentElement = currentElement->next;
+    }
+    printf("\n");
+
+    return 0;
 }
