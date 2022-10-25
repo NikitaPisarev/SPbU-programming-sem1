@@ -13,7 +13,7 @@ typedef struct Stack
     StackElement *head;
 } Stack;
 
-Stack *stackCreate()
+Stack *createStack()
 {
     Stack *stack = calloc(1, sizeof(Stack));
 

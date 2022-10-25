@@ -17,7 +17,13 @@ int pop(Stack *Stack, int *resultingValue);
 int lengthStack(Stack *stack);
 
 // If there is an upper element of the stack, then returns it
-int top(Stack *stack);
+int top(Stack *stack, int *value);
 
 // Cleaning the stack
 int freeStack(Stack *stack);
+
+// If the stack exists, then checks if it is empty
+int isEmpty(Stack *stack);
+
+// If the stack exists, then outputs it
+int printStack(Stack *stack);
