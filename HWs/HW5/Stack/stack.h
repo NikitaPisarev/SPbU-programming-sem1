@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdbool.h>
+
 typedef struct StackElement StackElement;
 
 typedef struct Stack Stack;
@@ -23,7 +25,7 @@ int top(Stack *stack, int *value);
 int freeStack(Stack *stack);
 
 // If the stack exists, then checks if it is empty
-int isEmpty(Stack *stack);
+bool isEmpty(Stack *stack);
 
 // If the stack exists, then outputs it
 int printStack(Stack *stack);

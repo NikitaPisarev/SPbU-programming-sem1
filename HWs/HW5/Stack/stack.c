@@ -1,6 +1,7 @@
 #include "stack.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 typedef struct StackElement
 {
@@ -136,7 +137,7 @@ int freeStack(Stack *stack)
     return 0;
 }
 
-int isEmpty(Stack *stack)
+bool isEmpty(Stack *stack)
 {
     if (stack == NULL)
     {
