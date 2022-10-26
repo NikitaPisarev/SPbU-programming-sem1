@@ -1,73 +1,135 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "../Stack/stack.h"
 
-int main()
+int checkBalanced(char sequence[], int lengthSequence)
 {
     Stack *stack = createStack();
-
     if (stack == NULL)
     {
         printf("Stack creation error.\n");
-        return 0;
+        return -4;
     }
-    
-    printf("Enter the bracket sequence:\n");
 
-    unsigned char currentСharacter = 0;
+    int errorCode = 0;
     int topElement = 0;
-
-    while ((currentСharacter = getc(stdin)) != '\n')
+    for (int i = 0; i < lengthSequence; ++i)
     {
-        if (currentСharacter == '(' || currentСharacter == '[' || currentСharacter == '{')
+        if (sequence[i] == '(' || sequence[i] == '[' || sequence[i] == '{')
         {
-            push(stack, currentСharacter);
+            if ((errorCode = push(stack, sequence[i])) != 0)
+            {
+                freeStack(stack);
+                free(stack);
+                return errorCode;
+            }
             continue;
         }
 
-        if (currentСharacter == ')')
+        if (sequence[i] == ')')
         {
-            top(stack, &topElement);
-
-            if (topElement != (currentСharacter - 1)) // In the encoding, the numbers of brackets () differ by one
+            if ((errorCode = pop(stack, &topElement)) != 0 ||
+                (topElement != (sequence[i] - 1))) // In the encoding, the numbers of brackets () differ by one
             {
-                printf("No.\n");
+                freeStack(stack);
+                free(stack);
                 return 0;
             }
-            pop(stack, &topElement);
-
+            
             continue;
         }
 
-        if (currentСharacter == ']' || currentСharacter == '}')
+        if (sequence[i] == ']' || sequence[i] == '}')
         {
-            top(stack, &topElement);
-
-            if (topElement != (currentСharacter - 2)) // In the encoding, the numbers of brackets {} and [] differ by two
+            if ((errorCode = pop(stack, &topElement)) != 0 ||
+                (topElement != (sequence[i] - 2))) // In the encoding, the numbers of brackets {} and [] differ by two
             {
-                printf("No.\n");
+                freeStack(stack);
+                free(stack);
                 return 0;
             }
-            pop(stack, &topElement);
-
-            continue;
         }
-
-        printf("No the bracket sequence\n");
-        return 0;
     }
 
     if (!isEmpty(stack))
     {
-        printf("No.\n");
         freeStack(stack);
         free(stack);
         return 0;
     }
+    return 1;
+}
 
-    freeStack(stack);
-    free(stack);
+bool testCheckBalanced()
+{
+    char sequence1[7] = "({[]})";
+    if (!checkBalanced(sequence1, 7))
+    {
+        return false;
+    }
 
-    printf("Yes");
+    char sequence2[5] = "([})";
+    if (checkBalanced(sequence2, 5))
+    {
+        return false;
+    }
+
+    char sequence3[6] = "([a])";
+    if (!checkBalanced(sequence3, 5))
+    {
+        return false;
+    }
+
+    char sequence4[1] = "";
+    if (!checkBalanced(sequence4, 1))
+    {
+        return false;
+    }    
+    return true;
+}
+
+int main()
+{
+    if (!testCheckBalanced())
+    {
+        printf("Tests failed!\n");
+        return 0;
+    }
+
+    int lengthSequence = 0;
+    printf("Enter the length of the bracket sequence: ");
+    scanf("%d", &lengthSequence);
+    if (lengthSequence <= 0)
+    {
+        printf("Invalid length value.\n");
+        return 0;
+    }
+    printf("Enter the bracket sequence:\n");
+    char *sequence = calloc(lengthSequence, sizeof(char));
+    if (sequence == NULL)
+    {
+        printf("Memory allocation error.\n");
+        return 0;
+    }
+    getc(stdin); // Clear input stream
+    for (int i = 0; i < lengthSequence; ++i)
+    {
+        scanf("%c", &sequence[i]);
+    }
+
+    int errorCode = checkBalanced(sequence, lengthSequence);
+    if (errorCode == 1)
+    {
+        printf("Good bracket sequence!\n");
+    }
+    else if (errorCode == 0)
+    {
+        printf("Bad bracket sequence.\n");
+    }
+    else
+    {
+        printf("The program terminated with error code %d.\n", errorCode);
+    }
     return 0;
 }
