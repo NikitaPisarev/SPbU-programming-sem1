@@ -27,3 +27,8 @@ int isEmpty(Stack *stack);
 
 // If the stack exists, then outputs it
 int printStack(Stack *stack);
+
+//Error codes:
+// -1: Stack not created
+// -2: Stack head is missing(or memory allocation error for head)
+// -3: Memory allocation error
