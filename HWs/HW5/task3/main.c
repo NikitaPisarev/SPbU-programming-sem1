@@ -37,8 +37,8 @@ int infixToPostfix(char input[], char *output, int lengthInput)
     }
 
     int currentOutput = 0;
-    int priority = 0;
-    int topElement = 0;
+    int priorityCurrentCharacter = 0;
+    int topElementStack = 0;
     int errorCode = 0;
     for (int i = 0; i < lengthInput; ++i)
     {
@@ -54,15 +54,15 @@ int infixToPostfix(char input[], char *output, int lengthInput)
             continue;
         }
 
-        priority = priorities(input[i]);
-        if (priority == 5) // Extra character(s)
+        priorityCurrentCharacter = priorities(input[i]);
+        if (priorityCurrentCharacter == 5) // Extra character(s)
         {
             return -5;
             freeStack(stack);
             free(stack);
         }
 
-        if (priority == 3) // Opening parenthesis
+        if (priorityCurrentCharacter == 3) // Opening parenthesis
         {
             if ((errorCode = push(stack, input[i])) != 0)
             {
@@ -72,7 +72,7 @@ int infixToPostfix(char input[], char *output, int lengthInput)
             }
         }
 
-        if (priority == 4) // Closing parenthesis
+        if (priorityCurrentCharacter == 4) // Closing parenthesis
         {
             if (isEmpty(stack))
             {
@@ -80,8 +80,8 @@ int infixToPostfix(char input[], char *output, int lengthInput)
                 free(stack);
                 return -6;
             }
-            pop(stack, &topElement);
-            while (topElement != '(' )
+            pop(stack, &topElementStack);
+            while (topElementStack != '(' )
             {
                 if (isEmpty(stack))
                 {
@@ -89,30 +89,30 @@ int infixToPostfix(char input[], char *output, int lengthInput)
                     free(stack);
                     return -7;
                 }
-                output[currentOutput++] = topElement;
+                output[currentOutput++] = topElementStack;
                 output[currentOutput++] = ' ';
-                pop(stack, &topElement);
+                pop(stack, &topElementStack);
             }
         }
 
-        if (priority == 1 || priority == 2) // Operations
+        if (priorityCurrentCharacter == 1 || priorityCurrentCharacter == 2) // Operations
         {
             if (isEmpty(stack))
             {
                 push(stack, input[i]);
                 continue;
             }
-            top(stack, &topElement);
-            while (priorities(topElement) <= priority)
+            top(stack, &topElementStack);
+            while (priorities(topElementStack) <= priorityCurrentCharacter)
             {
-                pop(stack, &topElement);
-                output[currentOutput++] = topElement;
+                pop(stack, &topElementStack);
+                output[currentOutput++] = topElementStack;
                 output[currentOutput++] = ' ';
                 if (isEmpty(stack))
                 {
                     break;
                 }
-                top(stack, &topElement);
+                top(stack, &topElementStack);
             }
             if ((errorCode = push(stack, input[i])) != 0)
             {
@@ -123,16 +123,16 @@ int infixToPostfix(char input[], char *output, int lengthInput)
         }
     }
 
-    while (!isEmpty(stack))
+    while (!isEmpty(stack)) // If there are still elements left in the stack, then we put them in the output
     {
-        pop(stack, &topElement);
-        if (priorities(topElement) == 3)
+        pop(stack, &topElementStack);
+        if (priorities(topElementStack) == 3)
         {
             freeStack(stack);
             free(stack);
             return -8;
         }
-        output[currentOutput++] = topElement;
+        output[currentOutput++] = topElementStack;
         output[currentOutput++] = ' ';
     }
     freeStack(stack);
