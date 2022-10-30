@@ -21,7 +21,6 @@ int checkBalanced(char sequence[], int lengthSequence)
             if ((errorCode = push(stack, sequence[i])) != 0)
             {
                 freeStack(stack);
-                free(stack);
                 return errorCode;
             }
             continue;
@@ -33,7 +32,6 @@ int checkBalanced(char sequence[], int lengthSequence)
                 (topElement != (sequence[i] - 1))) // In the encoding, the numbers of brackets () differ by one
             {
                 freeStack(stack);
-                free(stack);
                 return 0;
             }
             
@@ -46,7 +44,6 @@ int checkBalanced(char sequence[], int lengthSequence)
                 (topElement != (sequence[i] - 2))) // In the encoding, the numbers of brackets {} and [] differ by two
             {
                 freeStack(stack);
-                free(stack);
                 return 0;
             }
         }
@@ -55,7 +52,6 @@ int checkBalanced(char sequence[], int lengthSequence)
     if (!isEmpty(stack))
     {
         freeStack(stack);
-        free(stack);
         return 0;
     }
     return 1;

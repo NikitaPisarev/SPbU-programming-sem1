@@ -94,7 +94,6 @@ bool testOperations()
             {
                 printf("Error in operations function.\n");
                 freeStack(stack);
-                free(stack);
                 return false;
             }
 
@@ -105,7 +104,6 @@ bool testOperations()
         {
             printf("Error in push function.\n");
             freeStack(stack);
-            free(stack);
             return false;
         }
     }
@@ -115,14 +113,10 @@ bool testOperations()
     {
         printf("Error in pop function.\n");
         freeStack(stack);
-        free(stack);
-
         return false;
     }
 
-    freeStack(stack);
-    free(stack);
-    
+    freeStack(stack); 
     return resultTest == 9;
 }
 
@@ -166,7 +160,6 @@ int main()
                     printf("The operations function failed with error %d.\n", errorCode);
                 }
                 freeStack(stack);
-                free(stack);
                 return 0;
             }
 
@@ -177,7 +170,6 @@ int main()
         {
             printf("Reading error, enter only \"+, -, *, /\" and digits 0-9.\n");
             freeStack(stack);
-            free(stack);
             return 0;
         }
 
@@ -185,7 +177,6 @@ int main()
         {
             printf("The push function failed with error %d.\n", errorCode);
             freeStack(stack);
-            free(stack);
             return 0;
         }
     }
@@ -195,14 +186,10 @@ int main()
     {
         printf("The pop function failed with error %d.\n", errorCode);
         freeStack(stack);
-        free(stack);
-
         return 0;
     }
 
     freeStack(stack);
-    free(stack);
-
-    printf("Ответ: %d", result);
+    printf("Answer: %d", result);
     return 0;
 }

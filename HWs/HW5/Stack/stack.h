@@ -21,8 +21,8 @@ int lengthStack(Stack *stack);
 // If there is an upper element of the stack, then returns it
 int top(Stack *stack, int *value);
 
-// Cleaning the stack
-int freeStack(Stack *stack);
+// Frees up all the memory allocated for the stack
+void freeStack(Stack *stack);
 
 // If the stack exists, then checks if it is empty
 bool isEmpty(Stack *stack);

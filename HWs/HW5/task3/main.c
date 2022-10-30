@@ -59,7 +59,6 @@ int infixToPostfix(char input[], char *output, int lengthInput)
         {
             return -5;
             freeStack(stack);
-            free(stack);
         }
 
         if (priorityCurrentCharacter == 3) // Opening parenthesis
@@ -67,7 +66,6 @@ int infixToPostfix(char input[], char *output, int lengthInput)
             if ((errorCode = push(stack, input[i])) != 0)
             {
                 freeStack(stack);
-                free(stack);
                 return errorCode;
             }
         }
@@ -77,7 +75,6 @@ int infixToPostfix(char input[], char *output, int lengthInput)
             if (isEmpty(stack))
             {
                 freeStack(stack);
-                free(stack);
                 return -6;
             }
             pop(stack, &topElementStack);
@@ -86,7 +83,6 @@ int infixToPostfix(char input[], char *output, int lengthInput)
                 if (isEmpty(stack))
                 {
                     freeStack(stack);
-                    free(stack);
                     return -7;
                 }
                 output[currentOutput++] = topElementStack;
@@ -117,7 +113,6 @@ int infixToPostfix(char input[], char *output, int lengthInput)
             if ((errorCode = push(stack, input[i])) != 0)
             {
                 freeStack(stack);
-                free(stack);
                 return errorCode;
             }
         }
@@ -129,14 +124,12 @@ int infixToPostfix(char input[], char *output, int lengthInput)
         if (priorities(topElementStack) == 3)
         {
             freeStack(stack);
-            free(stack);
             return -8;
         }
         output[currentOutput++] = topElementStack;
         output[currentOutput++] = ' ';
     }
     freeStack(stack);
-    free(stack);
     return 0;
 }
 

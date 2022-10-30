@@ -117,11 +117,11 @@ int top(Stack *stack, int *value)
     return 0;
 }
 
-int freeStack(Stack *stack)
+void freeStack(Stack *stack)
 {
     if (stack == NULL)
     {
-        return -1;
+        return;
     }
 
     StackElement *currentElement = stack->head;
@@ -132,9 +132,7 @@ int freeStack(Stack *stack)
         free(currentElement);
         currentElement = nextElement;
     }
-    stack->head = NULL;
-
-    return 0;
+    free(stack);
 }
 
 bool isEmpty(Stack *stack)
