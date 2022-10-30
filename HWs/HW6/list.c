@@ -131,6 +131,5 @@ void freeList(List *list)
         previousElement = NULL;
         previousElement = currentElement;
     }
-    list->head = NULL;
     free(list);
 }
