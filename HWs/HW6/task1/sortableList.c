@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "list.h"
+#include "sortableList.h"
 
 typedef int Error;
 typedef int Value;
@@ -84,7 +84,7 @@ Error pop(List *list, Value value)
     }
     if (currentElement->value != value) // No such value was found
     {
-        return -2;
+        return -3;
     }
     if (previousElement == NULL) // If this is the first element
     {
