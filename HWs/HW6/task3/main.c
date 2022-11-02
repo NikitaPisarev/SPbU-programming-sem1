@@ -1,21 +1,24 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
+#include <stdlib.h>
+#include "mergeSortList.h"
 
 int main()
 {
-    FILE *file = fopen("data.txt", "r");
-    if (file == NULL)
+    Person *list = NULL;
+    if (listCreate(&list) == -1)
     {
-        printf("File not found.\n");
+        printf("Memory allocation error.\n");
         return 0;
     }
 
-    char temp[256] = { 0 };
-    while (!feof(file))
+    int errorCode = 0;
+    if ((errorCode = fillList(&list, "data.txt")) != 0)
     {
-        fscanf(file, "%s", temp);
-        printf("%s", temp);
+        printf("The fillList function failed with error %d.\n", errorCode);
+        return 0;
     }
-    fclose(file);
+
+    printf("List:\n");
+    printList(&list);
     return 0;
 }
