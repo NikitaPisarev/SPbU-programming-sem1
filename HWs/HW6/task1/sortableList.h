@@ -3,7 +3,6 @@
 typedef int Error;
 typedef int Value;
 
-typedef struct Node Node;
 typedef struct List List;
 
 // Creating a list
@@ -21,7 +20,7 @@ Error printList(List *list);
 // Frees up all the memory allocated for the list
 void freeList(List *list);
 
-//Error codes:
-// -1: List not created
-// -2: Memory allocation error
-// -3: No such value found
+// Error codes:
+//  -1: List not created
+//  -2: Memory allocation error
+//  -3: No such value found
