@@ -12,7 +12,7 @@ int main()
     }
 
     int key = 0;
-    printf("Hi, enter the sorting method ( >= 0 - by name, < 0 - by number): ");
+    printf("Hi, enter the sorting method (>= 0 - by name, < 0 - by number): ");
     scanf("%d", &key);
     mergeSorting(&list, key);
     printf("Phonebook:\n");
