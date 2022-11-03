@@ -126,10 +126,10 @@ void splitList(List *list, List **leftList, List **rightList)
         fastPointer = fastPointer->next;
         if (fastPointer != NULL)
         {
-            fastPointer = fastPointer->next; // If the list is odd, then slow Pointer will be exactly in the middle of the list,
-            slowPointer = slowPointer->next; // and if the list is even, then slowPointer will be one element further
-        }
-    }
+            fastPointer = fastPointer->next; // If the list is even, then slowPointer will point to the "LengthList"/2 - 1 index,
+            slowPointer = slowPointer->next; // so it will divide the list in two,
+        }                                    // and if the list is odd, then slowPointer will point exactly to the middle,
+    }                                        // so the left list will be 1 more than the right
 
     (*leftList) = list;
     (*rightList) = slowPointer->next;
@@ -172,5 +172,5 @@ void freeList(List **list)
         (*list) = (*list)->next;
         free(deleteElement);
     }
-    free((*list));
+    free(*list);
 }
