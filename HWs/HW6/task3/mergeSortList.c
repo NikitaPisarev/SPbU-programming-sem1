@@ -1,100 +1,176 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-#include "mergeSortList.h"
+#include <stdlib.h>
 
-#define size 256
+#define maximumSize 256
 
 typedef int Error;
 
-typedef struct Person
+typedef struct List
 {
-    char name[size];
-    char number[size];
-    struct Person *next;
-} Person;
+    char name[maximumSize];
+    char number[maximumSize];
+    struct List *next;
+} List;
 
-Error listCreate(Person **list)
+Error fillList(List **list, char *fileName)
 {
-    *list = calloc(1, sizeof(Person));
-    if (*list == NULL)
-    {
-        return -1;
-    }
-    return 0;
-}
-
-Error fillList(Person **list, char *fileName)
-{
-    if (list == NULL)
-    {
-        return -1;
-    }
-
     FILE *file = fopen(fileName, "r");
     if (file == NULL || feof(file))
     {
-        return -2;
+        return -1;
     }
 
-    char name[size] = {0};
-    char number[size] = {0};
-
-    Person *previousElement = NULL;
+    char name[maximumSize] = {0};
+    char number[maximumSize] = {0};
     while (!feof(file))
     {
         fscanf(file, "%s", name);
         fscanf(file, "%s", number);
-        Person *person = calloc(1, sizeof(Person));
+        List *person = calloc(1, sizeof(List));
         if (person == NULL)
         {
             fclose(file);
-            return -3;
+            return -2;
         }
-        strcpy((*list)->name, name);
-        strcpy((*list)->number, number);
-        (*list)->next = previousElement;
-        previousElement = (*list);
+        strcpy(person->name, name);
+        strcpy(person->number, number);
+        person->next = (*list);
+        (*list) = person;
     }
     fclose(file);
     return 0;
 }
 
-void mergeSorting(Person *list)
+int compare(List *firstElement, List *secondElement, int key)
 {
+    if (key >= 0)
+    {
+        return strcmp(firstElement->name, secondElement->name);
+    }
+    return strcmp(firstElement->number, secondElement->number);
 }
 
-// Error printList(Person *list)
-// {
-//     if (list == NULL)
-//     {
-//         return -1;
-//     }
+void merge(List *leftList, List *rightList, List **resultList, int key)
+{
+    (*resultList) = NULL;
+    if (leftList == NULL)
+    {
+        (*resultList) = rightList;
+        return;
+    }
+    if (rightList == NULL)
+    {
+        (*resultList) = leftList;
+        return;
+    }
 
-//     Node *currentElement = list->head;
-//     while (currentElement != NULL)
-//     {
-//         printf("%s %s\n", currentElement->name, currentElement->number);
-//         currentElement = currentElement->next;
-//     }
-//     return 0;
-// }
+    if (compare(leftList, rightList, key) < 0)
+    {
+        (*resultList) = leftList;
+        leftList = leftList->next;
+    }
+    else
+    {
+        (*resultList) = rightList;
+        rightList = rightList->next;
+    }
 
-// void freeList(Person *list)
-// {
-//     if (list == NULL)
-//     {
-//         return;
-//     }
+    List *headResultList = (*resultList);
 
-//     Node *currentElement = list->head;
-//     Node *previousElement = currentElement;
-//     while (currentElement != NULL)
-//     {
-//         currentElement = currentElement->next;
-//         free(previousElement);
-//         previousElement = NULL;
-//         previousElement = currentElement;
-//     }
-//     free(list);
-// }
+    while (leftList != NULL && rightList != NULL)
+    {
+        if (compare(leftList, rightList, key) < 0)
+        {
+            (*resultList)->next = leftList;
+            leftList = leftList->next;
+        }
+        else
+        {
+            (*resultList)->next = rightList;
+            rightList = rightList->next;
+        }
+        (*resultList) = (*resultList)->next;
+    }
+
+    while (leftList != NULL)
+    {
+        (*resultList)->next = leftList;
+        leftList = leftList->next;
+        (*resultList) = (*resultList)->next;
+    }
+
+    while (rightList != NULL)
+    {
+        (*resultList)->next = rightList;
+        rightList = rightList->next;
+        (*resultList) = (*resultList)->next;
+    }
+
+    (*resultList) = headResultList;
+}
+
+void splitList(List *list, List **leftList, List **rightList)
+{
+    if (list == NULL || list->next == NULL)
+    {
+        (*leftList) = list;
+        (*rightList) = NULL;
+        return;
+    }
+
+    List *fastPointer = list->next;
+    List *slowPointer = list;
+    while (fastPointer != NULL)
+    {
+        fastPointer = fastPointer->next;
+        if (fastPointer != NULL)
+        {
+            fastPointer = fastPointer->next; // If the list is odd, then slow Pointer will be exactly in the middle of the list,
+            slowPointer = slowPointer->next; // and if the list is even, then slowPointer will be one element further
+        }
+    }
+
+    (*leftList) = list;
+    (*rightList) = slowPointer->next;
+    slowPointer->next = NULL;
+}
+
+void mergeSorting(List **list, int key)
+{
+    if ((*list) == NULL || (*list)->next == NULL)
+    {
+        return;
+    }
+
+    List *leftList = NULL;
+    List *rightList = NULL;
+
+    splitList((*list), &leftList, &rightList);
+    mergeSorting(&leftList, key);
+    mergeSorting(&rightList, key);
+
+    merge(leftList, rightList, list, key);
+}
+
+void printList(List *list)
+{
+    while (list != NULL)
+    {
+        printf("%s\t%s\n", list->name, list->number);
+        list = list->next;
+    }
+    printf("\n");
+}
+
+void freeList(List **list)
+{
+    List *deleteElement = NULL;
+    while ((*list) != NULL)
+    {
+        deleteElement = (*list);
+        (*list) = (*list)->next;
+        free(deleteElement);
+    }
+    free((*list));
+}

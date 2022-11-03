@@ -2,21 +2,12 @@
 
 typedef int Error;
 
-typedef struct Person Person;
+typedef struct List List;
 
-// Creating a list
-Error listCreate(Person **list);
+Error fillList(List **list, char *fileName);
 
-// If the list is created, adds the value to the sortable list
-Error fillList(Person **list, char *fileName);
+void mergeSorting(List **list, int key);
 
-// If a list is created, outputs it
-Error printList(Person **list);
+void printList(List *list);
 
-// Frees up all the memory allocated for the list
-void freeList(Person *list);
-
-// Error codes:
-//  -1: Person not created
-//  -2: Memory allocation error
-//  -3: No such value found
+void freeList(List **list);

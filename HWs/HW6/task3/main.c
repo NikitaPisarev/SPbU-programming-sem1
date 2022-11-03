@@ -1,16 +1,12 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include "mergeSortList.h"
 
 int main()
 {
-    Person *list = NULL;
-    if (listCreate(&list) == -1)
-    {
-        printf("Memory allocation error.\n");
-        return 0;
-    }
-
+    List *list = NULL;
     int errorCode = 0;
     if ((errorCode = fillList(&list, "data.txt")) != 0)
     {
@@ -18,7 +14,12 @@ int main()
         return 0;
     }
 
-    printf("List:\n");
-    printList(&list);
+    int key = 0;
+    printf("Hi, enter the sorting method ( >= 0 - by name, < 0 - by number): ");
+    scanf("%d", &key);
+    mergeSorting(&list, key);
+    printf("Phonebook:\n");
+    printList(list);
+    freeList(&list);
     return 0;
 }
