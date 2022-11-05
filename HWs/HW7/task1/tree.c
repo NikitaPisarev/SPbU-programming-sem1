@@ -151,5 +151,6 @@ void freeTree(Tree **root)
 
     freeTree(&(*root)->leftChild);
     freeTree(&(*root)->rightChild);
+    free((*root)->value);
     free((*root));
 }
