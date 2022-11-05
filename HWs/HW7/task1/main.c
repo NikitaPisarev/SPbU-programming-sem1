@@ -5,6 +5,40 @@
 
 #define maximumSize 256
 
+bool testAdd()
+{
+    Tree *tree = NULL;
+    add(&tree, 1, "Hello");
+    add(&tree, 2, "World");
+
+    bool result = strcmp(getValue(tree, 1), "Hello") == 0 &&
+                  strcmp(getValue(tree, 2), "World") == 0;
+    freeTree(&tree);
+    return result;
+}
+
+bool testDelete()
+{
+    Tree *tree = NULL;
+    add(&tree, 5, "Hello");
+    add(&tree, 3, "World");
+    add(&tree, 10, "It's");
+    add(&tree, 7, "Dictionary");
+
+    deleteElement(&tree, 10);
+    bool result = strcmp(getValue(tree, 5), "Hello") == 0 &&
+                  strcmp(getValue(tree, 3), "World") == 0 &&
+                  strcmp(getValue(tree, 7), "Dictionary") == 0 &&
+                  getValue(tree, 10) == NULL;
+    freeTree(&tree);
+    return result;
+}
+
+bool testsPassed()
+{
+    return testAdd() && testDelete();
+}
+
 void printActions(void)
 {
     printf(" ---------------------------------------------------------------\n");
@@ -20,6 +54,12 @@ void printActions(void)
 
 int main()
 {
+    if (!testsPassed())
+    {
+        printf("Tests failed.\n");
+        return 0;
+    }
+
     Tree *tree = NULL;
     printf("Hi, it's a dictionary, that's what I can do:\n");
     printActions();
