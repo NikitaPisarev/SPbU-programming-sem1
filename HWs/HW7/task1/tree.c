@@ -79,6 +79,7 @@ void deleteElement(Tree **root, int key)
         {
             Tree *elementToDelete = (*root);
             (*root) = (*root)->rightChild;
+            free(elementToDelete->value);
             free(elementToDelete);
             return;
         }
