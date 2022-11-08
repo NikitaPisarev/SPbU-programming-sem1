@@ -71,6 +71,40 @@ int fillTree(Tree **root, FILE *fileName)
     return 0;
 }
 
+int evaluateTree(Tree *tree)
+{
+    if (tree == NULL)
+    {
+        return 0;
+    }
+
+    int leftValue = evaluateTree(tree->leftChild);
+    int rightValue = evaluateTree(tree->rightChild);
+
+    switch (tree->element)
+    {
+    case -1: // Numbers
+        return tree->value;
+        break;
+
+    case '+':
+        return leftValue + rightValue;
+        break;
+
+    case '-':
+        return leftValue - rightValue;
+        break;
+
+    case '*':
+        return leftValue * rightValue;
+        break;
+
+    case '/':
+        return leftValue / rightValue;
+        break;
+    }
+}
+
 void printExpression(Tree *tree)
 {
     if (tree == NULL)

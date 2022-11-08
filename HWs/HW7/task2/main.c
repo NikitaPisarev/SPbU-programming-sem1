@@ -18,5 +18,6 @@ int main()
     }
 
     printExpression(tree);
+    printf("= %d", evaluateTree(tree));
     return 0;
 }

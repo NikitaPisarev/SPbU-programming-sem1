@@ -8,6 +8,8 @@ int fillTree(Tree **root, FILE *fileName);
 
 void printExpression(Tree *tree);
 
+int evaluateTree(Tree *tree);
+
 // Tree output by direct traversal
 void printTree(Tree *root);
 
