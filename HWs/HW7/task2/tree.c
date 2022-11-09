@@ -5,8 +5,8 @@
 
 typedef struct Tree
 {
-    char element;
-    int value;
+    char operation;
+    int number;
     struct Tree *leftChild;
     struct Tree *rightChild;
 } Tree;
@@ -38,7 +38,7 @@ Error fillTree(Tree **root, FILE *fileName)
             {
                 return MemoryAllocationError;
             }
-            (*root)->element = currentСharacter;
+            (*root)->operation = currentСharacter;
 
             if (fillTree(&(*root)->leftChild, fileName) == MemoryAllocationError)
             {
@@ -61,14 +61,14 @@ Error fillTree(Tree **root, FILE *fileName)
             ungetc(nextElement, fileName);
             if (nextElement >= '0' && nextElement <= '9') // Checking if it's a negative number
             {
-                (*root)->element = -1; // The indicator that this node is a number
+                (*root)->operation = -1; // The indicator that this node is a number
                 ungetc(currentСharacter, fileName);
-                fscanf(fileName, "%d", &(*root)->value);
+                fscanf(fileName, "%d", &(*root)->number);
                 isСontinue = false;
                 break;
             }
 
-            (*root)->element = currentСharacter;
+            (*root)->operation = currentСharacter;
             if (fillTree(&(*root)->leftChild, fileName) == MemoryAllocationError)
             {
                 return MemoryAllocationError;
@@ -87,9 +87,9 @@ Error fillTree(Tree **root, FILE *fileName)
                 return MemoryAllocationError;
             }
 
-            (*root)->element = -1; // The indicator that this node is a number
+            (*root)->operation = -1; // The indicator that this node is a number
             ungetc(currentСharacter, fileName);
-            fscanf(fileName, "%d", &(*root)->value);
+            fscanf(fileName, "%d", &(*root)->number);
             isСontinue = false;
             break;
         }
@@ -108,10 +108,10 @@ int evaluateTree(Tree *tree)
     int leftValue = evaluateTree(tree->leftChild);
     int rightValue = evaluateTree(tree->rightChild);
 
-    switch (tree->element)
+    switch (tree->operation)
     {
     case -1: // Numbers
-        return tree->value;
+        return tree->number;
 
     case '+':
         return leftValue + rightValue;
@@ -134,13 +134,13 @@ void printExpression(Tree *tree)
         return;
     }
 
-    if (tree->element == -1) // This is a number
+    if (tree->operation == -1) // This is a number
     {
-        printf("%d ", tree->value);
+        printf("%d ", tree->number);
     }
     else
     {
-        printf("( %c ", tree->element);
+        printf("( %c ", tree->operation);
         printExpression(tree->leftChild);
         printExpression(tree->rightChild);
         printf(") ");
