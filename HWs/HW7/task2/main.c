@@ -17,6 +17,7 @@ int main()
         printf("Memory allocation error.\n");
         return 0;
     }
+    fclose(file);
 
     printExpression(tree);
     printf("= %d", evaluateTree(tree));
