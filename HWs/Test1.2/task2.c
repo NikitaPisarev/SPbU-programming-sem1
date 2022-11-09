@@ -33,6 +33,7 @@ bool isCorrect(int array[], int lengthArray)
 
     return true;
 }
+
 void shuffle(int array[], int lengthArray)
 {
     for (int i = 0; i < lengthArray; ++i)
@@ -40,6 +41,7 @@ void shuffle(int array[], int lengthArray)
         swap(&array[i], &array[rand() % lengthArray]);
     }
 }
+
 void bogoSorting(int array[], int lengthArray)
 {
     while (!isCorrect(array, lengthArray))

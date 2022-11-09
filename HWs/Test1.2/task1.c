@@ -19,6 +19,7 @@ void swap(int *firstNumber, int *secondNumber)
     *firstNumber = *secondNumber;
     *secondNumber = temp;
 }
+
 int evenNumbersAhead(int array[], int lengthArray)
 {
     int counterPermutations = 0;
