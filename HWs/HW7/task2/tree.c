@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include "tree.h"
@@ -12,7 +11,7 @@ typedef struct Tree
     struct Tree *rightChild;
 } Tree;
 
-int fillTree(Tree **root, FILE *fileName)
+Error fillTree(Tree **root, FILE *fileName)
 {
     bool isСontinue = true;
     int errorCode = 0;
@@ -32,43 +31,71 @@ int fillTree(Tree **root, FILE *fileName)
             break;
 
         case '+':
-        case '-':
         case '*':
         case '/':
             (*root) = calloc(1, sizeof(Tree));
             if ((*root) == NULL)
             {
-                return -1;
+                return MemoryAllocationError;
             }
             (*root)->element = currentСharacter;
 
-            errorCode = fillTree(&(*root)->leftChild, fileName);
-            if (errorCode != 0)
+            if (fillTree(&(*root)->leftChild, fileName) == MemoryAllocationError)
             {
-                return errorCode;
+                return MemoryAllocationError;
             }
-            errorCode = fillTree(&(*root)->rightChild, fileName);
-            if (errorCode != 0)
+
+            if (fillTree(&(*root)->rightChild, fileName) == MemoryAllocationError)
             {
-                return errorCode;
+                return MemoryAllocationError;
             }
             break;
-
-        default: // numbers
-            ungetc(currentСharacter, fileName);
+        case '-':
             (*root) = calloc(1, sizeof(Tree));
             if ((*root) == NULL)
             {
-                return -1;
+                return MemoryAllocationError;
             }
-            (*root)->element = -1; // Shows that in this node the number
+
+            char nextElement = getc(fileName);
+            ungetc(nextElement, fileName);
+            if (nextElement >= '0' && nextElement <= '9') // Checking if it's a negative number
+            {
+                (*root)->element = -1; // The indicator that this node is a number
+                ungetc(currentСharacter, fileName);
+                fscanf(fileName, "%d", &(*root)->value);
+                isСontinue = false;
+                break;
+            }
+
+            (*root)->element = currentСharacter;
+            if (fillTree(&(*root)->leftChild, fileName) == MemoryAllocationError)
+            {
+                return MemoryAllocationError;
+            }
+
+            if (fillTree(&(*root)->rightChild, fileName) == MemoryAllocationError)
+            {
+                return MemoryAllocationError;
+            }
+            break;
+
+        default: // Numbers
+            (*root) = calloc(1, sizeof(Tree));
+            if ((*root) == NULL)
+            {
+                return MemoryAllocationError;
+            }
+
+            (*root)->element = -1; // The indicator that this node is a number
+            ungetc(currentСharacter, fileName);
             fscanf(fileName, "%d", &(*root)->value);
             isСontinue = false;
             break;
         }
     }
 
-    return 0;
+    return Ok;
 }
 
 int evaluateTree(Tree *tree)
@@ -85,23 +112,18 @@ int evaluateTree(Tree *tree)
     {
     case -1: // Numbers
         return tree->value;
-        break;
 
     case '+':
         return leftValue + rightValue;
-        break;
 
     case '-':
         return leftValue - rightValue;
-        break;
 
     case '*':
         return leftValue * rightValue;
-        break;
 
     case '/':
         return leftValue / rightValue;
-        break;
     }
 }
 
@@ -123,25 +145,6 @@ void printExpression(Tree *tree)
         printExpression(tree->rightChild);
         printf(") ");
     }
-}
-
-void printTree(Tree *root)
-{
-    if (root == NULL)
-    {
-        return;
-    }
-    if (root->element == -1)
-    {
-        printf("%d ", root->value);
-    }
-    else
-    {
-        printf("%c ", root->element);
-    }
-    printf("\n");
-    printTree(root->leftChild);
-    printTree(root->rightChild);
 }
 
 void freeTree(Tree **root)

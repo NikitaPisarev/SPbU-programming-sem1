@@ -4,20 +4,22 @@
 int main()
 {
     Tree *tree = NULL;
-    FILE *file = fopen("../HWs/HW7/task2/data.txt", "r");
+    FILE *file = fopen("data.txt", "r");
     if (file == NULL || feof(file))
     {
-        printf("File error.\n");
+        printf("Error opening the file (or the file is empty).\n");
         return 0;
     }
 
-    if (fillTree(&tree, file) != 0)
+    if (fillTree(&tree, file) == MemoryAllocationError)
     {
-        printf("Function error.\n");
+        freeTree(&tree);
+        printf("Memory allocation error.\n");
         return 0;
     }
 
     printExpression(tree);
     printf("= %d", evaluateTree(tree));
+    freeTree(&tree);
     return 0;
 }
