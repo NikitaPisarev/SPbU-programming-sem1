@@ -168,26 +168,27 @@ Tree *insert(Tree *root, char *key, char *value)
 //     return tree;
 // }
 
-// char *getValue(Tree *tree, int key)
-// {
-//     if (tree == NULL)
-//     {
-//         return NULL;
-//     }
-//     if (tree->key == key)
-//     {
-//         return tree->value;
-//     }
+char *getValue(Tree *tree, char *key)
+{
+    if (tree == NULL)
+    {
+        return NULL;
+    }
 
-//     if (tree->key > key)
-//     {
-//         getValue(tree->leftChild, key);
-//     }
-//     else
-//     {
-//         getValue(tree->rightChild, key);
-//     }
-// }
+    int comparisonResult = strcmp(tree->key, key);
+    if (comparisonResult == 0)
+    {
+        return tree->value;
+    }
+    if (comparisonResult > 0)
+    {
+        getValue(tree->leftChild, key);
+    }
+    else
+    {
+        getValue(tree->rightChild, key);
+    }
+}
 
 void printTree(Tree *root)
 {
@@ -201,15 +202,16 @@ void printTree(Tree *root)
     printTree(root->rightChild);
 }
 
-void freeTree(Tree **root)
+void freeTree(Tree *root)
 {
-    if ((*root) == NULL)
+    if (root == NULL)
     {
         return;
     }
 
-    freeTree(&(*root)->leftChild);
-    freeTree(&(*root)->rightChild);
-    free((*root)->value);
-    free((*root));
+    freeTree(root->leftChild);
+    freeTree(root->rightChild);
+    free(root->value);
+    free(root->key);
+    free(root);
 }

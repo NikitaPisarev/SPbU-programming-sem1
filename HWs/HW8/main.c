@@ -26,6 +26,8 @@ int main()
 
     int action = -1;
     bool isContinue = true;
+    char bufferKey[maximumSize] = {0};
+    char bufferValue[maximumSize] = {0};
     while (isContinue)
     {
         printf("Enter the command number: ");
@@ -39,40 +41,38 @@ int main()
             break;
 
         case 1:
-            char bufferKey[maximumSize] = {0};
-            char bufferValue[maximumSize] = {0};
             printf("Enter the key and value: ");
             scanf("%s", bufferKey);
             scanf("%s", bufferValue);
             tree = insert(tree, bufferKey, bufferValue);
             break;
 
-            // case 2:
-            //     printf("Enter the key: ");
-            //     scanf("%d", &key);
-            //     char *pointerValue = getValue(tree, key);
-            //     if (pointerValue == NULL)
-            //     {
-            //         printf("There is no such key in the dictionary.\n");
-            //     }
-            //     else
-            //     {
-            //         printf("The value under key %d is %s\n", key, pointerValue);
-            //     }
-            //     break;
+        case 2:
+            printf("Enter the key: ");
+            scanf("%s", bufferKey);
+            char *pointerValue = getValue(tree, bufferKey);
+            if (pointerValue == NULL)
+            {
+                printf("There is no such key in the dictionary.\n");
+            }
+            else
+            {
+                printf("The value under key %s is %s\n", bufferKey, pointerValue);
+            }
+            break;
 
-            // case 3:
-            //     printf("Enter the key: ");
-            //     scanf("%d", &key);
-            //     if (getValue(tree, key) == NULL)
-            //     {
-            //         printf("There is NO such key in the dictionary.\n");
-            //     }
-            //     else
-            //     {
-            //         printf("There is such a key in the dictionary.\n");
-            //     }
-            //     break;
+        case 3:
+            printf("Enter the key: ");
+            scanf("%s", bufferKey);
+            if (getValue(tree, bufferKey) == NULL)
+            {
+                printf("There is NO such key in the dictionary.\n");
+            }
+            else
+            {
+                printf("There is such a key in the dictionary.\n");
+            }
+            break;
 
             // case 4:
             //     printf("Enter the key: ");
@@ -96,6 +96,6 @@ int main()
         }
     }
 
-    freeTree(&tree);
+    freeTree(tree);
     return 0;
 }
