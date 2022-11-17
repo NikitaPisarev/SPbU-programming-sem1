@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "tree.h"
 
 typedef struct Tree
@@ -13,15 +14,28 @@ typedef struct Tree
     struct Tree *rightChild;
 } Tree;
 
-Tree *findTree(Tree *root, char *key)
+Tree *createTree(char *key, char *value)
 {
-    if (root == NULL)
+    Tree *newTree = calloc(1, sizeof(Tree));
+    if (newTree == NULL)
+    {
         return NULL;
+    }
+    newTree->key = calloc(strlen(key) + 1, sizeof(char));
+    if (newTree->key == NULL)
+    {
+        return NULL;
+    }
+    newTree->value = calloc(strlen(value) + 1, sizeof(char));
+    if (newTree->value == NULL)
+    {
+        return NULL;
+    }
 
-    if (strcmp(key, root->key) == 0)
-        return root;
-
-    return strcmp(root->key, key) > 0 ? findTree(root->leftChild, key) : findTree(root->rightChild, key);
+    strcpy(newTree->value, value);
+    strcpy(newTree->key, key);
+    newTree->balance = 0;
+    return newTree;
 }
 
 Tree *rotateLeft(Tree *tree)
@@ -89,61 +103,60 @@ Tree *balance(Tree *tree)
     return tree;
 }
 
-Tree *addTree(Tree *root, char *key, char *value)
+Tree *insert(Tree *root, char *key, char *value)
 {
     if (root == NULL)
     {
-        Tree *newTree = calloc(1, sizeof(Tree));
-        if (newTree == NULL)
-        {
-            return NULL;
-        }
-        newTree->key = calloc(strlen(key) + 1, sizeof(char));
-        if (newTree->key == NULL)
-        {
-            return NULL;
-        }
-        newTree->value = calloc(strlen(value) + 1, sizeof(char));
-        if (newTree->value == NULL)
-        {
-            return NULL;
-        }
-
-        strcpy(newTree->value, value);
-        strcpy(newTree->key, key);
-        newTree->balance = 0;
-        return newTree;
+        return createTree(key, value);
     }
 
-    if (strcmp(root->key, key) > 0)
+    int comparisonResult = strcmp(root->key, key);
+    if (comparisonResult == 0)
     {
-        root->leftChild = addTree(root->leftChild, key, value);
-        --root->balance;
-    }
-    else
-    {
-        root->rightChild = addTree(root->rightChild, key, value);
-        ++root->balance;
-    }
-
-    return balance(root);
-}
-
-Tree *insert(Tree *root, char *key, char *value)
-{
-    Tree *foundTree = findTree(root, key);
-    if (foundTree != NULL)
-    {
-        free(foundTree->value);
-        foundTree->value = calloc(strlen(value) + 1, sizeof(char));
-        if (foundTree->value == NULL)
+        free(root->value);
+        root->value = calloc(strlen(value) + 1, sizeof(char));
+        if (root->value == NULL)
         {
             return NULL;
         }
-        strcpy(foundTree->value, value);
+        strcpy(root->value, value);
         return root;
     }
-    return addTree(root, key, value);
+    if (comparisonResult > 0)
+    {
+        if (root->leftChild == NULL)
+        {
+            root->leftChild = insert(root->leftChild, key, value);
+            --root->balance;
+            return balance(root);
+        }
+
+        int previousBalanceLeft = root->leftChild->balance;
+        root->leftChild = insert(root->leftChild, key, value);
+        int currentBalanceLeft = root->leftChild->balance;
+
+        if (previousBalanceLeft == 0 && currentBalanceLeft != 0)
+        {
+            --root->balance;
+        }
+        return balance(root);
+    }
+    if (root->rightChild == NULL)
+    {
+        root->rightChild = insert(root->rightChild, key, value);
+        ++root->balance;
+        return balance(root);
+    }
+
+    int previousBalanceRight = root->rightChild->balance;
+    root->rightChild = insert(root->rightChild, key, value);
+    int currentBalanceRight = root->rightChild->balance;
+
+    if (previousBalanceRight == 0 && currentBalanceRight != 0)
+    {
+        ++root->balance;
+    }
+    return balance(root);
 }
 
 // Tree **leftMostChild(Tree **tree)
@@ -153,50 +166,6 @@ Tree *insert(Tree *root, char *key, char *value)
 //         tree = &(*tree)->rightChild;
 //     }
 //     return tree;
-// }
-
-// void deleteElement(Tree **root, int key)
-// {
-//     if ((*root) == NULL)
-//     {
-//         return;
-//     }
-
-//     if ((*root)->key == key)
-//     {
-//         if ((*root)->leftChild == NULL)
-//         {
-//             Tree *elementToDelete = (*root);
-//             (*root) = (*root)->rightChild;
-//             free(elementToDelete->value);
-//             free(elementToDelete);
-//             return;
-//         }
-
-//         Tree **leftLargest = leftMostChild(&(*root)->leftChild);
-//         char *temporaryValue = (*root)->value;
-//         (*root)->value = (*leftLargest)->value;
-//         (*leftLargest)->value = temporaryValue;
-
-//         int temporaryKey = (*root)->key;
-//         (*root)->key = (*leftLargest)->key;
-//         (*leftLargest)->key = temporaryKey;
-
-//         Tree *elementToDelete = (*leftLargest);
-//         (*leftLargest) = (*leftLargest)->leftChild;
-//         free(elementToDelete->value);
-//         free(elementToDelete);
-//         return;
-//     }
-
-//     if ((*root)->key > key)
-//     {
-//         deleteElement(&(*root)->leftChild, key);
-//     }
-//     else
-//     {
-//         deleteElement(&(*root)->rightChild, key);
-//     }
 // }
 
 // char *getValue(Tree *tree, int key)
