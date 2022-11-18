@@ -12,7 +12,7 @@ typedef struct Tree Tree;
 Tree *addValue(Tree *tree, char *key, char *value, Error *errorCode);
 
 // Deletes an element by key, if there is no such key, does nothing
-Tree *deleteElement(Tree *tree, char *key);
+Tree *deleteElement(Tree *root, char *key);
 
 // Returns a value by key, if there is no such key, returns NULL
 char *getValue(Tree *tree, char *key);

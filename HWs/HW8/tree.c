@@ -1,4 +1,3 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -13,6 +12,24 @@ typedef struct Tree
     struct Tree *leftChild;
     struct Tree *rightChild;
 } Tree;
+
+void freeNode(Tree *tree)
+{
+    free(tree->key);
+    free(tree->value);
+    free(tree);
+}
+
+void freeTree(Tree *root)
+{
+    if (root == NULL)
+    {
+        return;
+    }
+    freeTree(root->leftChild);
+    freeTree(root->rightChild);
+    freeNode(root);
+}
 
 Tree *createTree(char *key, char *value)
 {
@@ -238,7 +255,89 @@ Tree *addValue(Tree *tree, char *key, char *value, Error *errorCode)
     return insert(tree, key, value, &isClimbing, errorCode);
 }
 
-Tree *deleteElement(Tree *root, char *key);
+Tree *leftMostChild(Tree **tree)
+{
+    while ((*tree)->rightChild != NULL)
+    {
+        tree = &(*tree)->rightChild;
+    }
+    return *tree;
+}
+
+Tree *deleteNode(Tree *root, char *key, bool *isClimbing)
+{
+    if (root == NULL)
+    {
+        *isClimbing = false;
+        return NULL;
+    }
+
+    int comparisonResult = strcmp(root->key, key);
+    int movement = 0;
+    if (comparisonResult == 0)
+    {
+        if (root->leftChild == NULL)
+        {
+            *isClimbing = true;
+            Tree *deleteElement = root;
+            root = root->rightChild;
+            freeNode(deleteElement);
+            return root;
+        }
+        if (root->rightChild == NULL)
+        {
+            *isClimbing = true;
+            Tree *deleteElement = root;
+            root = root->leftChild;
+            freeNode(deleteElement);
+            return root;
+        }
+
+        Tree *leftLargest = leftMostChild(&root->leftChild);
+        char *temporaryValue = root->value;
+        root->value = leftLargest->value;
+        leftLargest->value = temporaryValue;
+
+        char *temporaryKey = root->key;
+        root->key = leftLargest->key;
+        leftLargest->key = temporaryKey;
+
+        root->leftChild = deleteNode(root->leftChild, leftLargest->key, isClimbing); //
+        movement = 1;
+    }
+    else if (comparisonResult > 0)
+    {
+        root->leftChild = deleteNode(root->leftChild, key, isClimbing);
+        movement = 1;
+    }
+    else
+    {
+        root->rightChild = deleteNode(root->rightChild, key, isClimbing);
+        movement = -1;
+    }
+
+    if (!*isClimbing)
+    {
+        return root;
+    }
+
+    root->balance = root->balance + movement;
+    if (root->balance == 1 || root->balance == -1) // this means that the height of the subtree has not changed and the climbing stops
+    {
+        *isClimbing = false;
+    }
+    return balance(root);
+}
+
+Tree *deleteElement(Tree *root, char *key)
+{
+    if (key == NULL)
+    {
+        return NULL;
+    }
+    bool isClimbing = true;
+    return deleteNode(root, key, &isClimbing);
+}
 
 char *getValue(Tree *tree, char *key)
 {
@@ -272,18 +371,4 @@ void printTree(Tree *root)
     printf("%s: %s\n", root->key, root->value);
     printTree(root->leftChild);
     printTree(root->rightChild);
-}
-
-void freeTree(Tree *root)
-{
-    if (root == NULL)
-    {
-        return;
-    }
-
-    freeTree(root->leftChild);
-    freeTree(root->rightChild);
-    free(root->key);
-    free(root->value);
-    free(root);
 }

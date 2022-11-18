@@ -1,4 +1,3 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdbool.h>
 #include "tree.h"
@@ -80,11 +79,11 @@ int main()
             }
             break;
 
-            // case 4:
-            //     printf("Enter the key: ");
-            //     scanf("%d", &key);
-            //     deleteElement(&tree, key);
-            //     break;
+        case 4:
+            printf("Enter the key: ");
+            scanf("%s", bufferKey);
+            tree = deleteElement(tree, bufferKey);
+            break;
 
         case 5:
             printf("Dictionary:\n");
