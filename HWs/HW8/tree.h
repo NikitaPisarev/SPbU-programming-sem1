@@ -4,10 +4,10 @@ typedef enum { Ok, MemoryAllocationError } Error;
 
 typedef struct Tree Tree;
 
-Tree *insert(Tree *root, char *key, char *value);
+Tree *addValue(Tree *tree, char *key, char *value);
 
 // Deletes an element by key, if there is no such key, does nothing
-void deleteElement(Tree **tree, int key);
+Tree *deleteElement(Tree *tree, char *key);
 
 // Returns a value by key, if there is no such key, returns NULL
 char *getValue(Tree *tree, char *key);

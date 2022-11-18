@@ -58,6 +58,42 @@ Tree *rotateLeft(Tree *tree)
     return rightChild;
 }
 
+Tree *bigRotateLeft(Tree *tree)
+{
+    Tree *rightChild = tree->rightChild;
+    Tree *leftFromRightChild = rightChild->leftChild;
+    Tree *leftFromLeftChild = leftFromRightChild->leftChild;
+    Tree *rightFromLeftChild = leftFromRightChild->rightChild;
+    leftFromRightChild->leftChild = tree;
+    leftFromRightChild->rightChild = rightChild;
+    tree->rightChild = leftFromLeftChild;
+    rightChild->leftChild = rightFromLeftChild;
+    switch (leftFromRightChild->balance)
+    {
+    case -1:
+    {
+        tree->balance = 0;
+        rightChild->balance = 1;
+        break;
+    }
+    case 0:
+    {
+        tree->balance = 0;
+        rightChild->balance = 0;
+        break;
+    }
+    case 1:
+    {
+        tree->balance = -1;
+        rightChild->balance = 0;
+        break;
+    }
+    }
+    leftFromRightChild->balance = 0;
+
+    return leftFromRightChild;
+}
+
 Tree *rotateRight(Tree *tree)
 {
     Tree *leftChild = tree->leftChild;
@@ -78,6 +114,42 @@ Tree *rotateRight(Tree *tree)
     return leftChild;
 }
 
+Tree *bigRotateRight(Tree *tree)
+{
+    Tree *leftChild = tree->leftChild;
+    Tree *rightFromLeftChild = leftChild->rightChild;
+    Tree *rightFromRightChild = rightFromLeftChild->rightChild;
+    Tree *leftFromRightChild = rightFromLeftChild->leftChild;
+    rightFromLeftChild->leftChild = leftChild;
+    rightFromLeftChild->rightChild = tree;
+    tree->leftChild = rightFromRightChild;
+    leftChild->rightChild = leftFromRightChild;
+    switch (rightFromLeftChild->balance)
+    {
+    case -1:
+    {
+        tree->balance = 1;
+        leftChild->balance = 0;
+        break;
+    }
+    case 0:
+    {
+        tree->balance = 0;
+        leftChild->balance = 0;
+        break;
+    }
+    case 1:
+    {
+        tree->balance = 0;
+        leftChild->balance = -1;
+        break;
+    }
+    }
+    rightFromLeftChild->balance = 0;
+
+    return rightFromLeftChild;
+}
+
 Tree *balance(Tree *tree)
 {
     if (tree->balance == 2)
@@ -86,8 +158,7 @@ Tree *balance(Tree *tree)
         {
             return rotateLeft(tree);
         }
-        tree->rightChild = rotateRight(tree->rightChild);
-        return rotateLeft(tree);
+        return bigRotateLeft(tree);
     }
 
     if (tree->balance == -2)
@@ -96,14 +167,13 @@ Tree *balance(Tree *tree)
         {
             return rotateRight(tree);
         }
-        tree->leftChild = rotateLeft(tree->rightChild);
-        return rotateRight(tree);
+        return bigRotateRight(tree);
     }
 
     return tree;
 }
 
-Tree *insert(Tree *root, char *key, char *value)
+Tree *insert(Tree *root, char *key, char *value, bool *isClimbing)
 {
     if (root == NULL)
     {
@@ -111,8 +181,10 @@ Tree *insert(Tree *root, char *key, char *value)
     }
 
     int comparisonResult = strcmp(root->key, key);
+    int movement = 0;
     if (comparisonResult == 0)
     {
+        *isClimbing = false;
         free(root->value);
         root->value = calloc(strlen(value) + 1, sizeof(char));
         if (root->value == NULL)
@@ -122,51 +194,41 @@ Tree *insert(Tree *root, char *key, char *value)
         strcpy(root->value, value);
         return root;
     }
-    if (comparisonResult > 0)
+    else if (comparisonResult > 0)
     {
-        if (root->leftChild == NULL)
-        {
-            root->leftChild = insert(root->leftChild, key, value);
-            --root->balance;
-            return balance(root);
-        }
-
-        int previousBalanceLeft = root->leftChild->balance;
-        root->leftChild = insert(root->leftChild, key, value);
-        int currentBalanceLeft = root->leftChild->balance;
-
-        if (previousBalanceLeft == 0 && currentBalanceLeft != 0)
-        {
-            --root->balance;
-        }
-        return balance(root);
+        root->leftChild = insert(root->leftChild, key, value, isClimbing);
+        movement = -1;
     }
-    if (root->rightChild == NULL)
+    else
     {
-        root->rightChild = insert(root->rightChild, key, value);
-        ++root->balance;
-        return balance(root);
+        root->rightChild = insert(root->rightChild, key, value, isClimbing);
+        movement = 1;
     }
 
-    int previousBalanceRight = root->rightChild->balance;
-    root->rightChild = insert(root->rightChild, key, value);
-    int currentBalanceRight = root->rightChild->balance;
-
-    if (previousBalanceRight == 0 && currentBalanceRight != 0)
+    if (!*isClimbing)
     {
-        ++root->balance;
+        return root;
+    }
+
+    root->balance = root->balance + movement;
+    if (root->balance == 0 || root->balance == -2 || root->balance == 2)
+    {
+        *isClimbing = false;
     }
     return balance(root);
 }
 
-// Tree **leftMostChild(Tree **tree)
-// {
-//     while ((*tree)->rightChild != NULL)
-//     {
-//         tree = &(*tree)->rightChild;
-//     }
-//     return tree;
-// }
+Tree *addValue(Tree *tree, char *key, char *value)
+{
+    if (key == NULL || value == NULL)
+    {
+        return NULL;
+    }
+    bool isClimbing = true;
+    return insert(tree, key, value, &isClimbing);
+}
+
+Tree *deleteElement(Tree *root, char *key);
 
 char *getValue(Tree *tree, char *key)
 {
@@ -211,7 +273,7 @@ void freeTree(Tree *root)
 
     freeTree(root->leftChild);
     freeTree(root->rightChild);
-    free(root->value);
     free(root->key);
+    free(root->value);
     free(root);
 }

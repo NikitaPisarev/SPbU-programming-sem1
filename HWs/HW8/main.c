@@ -44,7 +44,7 @@ int main()
             printf("Enter the key and value: ");
             scanf("%s", bufferKey);
             scanf("%s", bufferValue);
-            tree = insert(tree, bufferKey, bufferValue);
+            tree = addValue(tree, bufferKey, bufferValue);
             break;
 
         case 2:
