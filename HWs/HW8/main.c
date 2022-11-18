@@ -44,7 +44,13 @@ int main()
             printf("Enter the key and value: ");
             scanf("%s", bufferKey);
             scanf("%s", bufferValue);
-            tree = addValue(tree, bufferKey, bufferValue);
+            Error errorCode = Ok;
+            tree = addValue(tree, bufferKey, bufferValue, &errorCode);
+            if (errorCode != Ok)
+            {
+                printf("Memory allocation error.\n");
+                isContinue = false;
+            }
             break;
 
         case 2:

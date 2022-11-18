@@ -173,11 +173,17 @@ Tree *balance(Tree *tree)
     return tree;
 }
 
-Tree *insert(Tree *root, char *key, char *value, bool *isClimbing)
+Tree *insert(Tree *root, char *key, char *value, bool *isClimbing, Error *errorCode)
 {
     if (root == NULL)
     {
-        return createTree(key, value);
+        Tree *newTree = createTree(key, value);
+        if (newTree == NULL)
+        {
+            *errorCode = MemoryAllocationError;
+            *isClimbing = false;
+        }
+        return newTree;
     }
 
     int comparisonResult = strcmp(root->key, key);
@@ -189,6 +195,8 @@ Tree *insert(Tree *root, char *key, char *value, bool *isClimbing)
         root->value = calloc(strlen(value) + 1, sizeof(char));
         if (root->value == NULL)
         {
+            *errorCode = MemoryAllocationError;
+            *isClimbing = false;
             return NULL;
         }
         strcpy(root->value, value);
@@ -196,12 +204,12 @@ Tree *insert(Tree *root, char *key, char *value, bool *isClimbing)
     }
     else if (comparisonResult > 0)
     {
-        root->leftChild = insert(root->leftChild, key, value, isClimbing);
+        root->leftChild = insert(root->leftChild, key, value, isClimbing, errorCode);
         movement = -1;
     }
     else
     {
-        root->rightChild = insert(root->rightChild, key, value, isClimbing);
+        root->rightChild = insert(root->rightChild, key, value, isClimbing, errorCode);
         movement = 1;
     }
 
@@ -211,21 +219,23 @@ Tree *insert(Tree *root, char *key, char *value, bool *isClimbing)
     }
 
     root->balance = root->balance + movement;
-    if (root->balance == 0 || root->balance == -2 || root->balance == 2)
+    // -2,2 - after the balancing function, the length will remain the same, therefore further climbing is not necessary
+    // 0 - have balanced the tree
+    if (root->balance == 0 || root->balance == 2 || root->balance == -2)
     {
         *isClimbing = false;
     }
     return balance(root);
 }
 
-Tree *addValue(Tree *tree, char *key, char *value)
+Tree *addValue(Tree *tree, char *key, char *value, Error *errorCode)
 {
     if (key == NULL || value == NULL)
     {
         return NULL;
     }
     bool isClimbing = true;
-    return insert(tree, key, value, &isClimbing);
+    return insert(tree, key, value, &isClimbing, errorCode);
 }
 
 Tree *deleteElement(Tree *root, char *key);
