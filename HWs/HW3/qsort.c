@@ -59,10 +59,10 @@ void quickSort(int array[], int leftIndex, int rigthIndex)
     }
     else
     {
-        int reference = partition(array, leftIndex, rigthIndex);
-        quickSort(array, leftIndex, reference - 1);
-        quickSort(array, reference + 1, rigthIndex);
-    }  
+        int middleIndex = partition(array, leftIndex, rigthIndex);
+        quickSort(array, leftIndex, middleIndex - 1);
+        quickSort(array, middleIndex + 1, rigthIndex);
+    }
 }
 
 bool testQuickSort1()
@@ -123,7 +123,7 @@ int testQuickSort()
     {
         return -1;
     }
-    
+
     if (!testQuickSort2())
     {
         return -2;
@@ -134,7 +134,7 @@ int testQuickSort()
         return -3;
     }
 
-    return 0;   
+    return 0;
 }
 
 int main()
@@ -146,41 +146,40 @@ int main()
         return 0;
     }
 
-    int array[arraySizeBound] = { 0 };
+    int array[arraySizeBound] = {0};
     int arraySize = 0;
-    int scan_res = 0;
-    bool isCorrectInput = true; 
+    int scanResult = 0;
+    bool isCorrectInput = true;
 
     do
     {
         printf("Enter size array: ");
-        scan_res = scanf("%d", &arraySize);
+        scanResult = scanf("%d", &arraySize);
 
         isCorrectInput = true;
 
-        if (!scan_res || arraySize < 1 || arraySize > arraySizeBound)
+        if (!scanResult || arraySize < 1 || arraySize > arraySizeBound)
         {
             printf("Incorrect input (The size is positive and no more than %d). Try again!\n", arraySizeBound);
             scanf_s("%*[^\n]");
 
             isCorrectInput = false;
         }
-    } while (!scan_res || !isCorrectInput);
-    
+    } while (!isCorrectInput);
 
-    printf("Enter a array:\n");
+    printf("Enter an array:\n");
     for (int i = 0; i < arraySize; ++i)
     {
         do
         {
-            scan_res = scanf("%d", &array[i]);
+            scanResult = scanf("%d", &array[i]);
 
-            if (!scan_res)
+            if (!scanResult)
             {
                 printf("Incorrect input. Try again!\n");
                 scanf_s("%*[^\n]");
             }
-        } while (!scan_res);
+        } while (!scanResult);
     }
 
     quickSort(array, 0, arraySize - 1);
