@@ -53,8 +53,8 @@ int conversionFromBinaryDecimal(unsigned char array[], char length)
 bool testBinaryRepresentation()
 {
     int number = 12;
-    unsigned char binaryNumber[lengthBinaryNumber] = { 0 };
-    unsigned char correctBinaryNumber[lengthBinaryNumber] = { 0 };
+    unsigned char binaryNumber[lengthBinaryNumber] = {0};
+    unsigned char correctBinaryNumber[lengthBinaryNumber] = {0};
     correctBinaryNumber[lengthBinaryNumber - 3] = 1; // 000100 = 4
     correctBinaryNumber[lengthBinaryNumber - 4] = 1; // 001000 = 8
 
@@ -73,14 +73,14 @@ bool testBinaryRepresentation()
 
 bool testAddBinaryNumbers()
 {
-    unsigned char binaryNumber1[lengthBinaryNumber] = { 0 };
-    unsigned char binaryNumber2[lengthBinaryNumber] = { 0 };
+    unsigned char binaryNumber1[lengthBinaryNumber] = {0};
+    unsigned char binaryNumber2[lengthBinaryNumber] = {0};
 
     binaryNumber1[lengthBinaryNumber - 3] = 1; // 000100 = 4
     binaryNumber2[lengthBinaryNumber - 3] = 1; // 000100 = 4
 
-    unsigned char result[lengthBinaryNumber] = { 0 };
-    unsigned char correctResult[lengthBinaryNumber] = { 0 };
+    unsigned char result[lengthBinaryNumber] = {0};
+    unsigned char correctResult[lengthBinaryNumber] = {0};
     correctResult[lengthBinaryNumber - 4] = 1; // 001000 = 8
 
     addBinaryNumbers(binaryNumber1, binaryNumber2, result);
@@ -98,7 +98,7 @@ bool testAddBinaryNumbers()
 
 bool testConversionFromBinaryDecimal()
 {
-    unsigned char binaryNumber[lengthBinaryNumber] = { 0 };
+    unsigned char binaryNumber[lengthBinaryNumber] = {0};
     binaryNumber[lengthBinaryNumber - 3] = 1; // 000100 = 4
     binaryNumber[lengthBinaryNumber - 4] = 1; // 001000 = 8
 
@@ -129,25 +129,25 @@ int main()
 
     int firstNumber = 0;
     int secondNumber = 0;
-    int scan_resFirstNumber = 0;
-    int scan_resSecondNumber = 0;
+    int scanResFirstNumber = 0;
+    int scanResSecondNumber = 0;
 
     printf("Привет, введи два числа: ");
     do
     {
-        scan_resFirstNumber = scanf("%d", &firstNumber);
-        scan_resSecondNumber = scanf("%d", &secondNumber);
+        scanResFirstNumber = scanf("%d", &firstNumber);
+        scanResSecondNumber = scanf("%d", &secondNumber);
 
-        if (!scan_resFirstNumber || !scan_resSecondNumber)
+        if (!scanResFirstNumber || !scanResSecondNumber)
         {
             printf("Ошибка ввода. Вводить можно только целые числа. Попробуй еще раз!\n");
             scanf("%*[^\n]");
         }
 
-    } while (!scan_resFirstNumber || !scan_resSecondNumber);
+    } while (!scanResFirstNumber || !scanResSecondNumber);
 
-    unsigned char binaryFirstNumber[lengthBinaryNumber] = { 0 };
-    unsigned char binarySecondNumber[lengthBinaryNumber] = { 0 };
+    unsigned char binaryFirstNumber[lengthBinaryNumber] = {0};
+    unsigned char binarySecondNumber[lengthBinaryNumber] = {0};
     binaryRepresentation(binaryFirstNumber, firstNumber);
     binaryRepresentation(binarySecondNumber, secondNumber);
 
@@ -157,14 +157,13 @@ int main()
     printArray(binarySecondNumber, lengthBinaryNumber);
     printf(" (%d) \n --------------------------------\n ", secondNumber);
 
-    unsigned char binarySum[lengthBinaryNumber] = { 0 };
+    unsigned char binarySum[lengthBinaryNumber] = {0};
     addBinaryNumbers(binaryFirstNumber, binarySecondNumber, binarySum);
 
     int decimalSum = conversionFromBinaryDecimal(binarySum, lengthBinaryNumber);
 
     printArray(binarySum, lengthBinaryNumber);
     printf(" (%d)", decimalSum);
-    
     printf("\n\nСумма %d и %d равна %d.\n", firstNumber, secondNumber, decimalSum);
 
     return 0;
