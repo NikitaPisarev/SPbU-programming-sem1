@@ -4,9 +4,11 @@
 
 #define arraySizeBound 999
 
-void mostCommon(int array[], int length, int *mostCommon, int *counterMaximum)
+int mostCommonInSortedArray(int array[], int length, int *counterMaximum)
 {
     int counter = 1;
+    int mostCommon = array[0];
+    *counterMaximum = 1;
 
     for (int i = 1; i < length; ++i)
     {
@@ -18,7 +20,7 @@ void mostCommon(int array[], int length, int *mostCommon, int *counterMaximum)
         {
             if (counter > *counterMaximum)
             {
-                *mostCommon = array[i - 1];
+                mostCommon = array[i - 1];
                 *counterMaximum = counter;
             }
 
@@ -28,17 +30,17 @@ void mostCommon(int array[], int length, int *mostCommon, int *counterMaximum)
 
     if (counter > *counterMaximum) // If the most common number is at the end, then we never check the last element for the maximum
     {
-        *mostCommon = array[length - 2];
+        mostCommon = array[length - 2];
         *counterMaximum = counter;
     }
+    return mostCommon;
 }
 
 bool testMostCommon()
 {
     int array[5] = {0, 1, 1, 1, 0};
-    int counterMaximum = 1;
-    int mostCommonNumber = array[0];
-    mostCommon(array, 5, &mostCommonNumber, &counterMaximum);
+    int counterMaximum = 0;
+    int mostCommonNumber = mostCommonInSortedArray(array, 5, &counterMaximum);
 
     return mostCommonNumber == 1 && counterMaximum == 3;
 }
@@ -60,45 +62,43 @@ int main()
 
     int array[arraySizeBound] = {0};
     int arraySize = 0;
-    int scan_res = 0;
+    int scanResult = 0;
     bool isCorrectInput = true;
 
     do
     {
         printf("Enter size array: ");
-        scan_res = scanf("%d", &arraySize);
+        scanResult = scanf("%d", &arraySize);
 
         isCorrectInput = true;
 
-        if (!scan_res || arraySize < 1 || arraySize > arraySizeBound)
+        if (!scanResult || arraySize < 1 || arraySize > arraySizeBound)
         {
             printf("Incorrect input (The size is positive and no more than %d). Try again!\n", arraySizeBound);
             scanf_s("%*[^\n]");
 
             isCorrectInput = false;
         }
-    } while (!scan_res || !isCorrectInput);
+    } while (!isCorrectInput);
 
-    printf("Enter a array:\n");
+    printf("Enter an array:\n");
     for (int i = 0; i < arraySize; ++i)
     {
         do
         {
-            scan_res = scanf("%d", &array[i]);
+            scanResult = scanf("%d", &array[i]);
 
-            if (!scan_res)
+            if (!scanResult)
             {
                 printf("Incorrect input. Try again!\n");
                 scanf_s("%*[^\n]");
             }
-        } while (!scan_res);
+        } while (!scanResult);
     }
 
     quickSort(array, 0, arraySize - 1);
-
-    int counterMaximum = 1;
-    int mostCommonNumber = array[0];
-    mostCommon(array, arraySize, &mostCommonNumber, &counterMaximum);
+    int counterMaximum = 0;
+    int mostCommonNumber = mostCommonInSortedArray(array, arraySize, &counterMaximum);
 
     if (counterMaximum == 1)
     {
@@ -108,6 +108,5 @@ int main()
     {
         printf("The most common element is \"%d\", which has been encountered %d time(s).\n", mostCommonNumber, counterMaximum);
     }
-
     return 0;
 }
