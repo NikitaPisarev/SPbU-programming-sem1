@@ -40,7 +40,7 @@ int main()
             printf("Good luck!\n");
             isContinue = false;
             break;
-        
+
         case 1:
             Value addValue = 0;
             printf("Enter the value you want to add to the list: ");
@@ -52,24 +52,24 @@ int main()
             }
             printf("The value %d was successfully added.\n", addValue);
             break;
-        
+
         case 2:
-            Value popValue = 0;
+            Value deleteValue = 0;
             printf("Enter the value you want to remove from the list: ");
-            scanf("%d", &popValue);
-            if ((errorCode = pop(list, popValue)) == -3)
+            scanf("%d", &deleteValue);
+            if ((errorCode = deleteElement(list, deleteValue)) == -3)
             {
                 printf("There is no such value in the list.\n");
                 continue;
             }
             else if (errorCode != 0)
             {
-                printf("The pop function failed with error %d.\n", errorCode);
+                printf("The deleteElement function failed with error %d.\n", errorCode);
                 isContinue = false;
             }
-            printf("Value %d has been successfully deleted.\n", popValue);
+            printf("Value %d has been successfully deleted.\n", deleteValue);
             break;
-        
+
         case 3:
             printf("List:\n");
             printList(list);
@@ -84,7 +84,7 @@ int main()
             break;
         }
     }
-    
+
     freeList(list);
     return 0;
 }

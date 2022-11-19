@@ -42,7 +42,7 @@ Error addElement(List *list, Value value)
         list->head->value = value;
         return 0;
     }
-    
+
     Node *currentElement = list->head;
     Node *previousElement = NULL;
     while (currentElement != NULL && currentElement->value < value)
@@ -68,7 +68,7 @@ Error addElement(List *list, Value value)
     return 0;
 }
 
-Error pop(List *list, Value value)
+Error deleteElement(List *list, Value value)
 {
     if (list == NULL)
     {
@@ -128,7 +128,6 @@ void freeList(List *list)
     {
         currentElement = currentElement->next;
         free(previousElement);
-        previousElement = NULL;
         previousElement = currentElement;
     }
     free(list);
