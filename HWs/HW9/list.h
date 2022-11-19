@@ -12,7 +12,7 @@ List *listCreate();
 Error addElement(List *list, Value value);
 
 // If there is such an element, deletes it
-Error pop(List *list, Value value);
+Error deleteElement(List *list, Value value);
 
 // If a list is created, outputs it
 Error printList(List *list);

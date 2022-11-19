@@ -68,7 +68,7 @@ Error addElement(List *list, Value value)
     return 0;
 }
 
-Error pop(List *list, Value value)
+Error deleteElement(List *list, Value value)
 {
     if (list == NULL)
     {
@@ -77,12 +77,12 @@ Error pop(List *list, Value value)
 
     Node *currentElement = list->head;
     Node *previousElement = NULL;
-    while (currentElement->value != value && currentElement->next != NULL)
+    while (strcmp(currentElement->value, value) != 0 && currentElement->next != NULL)
     {
         previousElement = currentElement;
         currentElement = currentElement->next;
     }
-    if (currentElement->value != value) // No such value was found
+    if (strcmp(currentElement->value, value) != 0) // No such value was found
     {
         return -3;
     }
