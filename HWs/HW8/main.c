@@ -19,6 +19,12 @@ void printActions(void)
 
 int main()
 {
+    if (!tests())
+    {
+        printf("Tests failed.\n");
+        return 0;
+    }
+
     Tree *tree = NULL;
     printf("Hi, it's a dictionary, that's what I can do:\n");
     printActions();

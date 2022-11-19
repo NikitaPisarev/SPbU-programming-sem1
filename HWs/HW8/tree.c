@@ -88,23 +88,19 @@ Tree *bigRotateLeft(Tree *tree)
     switch (leftFromRightChild->balance)
     {
     case -1:
-    {
         tree->balance = 0;
         rightChild->balance = 1;
         break;
-    }
+
     case 0:
-    {
         tree->balance = 0;
         rightChild->balance = 0;
         break;
-    }
+
     case 1:
-    {
         tree->balance = -1;
         rightChild->balance = 0;
         break;
-    }
     }
     leftFromRightChild->balance = 0;
 
@@ -144,23 +140,19 @@ Tree *bigRotateRight(Tree *tree)
     switch (rightFromLeftChild->balance)
     {
     case -1:
-    {
         tree->balance = 1;
         leftChild->balance = 0;
         break;
-    }
+
     case 0:
-    {
         tree->balance = 0;
         leftChild->balance = 0;
         break;
-    }
+
     case 1:
-    {
         tree->balance = 0;
         leftChild->balance = -1;
         break;
-    }
     }
     rightFromLeftChild->balance = 0;
 
@@ -371,4 +363,170 @@ void printTree(Tree *root)
     printf("%s: %s\n", root->key, root->value);
     printTree(root->leftChild);
     printTree(root->rightChild);
+}
+
+bool testGetValue()
+{
+    Tree *testTree = calloc(1, sizeof(Tree));
+    if (testTree == NULL)
+    {
+        return false;
+    }
+    testTree->value = calloc(2, sizeof(char));
+    if (testTree->value == NULL)
+    {
+        return false;
+    }
+    testTree->key = calloc(2, sizeof(char));
+    if (testTree->key == NULL)
+    {
+        return false;
+    }
+    strcpy(testTree->key, "C");
+    strcpy(testTree->value, "C");
+
+    testTree->leftChild = calloc(1, sizeof(Tree));
+    if (testTree->leftChild == NULL)
+    {
+        return false;
+    }
+    testTree->leftChild->value = calloc(2, sizeof(char));
+    if (testTree->leftChild->value == NULL)
+    {
+        return false;
+    }
+    testTree->leftChild->key = calloc(2, sizeof(char));
+    if (testTree->leftChild->key == NULL)
+    {
+        return false;
+    }
+    strcpy(testTree->leftChild->key, "A");
+    strcpy(testTree->leftChild->value, "A");
+
+    bool resultTest = strcmp(getValue(testTree, "A"), "A") == 0;
+    freeTree(testTree);
+    return resultTest;
+}
+
+bool testAdd()
+{
+    Tree *testTree = NULL;
+    Error errorCode = Ok;
+    testTree = addValue(testTree, "5", "5", &errorCode);
+    if (errorCode != Ok)
+    {
+        return false;
+    }
+    testTree = addValue(testTree, "3", "3", &errorCode);
+    if (errorCode != Ok)
+    {
+        return false;
+    }
+    testTree = addValue(testTree, "7", "7", &errorCode);
+    if (errorCode != Ok)
+    {
+        return false;
+    }
+
+    bool firstTest = strcmp(getValue(testTree, "5"), "5") == 0;
+    bool secondTest = strcmp(getValue(testTree, "3"), "3") == 0;
+    bool thirdTest = strcmp(getValue(testTree, "7"), "7") == 0;
+    freeTree(testTree);
+    return firstTest && secondTest && thirdTest;
+}
+
+bool testDelete()
+{
+    Tree *testTree = NULL;
+    Error errorCode = Ok;
+    testTree = addValue(testTree, "5", "5", &errorCode);
+    if (errorCode != Ok)
+    {
+        return false;
+    }
+    testTree = addValue(testTree, "3", "3", &errorCode);
+    if (errorCode != Ok)
+    {
+        return false;
+    }
+    testTree = addValue(testTree, "7", "7", &errorCode);
+    if (errorCode != Ok)
+    {
+        return false;
+    }
+
+    deleteElement(testTree, "5");
+    bool firstTest = getValue(testTree, "5") == NULL;
+    bool secondTest = strcmp(getValue(testTree, "3"), "3") == 0;
+    bool thirdTest = strcmp(getValue(testTree, "7"), "7") == 0;
+    freeTree(testTree);
+    return firstTest && secondTest && thirdTest;
+}
+
+int checkBalancedTree(Tree *tree, bool *isBalanced)
+{
+    if (tree == NULL)
+    {
+        return 0;
+    }
+    int heightLeftChild = checkBalancedTree(tree->leftChild, isBalanced);
+    int heightRightChild = checkBalancedTree(tree->rightChild, isBalanced);
+
+    if (tree->balance != (heightRightChild - heightLeftChild))
+    {
+        *isBalanced = false;
+    }
+
+    return (heightLeftChild > heightRightChild ? heightLeftChild : heightRightChild) + 1;
+}
+
+bool testBalancedTree()
+{
+    Tree *testTree = NULL;
+    Error errorCode = Ok;
+    bool resultTest = true;
+    testTree = addValue(testTree, "5", "5", &errorCode);
+    if (errorCode != Ok)
+    {
+        return false;
+    }
+    testTree = addValue(testTree, "2", "2", &errorCode);
+    if (errorCode != Ok)
+    {
+        return false;
+    }
+    testTree = addValue(testTree, "8", "8", &errorCode);
+    if (errorCode != Ok)
+    {
+        return false;
+    }
+    testTree = addValue(testTree, "1", "1", &errorCode);
+    if (errorCode != Ok)
+    {
+        return false;
+    }
+    testTree = addValue(testTree, "3", "3", &errorCode);
+    if (errorCode != Ok)
+    {
+        return false;
+    }
+    checkBalancedTree(testTree, &resultTest);
+
+    testTree = addValue(testTree, "4", "4", &errorCode);
+    if (errorCode != Ok)
+    {
+        return false;
+    }
+    checkBalancedTree(testTree, &resultTest);
+
+    testTree = deleteElement(testTree, "5");
+    checkBalancedTree(testTree, &resultTest);
+
+    freeTree(testTree);
+    return resultTest;
+}
+
+bool tests()
+{
+    return testGetValue() && testAdd() && testDelete() && testBalancedTree();
 }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdbool.h>
+
 typedef enum { Ok, MemoryAllocationError } Error;
 
 typedef struct Tree Tree;
@@ -22,3 +24,7 @@ void printTree(Tree *root);
 
 // Frees up all the memory allocated for the tree
 void freeTree(Tree *root);
+
+// Tests
+// returns: "true" if the tests are passed, otherwise "false"
+bool tests();
