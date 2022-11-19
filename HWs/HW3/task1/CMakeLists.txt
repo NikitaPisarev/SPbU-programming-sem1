@@ -3,4 +3,4 @@ project(3_1 C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(3_1 qsort.c quickSort.c)
+add_executable(3_1 qsort.c ../quickSort.c)

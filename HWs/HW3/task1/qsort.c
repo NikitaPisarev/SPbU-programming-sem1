@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
-#include "quickSort.h"
+#include "../quickSort.h"
 
 #define arraySizeBound 1000
 
