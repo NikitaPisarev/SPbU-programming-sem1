@@ -1,6 +1,8 @@
+#include <stdbool.h>
 #include "qsort.h"
 
-// swaps objects firstNumber and secondNumber
+#define sizeInsertionSort 10
+
 void swap(int *firstNumber, int *secondNumber)
 {
     int temp = *firstNumber;
@@ -8,29 +10,25 @@ void swap(int *firstNumber, int *secondNumber)
     *secondNumber = temp;
 }
 
-// rearranges the elements in the segment [leftIndex, rightIndex]
-// so that all the elements to the left of "rightIndex" are smaller
-// and to the right are larger and returns the index of "rightIndex"
-int partition(int array[], int leftIndex, int rightIndex)
+int partition(int array[], int leftIndex, int rigthIndex)
 {
-    for (int current = leftIndex; current < rightIndex; ++current)
+    for (int current = leftIndex; current < rigthIndex; ++current)
     {
-        if (array[rightIndex] > array[current])
+        if (array[rigthIndex] > array[current])
         {
             swap(&array[current], &array[leftIndex]);
             ++leftIndex;
         }
     }
 
-    swap(&array[rightIndex], &array[leftIndex]);
+    swap(&array[rigthIndex], &array[leftIndex]);
 
     return leftIndex;
 }
 
-// sorts by inserting a segment [leftIndex, rightIndex] in an array
-void insertsSort(int array[], int leftIndex, int rightIndex)
+void insertsSort(int array[], int leftIndex, int rigthIndex)
 {
-    for (int i = leftIndex; i < rightIndex; ++i)
+    for (int i = leftIndex; i < rigthIndex; ++i)
     {
         int j = i + 1;
 
@@ -42,17 +40,88 @@ void insertsSort(int array[], int leftIndex, int rightIndex)
     }
 }
 
-// quick sorting of a segment [leftIndex, rightIndex] in an array
-void quickSort(int array[], int leftIndex, int rightIndex)
+void quickSort(int array[], int leftIndex, int rigthIndex)
 {
-    if (rightIndex - leftIndex <= 8)
+    if (rigthIndex - leftIndex <= sizeInsertionSort - 2)
     {
-        insertsSort(array, leftIndex, rightIndex);
+        insertsSort(array, leftIndex, rigthIndex);
     }
     else
     {
-        int reference = partition(array, leftIndex, rightIndex);
-        quickSort(array, leftIndex, reference - 1);
-        quickSort(array, reference + 1, rightIndex);
-    }  
+        int middleIndex = partition(array, leftIndex, rigthIndex);
+        quickSort(array, leftIndex, middleIndex - 1);
+        quickSort(array, middleIndex + 1, rigthIndex);
+    }
+}
+
+bool testQuickSort1()
+{
+    int array[5] = {5, 4, 3, 2, 1};
+
+    quickSort(array, 0, 4);
+
+    for (int i = 0; i < 5; ++i)
+    {
+        if (array[i] != i + 1)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool testQuickSort2()
+{
+    int array[4] = {-3, 0, -1, -2};
+    int correctArray[4] = {-3, -2, -1, 0};
+
+    quickSort(array, 0, 3);
+
+    for (int i = 0; i < 4; ++i)
+    {
+        if (array[i] != correctArray[i])
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool testQuickSort3()
+{
+    int array[6] = {2, 2, 2, 2, 2, 2};
+
+    quickSort(array, 0, 5);
+
+    for (int i = 0; i < 6; ++i)
+    {
+        if (array[i] != 2)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+int testQuickSort()
+{
+    if (!testQuickSort1())
+    {
+        return -1;
+    }
+
+    if (!testQuickSort2())
+    {
+        return -2;
+    }
+
+    if (!testQuickSort3())
+    {
+        return -3;
+    }
+
+    return 0;
 }

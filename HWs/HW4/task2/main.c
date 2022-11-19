@@ -3,9 +3,11 @@
 #include <stdlib.h>
 #include "qsort.h"
 
-void mostCommon(int array[], int length, int *mostCommon, int *counterMaximum)
+int mostCommonInSortedArray(int array[], int length, int *counterMaximum)
 {
     int counter = 1;
+    int mostCommon = array[0];
+    *counterMaximum = 1;
 
     for (int i = 1; i < length; ++i)
     {
@@ -13,11 +15,11 @@ void mostCommon(int array[], int length, int *mostCommon, int *counterMaximum)
         {
             ++counter;
         }
-        else 
+        else
         {
             if (counter > *counterMaximum)
             {
-                *mostCommon = array[i - 1];
+                mostCommon = array[i - 1];
                 *counterMaximum = counter;
             }
 
@@ -25,33 +27,39 @@ void mostCommon(int array[], int length, int *mostCommon, int *counterMaximum)
         }
     }
 
-    if (counter > *counterMaximum)  // If the most common number is at the end, then we never check the last element for the maximum
+    if (counter > *counterMaximum) // If the most common number is at the end, then we never check the last element for the maximum
     {
-        *mostCommon = array[length - 2]; 
+        mostCommon = array[length - 2];
         *counterMaximum = counter;
     }
+    return mostCommon;
 }
 
 bool testMostCommon()
 {
     int array[5] = {0, 1, 1, 1, 0};
     int counterMaximum = 1;
-    int mostCommonNumber = array[0];
-    mostCommon(array, 5, &mostCommonNumber, &counterMaximum);
+    int mostCommonNumber = mostCommonInSortedArray(array, 5, &counterMaximum);
 
     return mostCommonNumber == 1 && counterMaximum == 3;
 }
 
 int main()
 {
+    int errorCode = testQuickSort();
+    if (errorCode != 0)
+    {
+        printf("Tests failed! Error code %d.\n", errorCode);
+        return 0;
+    }
+
     if (!testMostCommon())
     {
         printf("MostCommon function tests failed!\n");
         return 0;
     }
 
-    FILE *file = fopen("array.txt", "r");
-
+    FILE *file = fopen("../HWs/HW4/task2/array.txt", "r");
     if (file == NULL)
     {
         printf("File opening error :(\n");
@@ -73,9 +81,7 @@ int main()
     }
 
     fseek(file, 0, SEEK_SET);
-
     int *array = calloc(arraySize, sizeof(int));
-
     if (array == NULL)
     {
         printf("Memory allocation error :(\n");
@@ -86,14 +92,11 @@ int main()
     {
         fscanf(file, "%d", &array[i]);
     }
-
     fclose(file);
 
     quickSort(array, 0, arraySize - 1);
-
     int counterMaximum = 1;
-    int mostCommonNumber = array[0];
-    mostCommon(array, arraySize, &mostCommonNumber, &counterMaximum);
+    int mostCommonNumber = mostCommonInSortedArray(array, arraySize, &counterMaximum);
 
     if (counterMaximum == 1)
     {
@@ -105,6 +108,5 @@ int main()
     }
 
     free(array);
-
     return 0;
 }
