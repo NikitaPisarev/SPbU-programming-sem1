@@ -9,6 +9,7 @@ typedef char *Value;
 typedef struct Node
 {
     Value value;
+    int amount;
     struct Node *next;
 } Node;
 
@@ -46,13 +47,20 @@ Error addElement(List *list, Value value)
             return -2;
         }
         strcpy(list->head->value, value);
+        list->head->amount = 1;
         return 0;
     }
     Node *currentElement = list->head;
-    while (currentElement->next != NULL)
+    while (currentElement->next != NULL && strcmp(currentElement->value, value) != 0)
     {
         currentElement = currentElement->next;
     }
+    if (strcmp(currentElement->value, value) == 0)
+    {
+        ++currentElement->amount;
+        return 0;
+    }
+
     Node *newElement = calloc(1, sizeof(Node));
     if (newElement == NULL)
     {
@@ -64,6 +72,7 @@ Error addElement(List *list, Value value)
         return -2;
     }
     strcpy(newElement->value, value);
+    newElement->amount = 1;
     currentElement->next = newElement;
     return 0;
 }
@@ -109,10 +118,9 @@ Error printList(List *list)
     Node *currentElement = list->head;
     while (currentElement != NULL)
     {
-        printf("%s ", currentElement->value);
+        printf("%s %d\n", currentElement->value, currentElement->amount);
         currentElement = currentElement->next;
     }
-    printf("\n");
     return 0;
 }
 
