@@ -3,125 +3,61 @@
 #include <stdlib.h>
 #include "list.h"
 
-typedef int Error;
-typedef char *Value;
-
-typedef struct Node
+List *findNode(List **list, Value value)
 {
-    Value value;
-    int amount;
-    struct Node *next;
-} Node;
-
-typedef struct List
-{
-    Node *head;
-} List;
-
-List *listCreate()
-{
-    List *list = calloc(1, sizeof(List));
     if (list == NULL)
     {
         return NULL;
     }
-    return list;
+
+    while (*list != NULL && strcmp((*list)->value, value) != 0)
+    {
+        list = &(*list)->next;
+    }
+    return *list;
 }
 
-Error addElement(List *list, Value value)
+Error addNode(List **list, Value value)
 {
     if (list == NULL)
     {
         return -1;
     }
-    if (list->head == NULL)
+
+    while (*list != NULL)
     {
-        list->head = calloc(1, sizeof(Node));
-        if (list->head == NULL)
-        {
-            return -2;
-        }
-        list->head->value = calloc(strlen(value) + 1, sizeof(char));
-        if (list->head->value == NULL)
-        {
-            return -2;
-        }
-        strcpy(list->head->value, value);
-        list->head->amount = 1;
-        return 0;
-    }
-    Node *currentElement = list->head;
-    while (currentElement->next != NULL && strcmp(currentElement->value, value) != 0)
-    {
-        currentElement = currentElement->next;
-    }
-    if (strcmp(currentElement->value, value) == 0)
-    {
-        ++currentElement->amount;
-        return 0;
+        list = &(*list)->next;
     }
 
-    Node *newElement = calloc(1, sizeof(Node));
-    if (newElement == NULL)
+    List *newNode = calloc(1, sizeof(List));
+    if (newNode == NULL)
     {
         return -2;
     }
-    newElement->value = calloc(strlen(value) + 1, sizeof(char));
-    if (newElement->value == NULL)
+    newNode->value = calloc(strlen(value) + 1, sizeof(char));
+    if (newNode->value == NULL)
     {
         return -2;
     }
-    strcpy(newElement->value, value);
-    newElement->amount = 1;
-    currentElement->next = newElement;
+    strcpy(newNode->value, value);
+    newNode->amount = 1;
+    *list = newNode;
     return 0;
 }
 
-Error deleteElement(List *list, Value value)
+void printList(List *list)
 {
     if (list == NULL)
     {
-        return -1;
+        return;
     }
-
-    Node *currentElement = list->head;
-    Node *previousElement = NULL;
-    while (strcmp(currentElement->value, value) != 0 && currentElement->next != NULL)
+    while (list != NULL)
     {
-        previousElement = currentElement;
-        currentElement = currentElement->next;
+        printf("| ");
+        printf("%s %d | ", list->value, list->amount);
+        list = list->next;
     }
-    if (strcmp(currentElement->value, value) != 0) // No such value was found
-    {
-        return -3;
-    }
-    if (previousElement == NULL) // If this is the first element
-    {
-        list->head = currentElement->next;
-    }
-    else
-    {
-        previousElement->next = currentElement->next;
-    }
-    free(currentElement->value);
-    free(currentElement);
-    return 0;
-}
-
-Error printList(List *list)
-{
-    if (list == NULL)
-    {
-        return -1;
-    }
-
-    Node *currentElement = list->head;
-    while (currentElement != NULL)
-    {
-        printf("%s %d\n", currentElement->value, currentElement->amount);
-        currentElement = currentElement->next;
-    }
-    return 0;
+    printf("\n");
 }
 
 void freeList(List *list)
@@ -131,14 +67,7 @@ void freeList(List *list)
         return;
     }
 
-    Node *currentElement = list->head;
-    Node *previousElement = currentElement;
-    while (currentElement != NULL)
-    {
-        currentElement = currentElement->next;
-        free(previousElement->value);
-        free(previousElement);
-        previousElement = currentElement;
-    }
+    freeList(list->next);
+    free(list->value);
     free(list);
 }
