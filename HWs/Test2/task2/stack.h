@@ -1,7 +1,5 @@
 #pragma once
 
-typedef struct StackElement StackElement;
-
 typedef struct Stack Stack;
 
 Stack *createStack();
