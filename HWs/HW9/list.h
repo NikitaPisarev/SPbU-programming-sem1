@@ -16,6 +16,9 @@ List *findNode(List **list, Value value);
 // Adds the value to the list
 Error addNode(List **list, Value value);
 
+// Length list
+int lengthList(List **list);
+
 // Outputs a list
 void printList(List *list);
 

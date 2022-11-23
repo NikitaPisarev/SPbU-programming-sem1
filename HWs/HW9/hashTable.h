@@ -16,6 +16,10 @@ void printHashTable(HashTable *table);
 // Frees up all the memory allocated for the hash table
 void freeHashTable(HashTable *table);
 
+int maximumLength(HashTable *table);
+
+float averageLength(HashTable *table);
+
 // the number of elements in the hash table
 int numberOfElements(HashTable *table);
 

@@ -32,7 +32,9 @@ int main()
 
     printf("Word frequencies in your file:\n");
     printHashTable(table);
-    printf("Fill factor %f", (float)numberOfElements(table) / numbeOfSegments(table));
+    printf("Fill factor: %f\n", (float)numberOfElements(table) / numbeOfSegments(table));
+    printf("Maximum list length: %d\n", maximumLength(table));
+    printf("Average list length: %f\n", averageLength(table));
     freeHashTable(table);
     return 0;
 }

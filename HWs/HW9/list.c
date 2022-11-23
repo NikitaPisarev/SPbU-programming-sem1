@@ -45,6 +45,21 @@ Error addNode(List **list, Value value)
     return 0;
 }
 
+int lengthList(List **list)
+{
+    int counter = 0;
+    if (list == NULL)
+    {
+        return counter;
+    }
+    while (*list != NULL)
+    {
+        list = &(*list)->next;
+        ++counter;
+    }
+    return counter;
+}
+
 void printList(List *list)
 {
     if (list == NULL)

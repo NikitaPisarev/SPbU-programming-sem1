@@ -2,7 +2,7 @@
 #include "hashTable.h"
 #include "list.h"
 
-#define CAPACITY 101
+#define CAPACITY 31
 
 typedef struct HashTable
 {
@@ -56,6 +56,55 @@ Error insert(HashTable *table, Value value)
     else
     {
         ++node->amount;
+        return 0;
+    }
+}
+
+int maximumLength(HashTable *table)
+{
+    if (table == NULL)
+    {
+        return -3;
+    }
+
+    int maximum = 0;
+    int currentLength = 0;
+    for (int i = 0; i < table->size; ++i)
+    {
+        currentLength = lengthList(&table->values[i]);
+        if (currentLength > maximum)
+        {
+            maximum = currentLength;
+        }
+    }
+    return maximum;
+}
+
+float averageLength(HashTable *table)
+{
+    if (table == NULL)
+    {
+        return -3;
+    }
+
+    int sumsLength = 0;
+    int notEmpty = 0;
+    int currentLength = 0;
+    for (int i = 0; i < table->size; ++i)
+    {
+        currentLength = lengthList(&table->values[i]);
+        if (currentLength != 0)
+        {
+            sumsLength += currentLength;
+            ++notEmpty;
+        }
+    }
+    if (notEmpty != 0)
+    {
+        return (float)sumsLength / notEmpty;
+    }
+    else
+    {
         return 0;
     }
 }
