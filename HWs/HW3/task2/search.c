@@ -118,7 +118,9 @@ int main()
 
         isCorrectInput = true;
 
-        if (!scanResultN || !scanResultK || lengthArrayK <= 0 || lengthArrayN <= 0 || lengthArrayK > arraySize || lengthArrayN > arraySize)
+        if (!scanResultN || !scanResultK || lengthArrayK <= 0 ||
+            lengthArrayN <= 0 || lengthArrayK > arraySize ||
+            lengthArrayN > arraySize)
         {
             printf("Incorrect input (\"N\" and \"K\" are positive and less than %d). Try again!\n", arraySize + 1);
             scanf_s("%*[^\n]");
