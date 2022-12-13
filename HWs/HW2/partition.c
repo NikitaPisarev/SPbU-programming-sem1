@@ -38,7 +38,7 @@ void partition(int array[], int leftIndex, int rigthIndex)
     swap(&array[leftIndex], &array[leftElement - 1]);
 }
 
-void main()
+int main()
 {
     int array[arraySize] = { 0 };
 
@@ -56,4 +56,5 @@ void main()
 
     printf("\nThe array has become like this:\n");
     printArr(array);
+    return 0;
 }
