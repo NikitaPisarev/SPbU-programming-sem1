@@ -37,21 +37,21 @@ int main()
 {
     int number = 0;
     int degree = 0;
-    int scan_resNumber = 0;
-    int scan_resDegree = 0;
+    int scanResNumber = 0;
+    int scanResDegree = 0;
 
     do
     {
         printf("Enter the number and degree: ");
-        scan_resNumber = scanf("%d", &number);
-        scan_resDegree= scanf("%d", &degree);
+        scanResNumber = scanf("%d", &number);
+        scanResDegree = scanf("%d", &degree);
 
-        if (!scan_resNumber || !scan_resDegree)
+        if (!scanResNumber || !scanResDegree)
         {
             printf("Incorrect input. Try again!\n");
             scanf_s("%*[^\n]");
         }
-    } while (!scan_resNumber || !scan_resDegree);
+    } while (!scanResNumber || !scanResDegree);
 
     if (number == 0 && degree == 0)
     {
