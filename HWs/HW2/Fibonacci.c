@@ -8,7 +8,7 @@ int iterativeFibonacci(unsigned int number)
     int previousNumber = 0;
     int currentNumber = 1;
 
-    for (int i = 0; i < number ; ++i)
+    for (int i = 0; i < number; ++i)
     {
         currentNumber = currentNumber + previousNumber;
         previousNumber = currentNumber - previousNumber;
