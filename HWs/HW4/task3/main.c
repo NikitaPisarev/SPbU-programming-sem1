@@ -33,7 +33,7 @@ void printActions(void)
     printf(" 0 — Exit\n");
     printf(" 1 — Add an entry (name and phone number)\n");
     printf(" 2 — Print all available entries\n");
-    printf(" 3 — Find a phone by namen\n");
+    printf(" 3 — Find a phone by name\n");
     printf(" 4 — Find a name by phone\n");
     printf(" 5 — Save current data to a file\n");
     printf(" 6 - View the list of commands\n");
@@ -60,6 +60,11 @@ unsigned char amountEntries(FILE *file)
 char *addEntry(char current)
 {
     char *buffer = calloc(maximumSize, sizeof(char));
+    if (buffer == NULL)
+    {
+        return NULL;
+    }
+
     printf("\nEnter the phone and number (For example: +79123456789 Alex):\n");
     getchar();
     fgets(buffer, entrySize, stdin);
@@ -72,7 +77,6 @@ int saveData(FILE *file, char *data[], char lengthData)
 {
     if (lengthData == 0)
     {
-        printf("\nNo changes.\n\n");
         return 1;
     }
     fseek(file, 0, SEEK_END);
@@ -82,7 +86,6 @@ int saveData(FILE *file, char *data[], char lengthData)
         data[i] = 0;
     }
     fseek(file, 0, SEEK_SET);
-    printf("\nChanges saved successfully!\n\n");
 
     return 0;
 }
@@ -99,7 +102,7 @@ void nameByPhone(FILE *file, char number[])
         fscanf(file, "%s", currentName);
         if (!strcmp(currentNumber, number))
         {
-            printf("\nNumber %s belongs to %s\n", currentNumber, currentName);
+            printf("\nNumber %s belongs to %s\n\n", currentNumber, currentName);
             isFound = true;
         }
     }
@@ -149,6 +152,7 @@ int main()
     printActions();
 
     int action = -1;
+    int result = 0;
     bool isContinue = true;
 
     while (isContinue)
@@ -165,6 +169,11 @@ int main()
 
         case 1:
             data[current] = addEntry(current);
+            if (data[current] == NULL)
+            {
+                printf("Memory allocation error.\n");
+                isContinue = false;
+            }
             ++current;
             break;
 
@@ -199,7 +208,15 @@ int main()
             break;
 
         case 5:
-            saveData(file, data, current);
+            result = saveData(file, data, current);
+            if (result == 1)
+            {
+                printf("\nNo changes.\n\n");
+            }
+            else
+            {
+                printf("\nChanges saved successfully!\n\n");
+            }
             current = 0;
             break;
 
