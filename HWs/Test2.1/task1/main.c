@@ -20,6 +20,12 @@ int main()
         while (currentCharacter != '\t' && !feof(file))
         {
             currentCharacter = fgetc(file);
+            if (currentCharacter == '\n')
+            {
+                printf("Incorrect file structure.\n");
+                fclose(file);
+                return 0;
+            }
         }
         if (feof(file))
         {
@@ -27,7 +33,7 @@ int main()
         }
 
         scanRes = fscanf(file, "%d", &amountOfGoods);
-        if (scanRes == 0)
+        if (scanRes == 0 || amountOfGoods <= 0)
         {
             printf("Incorrect file structure.\n");
             fclose(file);
@@ -35,7 +41,7 @@ int main()
         }
 
         scanRes = fscanf(file, "%d", &price);
-        if (scanRes == 0)
+        if (scanRes == 0 || price <= 0)
         {
             printf("Incorrect file structure.\n");
             fclose(file);
