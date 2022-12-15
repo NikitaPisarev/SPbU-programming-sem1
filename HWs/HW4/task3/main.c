@@ -3,10 +3,16 @@
 #include <stdbool.h>
 #include <string.h>
 
-#define maximumSize 255
+#define maximumSize 256
 #define entrySize 100
 
-int printList(FILE *file, unsigned char amountEntry)
+typedef struct
+{
+    char *name;
+    char *phone;
+} Person;
+
+int printList(Person data[], unsigned char amountEntry)
 {
     if (amountEntry == 0)
     {
@@ -15,19 +21,16 @@ int printList(FILE *file, unsigned char amountEntry)
     }
 
     printf("\nPhone book:\n");
-    char entry[maximumSize] = {0};
     for (int i = 0; i < amountEntry; ++i)
     {
-        fgets(entry, maximumSize, file);
-        printf("%d. %s", i + 1, entry);
+        printf("%d. %s %s", i + 1, data[i].name, data[i].phone);
     }
-    fseek(file, 0, SEEK_SET);
     printf("\n");
 
     return 0;
 }
 
-void printActions(void)
+void printActions()
 {
     printf(" ------------------------------------\n");
     printf(" 0 — Exit\n");
@@ -59,17 +62,14 @@ unsigned char amountEntries(FILE *file)
 
 char *addEntry(char current)
 {
-    char *buffer = calloc(maximumSize, sizeof(char));
+    char *buffer = (char *)malloc(maximumSize * sizeof(char));
     if (buffer == NULL)
     {
         return NULL;
     }
 
-    printf("\nEnter the phone and number (For example: +79123456789 Alex):\n");
     getchar();
     fgets(buffer, entrySize, stdin);
-    printf("Entry successfully added.\n\n");
-
     return buffer;
 }
 
@@ -79,7 +79,6 @@ int saveData(FILE *file, char *data[], char lengthData)
     {
         return 1;
     }
-    fseek(file, 0, SEEK_END);
     for (int i = 0; i < lengthData; ++i)
     {
         fputs(data[i], file);
@@ -90,46 +89,39 @@ int saveData(FILE *file, char *data[], char lengthData)
     return 0;
 }
 
-void nameByPhone(FILE *file, char number[])
+void nameByPhone(Person data[], unsigned char amountEntry, char number[])
 {
     bool isFound = false;
-    char currentNumber[maximumSize] = {0};
-    char currentName[maximumSize] = {0};
 
-    while (!feof(file) && !isFound)
+    for (int i = 0; i < amountEntry; ++i)
     {
-        fscanf(file, "%s", currentNumber);
-        fscanf(file, "%s", currentName);
-        if (!strcmp(currentNumber, number))
+        if (!strcmp(data[i].phone, number))
         {
-            printf("\nNumber %s belongs to %s\n\n", currentNumber, currentName);
+            printf("\nNumber %s belongs to %s\n\n", data[i].phone, data[i].name);
             isFound = true;
+            break;
         }
     }
-    fseek(file, 0, SEEK_SET);
+
     if (!isFound)
     {
         printf("\nThere is no such number in phone book.\n\n");
     }
 }
 
-void phoneByName(FILE *file, char name[])
+void phoneByName(Person data[], unsigned char amountEntry, char name[])
 {
     bool isFound = false;
-    char currentNumber[maximumSize] = {0};
-    char currentName[maximumSize] = {0};
 
-    while (!feof(file) && !isFound)
+    for (int i = 0; i < amountEntry; ++i)
     {
-        fscanf(file, "%s", currentNumber);
-        fscanf(file, "%s", currentName);
-        if (!strcmp(currentName, name))
+        if (!strcmp(data[i].name, name))
         {
-            printf("\nSubscriber has %s number %s\n\n", name, currentNumber);
+            printf("\nSubscriber has %s number %s\n\n", data[i].name, data[i].phone);
             isFound = true;
+            break;
         }
     }
-    fseek(file, 0, SEEK_SET);
     if (!isFound)
     {
         printf("\nThere is no such name in the phone book.\n\n");
@@ -142,11 +134,19 @@ int main()
     if (file == NULL)
     {
         printf("Error working with the file.\n");
-        return 0;
+        return -1;
     }
 
-    char *data[entrySize] = {0};
-    char current = 0;
+    Person data[entrySize] = {0};
+    unsigned char current = 0;
+
+    while (!feof(file))
+    {
+        fgets(data[current].name, maximumSize, file);
+        fgets(data[current].phone, maximumSize, file);
+        ++current;
+    }
+    fclose(file);
 
     printf("Hi, this is a Phone Book!\nThat's what I can do:\n");
     printActions();
@@ -168,18 +168,28 @@ int main()
             break;
 
         case 1:
-            data[current] = addEntry(current);
-            if (data[current] == NULL)
+            printf("\nEnter the name:\n");
+            data[current].name = addEntry(current);
+            if (data[current].name == NULL)
             {
                 printf("Memory allocation error.\n");
                 isContinue = false;
+                break;
+            }
+            printf("\nEnter the phone:\n");
+            data[current].phone = addEntry(current);
+            if (data[current].phone == NULL)
+            {
+                printf("Memory allocation error.\n");
+                isContinue = false;
+                break;
             }
             ++current;
+            printf("Entry successfully added.\n\n");
             break;
 
         case 2:
-            unsigned char amount = amountEntries(file);
-            printList(file, amount);
+            printList(data, current);
             break;
 
         case 3:
@@ -187,7 +197,7 @@ int main()
 
             printf("Enter the name of the subscriber whose number to show: ");
             scanf("%s", name);
-            phoneByName(file, name);
+            phoneByName(data, current, name);
             break;
 
         case 4:
@@ -199,26 +209,25 @@ int main()
             if (number[0] != '+')
             {
                 char tempNumber[] = "+";
-
                 strcat(tempNumber, number);
                 strcpy(number, tempNumber);
             }
 
-            nameByPhone(file, number);
+            nameByPhone(data, current, number);
             break;
 
-        case 5:
-            result = saveData(file, data, current);
-            if (result == 1)
-            {
-                printf("\nNo changes.\n\n");
-            }
-            else
-            {
-                printf("\nChanges saved successfully!\n\n");
-            }
-            current = 0;
-            break;
+            // case 5:
+            //     result = saveData(file, data, current);
+            //     if (result == 1)
+            //     {
+            //         printf("\nNo changes.\n\n");
+            //     }
+            //     else
+            //     {
+            //         printf("\nChanges saved successfully!\n\n");
+            //     }
+            //     current = 0;
+            //     break;
 
         case 6:
             printActions();
@@ -230,6 +239,5 @@ int main()
         }
     }
 
-    fclose(file);
     return 0;
 }
