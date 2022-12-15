@@ -34,7 +34,7 @@ int checkBalanced(char sequence[], int lengthSequence)
                 freeStack(stack);
                 return 0;
             }
-            
+
             continue;
         }
 
@@ -81,7 +81,7 @@ bool testCheckBalanced()
     if (!checkBalanced(sequence4, 1))
     {
         return false;
-    }    
+    }
     return true;
 }
 
@@ -108,11 +108,7 @@ int main()
         printf("Memory allocation error.\n");
         return 0;
     }
-    getc(stdin); // Clear input stream
-    for (int i = 0; i < lengthSequence; ++i)
-    {
-        scanf("%c", &sequence[i]);
-    }
+    scanf("%s", sequence);
 
     int errorCode = checkBalanced(sequence, lengthSequence);
     if (errorCode == 1)
