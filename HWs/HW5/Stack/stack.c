@@ -81,25 +81,6 @@ int pop(Stack *stack, int *resultingValue)
     return 0;
 }
 
-int lengthStack(Stack *stack)
-{
-    if (stack == NULL)
-    {
-        return -1;
-    }
-
-    int length = 0;
-    StackElement *currentElement = stack->head;
-
-    while (currentElement != NULL)
-    {
-        ++length;
-        currentElement = currentElement->next;
-    }
-
-    return length;
-}
-
 int top(Stack *stack, int *value)
 {
     if (stack == NULL)
