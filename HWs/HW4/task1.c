@@ -44,7 +44,7 @@ int conversionFromBinaryDecimal(unsigned char array[], char length)
     for (int i = length - 1; i >= 0; --i)
     {
         decimalResult += array[i] * power;
-        power *= 2;
+        power <<= 1;
     }
 
     return decimalResult;
@@ -112,19 +112,19 @@ int main()
     if (!testBinaryRepresentation())
     {
         printf("Ошибка работы функции BinaryRepresentation.\n");
-        return 0;
+        return -1;
     }
 
     if (!testAddBinaryNumbers())
     {
         printf("Ошибка работы функции AddBinaryNumbers.\n");
-        return 0;
+        return -2;
     }
 
     if (!testConversionFromBinaryDecimal())
     {
         printf("Ошибка работы функции ConversionFromBinaryDecimal.\n");
-        return 0;
+        return -3;
     }
 
     int firstNumber = 0;
