@@ -78,7 +78,7 @@ int infixToPostfix(char input[], char *output, int lengthInput)
                 return -6;
             }
             pop(stack, &topElementStack);
-            while (topElementStack != '(' )
+            while (topElementStack != '(')
             {
                 if (isEmpty(stack))
                 {
@@ -136,7 +136,7 @@ int infixToPostfix(char input[], char *output, int lengthInput)
 bool testInfixToPostfix()
 {
     char inputTest1[] = "(1 + 1) * 2";
-    char outputTest1[10] = { 0 };
+    char outputTest1[10] = {0};
     char correctOutput1[] = "1 1 + 2 *";
     if (infixToPostfix(inputTest1, outputTest1, 11) != 0)
     {
@@ -152,7 +152,7 @@ bool testInfixToPostfix()
     }
 
     char inputTest2[] = "1 + (2 * 5 + 3) / 7";
-    char outputTest2[18] = { 0 };
+    char outputTest2[18] = {0};
     char correctOutput2[] = "1 2 5 * 3 + 7 / +";
     if (infixToPostfix(inputTest2, outputTest2, 19) != 0)
     {
@@ -178,8 +178,8 @@ int main()
         return 0;
     }
 
-    char input[maximumExpression] = { 0 };
-    char output[maximumExpression] = { 0 };
+    char input[maximumExpression] = {0};
+    char output[maximumExpression] = {0};
     printf("Enter the expression (no more than %d characters):\n", maximumExpression);
     gets(input);
     unsigned char lengthInput = strlen(input);
