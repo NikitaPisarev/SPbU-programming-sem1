@@ -8,8 +8,8 @@
 
 typedef struct
 {
-    char *name;
-    char *phone;
+    char name[maximumSize];
+    char phone[maximumSize];
 } Person;
 
 int printList(Person data[], unsigned char amountEntry)
@@ -23,7 +23,7 @@ int printList(Person data[], unsigned char amountEntry)
     printf("\nPhone book:\n");
     for (int i = 0; i < amountEntry; ++i)
     {
-        printf("%d. %s %s", i + 1, data[i].name, data[i].phone);
+        printf("%d. %s   %s", i + 1, data[i].name, data[i].phone);
     }
     printf("\n");
 
@@ -43,61 +43,44 @@ void printActions()
     printf(" ------------------------------------\n");
 }
 
-unsigned char amountEntries(FILE *file)
-{
-    char amount = 0;
-    char temp[maximumSize] = {0};
-
-    while (!feof(file))
-    {
-        if (fgets(temp, maximumSize, file) != NULL)
-        {
-            ++amount;
-        }
-    }
-    fseek(file, 0, SEEK_SET);
-
-    return amount;
-}
-
-char *addEntry(char current)
-{
-    char *buffer = (char *)malloc(maximumSize * sizeof(char));
-    if (buffer == NULL)
-    {
-        return NULL;
-    }
-
-    getchar();
-    fgets(buffer, entrySize, stdin);
-    return buffer;
-}
-
-int saveData(FILE *file, char *data[], char lengthData)
+int saveData(char fileName[], Person data[], char lengthData)
 {
     if (lengthData == 0)
     {
         return 1;
     }
-    for (int i = 0; i < lengthData; ++i)
-    {
-        fputs(data[i], file);
-        data[i] = 0;
-    }
-    fseek(file, 0, SEEK_SET);
 
+    FILE *file = fopen(fileName, "w");
+    if (file == NULL)
+    {
+        return 2;
+    }
+
+    for (int i = 0; i < lengthData - 1; ++i)
+    {
+        fputs(data[i].name, file);
+        fputs(data[i].phone, file);
+    }
+    fputs(data[lengthData - 1].name, file);
+    char buffer[maximumSize] = {0};
+    strcpy(buffer, data[lengthData - 1].phone);
+    buffer[strlen(buffer) - 1] = '\0';
+    fputs(buffer, file);
+
+    fclose(file);
     return 0;
 }
 
 void nameByPhone(Person data[], unsigned char amountEntry, char number[])
 {
     bool isFound = false;
+    int lengthNumber = strlen(number);
 
     for (int i = 0; i < amountEntry; ++i)
     {
-        if (!strcmp(data[i].phone, number))
+        if (!strncmp(data[i].phone, number, lengthNumber))
         {
-            printf("\nNumber %s belongs to %s\n\n", data[i].phone, data[i].name);
+            printf("\nThis number belongs to %s\n", data[i].name);
             isFound = true;
             break;
         }
@@ -112,12 +95,13 @@ void nameByPhone(Person data[], unsigned char amountEntry, char number[])
 void phoneByName(Person data[], unsigned char amountEntry, char name[])
 {
     bool isFound = false;
+    int lengthName = strlen(name);
 
     for (int i = 0; i < amountEntry; ++i)
     {
-        if (!strcmp(data[i].name, name))
+        if (!strncmp(data[i].name, name, lengthName))
         {
-            printf("\nSubscriber has %s number %s\n\n", data[i].name, data[i].phone);
+            printf("\nThis subscriber has number %s\n", data[i].phone);
             isFound = true;
             break;
         }
@@ -130,7 +114,8 @@ void phoneByName(Person data[], unsigned char amountEntry, char name[])
 
 int main()
 {
-    FILE *file = fopen("database.txt", "a+");
+    char fileName[maximumSize] = "database.txt";
+    FILE *file = fopen(fileName, "r");
     if (file == NULL)
     {
         printf("Error working with the file.\n");
@@ -146,6 +131,7 @@ int main()
         fgets(data[current].phone, maximumSize, file);
         ++current;
     }
+    strcat(data[current - 1].phone, "\n");
     fclose(file);
 
     printf("Hi, this is a Phone Book!\nThat's what I can do:\n");
@@ -169,21 +155,11 @@ int main()
 
         case 1:
             printf("\nEnter the name:\n");
-            data[current].name = addEntry(current);
-            if (data[current].name == NULL)
-            {
-                printf("Memory allocation error.\n");
-                isContinue = false;
-                break;
-            }
+            getchar();
+            fgets(data[current].name, maximumSize, stdin);
             printf("\nEnter the phone:\n");
-            data[current].phone = addEntry(current);
-            if (data[current].phone == NULL)
-            {
-                printf("Memory allocation error.\n");
-                isContinue = false;
-                break;
-            }
+            fgets(data[current].phone, maximumSize, stdin);
+
             ++current;
             printf("Entry successfully added.\n\n");
             break;
@@ -196,7 +172,8 @@ int main()
             char name[maximumSize] = {0};
 
             printf("Enter the name of the subscriber whose number to show: ");
-            scanf("%s", name);
+            getchar();
+            fgets(name, maximumSize, stdin);
             phoneByName(data, current, name);
             break;
 
@@ -204,7 +181,8 @@ int main()
             char number[maximumSize] = {0};
 
             printf("Enter the phone whose name of the subscriber to show(For example: +102): ");
-            scanf("%s", number);
+            getchar();
+            fgets(number, maximumSize, stdin);
 
             if (number[0] != '+')
             {
@@ -216,18 +194,21 @@ int main()
             nameByPhone(data, current, number);
             break;
 
-            // case 5:
-            //     result = saveData(file, data, current);
-            //     if (result == 1)
-            //     {
-            //         printf("\nNo changes.\n\n");
-            //     }
-            //     else
-            //     {
-            //         printf("\nChanges saved successfully!\n\n");
-            //     }
-            //     current = 0;
-            //     break;
+        case 5:
+            result = saveData(fileName, data, current);
+            if (result == 1)
+            {
+                printf("\nNo changes.\n\n");
+            }
+            else if (result == 2)
+            {
+                printf("File opening error.\n");
+            }
+            else
+            {
+                printf("\nChanges saved successfully!\n\n");
+            }
+            break;
 
         case 6:
             printActions();
