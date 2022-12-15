@@ -6,7 +6,16 @@
 
 #define maximumExpression 256
 
-int priorities(char symbol)
+void printError()
+{
+    printf("// Error codes:\n");
+    printf("-1: Stack not created\n");
+    printf("-2: Stack head is missing(or memory allocation error for head)\n");
+    printf("-3: Memory allocation error\n");
+    printf("-4: Incorrect sequence\n");
+}
+
+int getPriority(char symbol)
 {
     if (symbol == '*' || symbol == '/')
     {
@@ -16,15 +25,7 @@ int priorities(char symbol)
     {
         return 2;
     }
-    if (symbol == '(')
-    {
-        return 3;
-    }
-    if (symbol == ')')
-    {
-        return 4;
-    }
-    return 5;
+    return 3;
 }
 
 int infixToPostfix(char input[], char *output, int lengthInput)
@@ -33,7 +34,7 @@ int infixToPostfix(char input[], char *output, int lengthInput)
     if (stack == NULL)
     {
         printf("Stack creation error.\n");
-        return -4;
+        return -1;
     }
 
     int currentOutput = 0;
@@ -47,35 +48,29 @@ int infixToPostfix(char input[], char *output, int lengthInput)
             continue;
         }
 
-        if (input[i] - '0' >= 0 && input[i] - '0' <= 9) // Numbers
+        if (input[i] >= '0' && input[i] <= '9') // Numbers
         {
             output[currentOutput++] = input[i];
             output[currentOutput++] = ' ';
             continue;
         }
 
-        priorityCurrentCharacter = priorities(input[i]);
-        if (priorityCurrentCharacter == 5) // Extra character(s)
-        {
-            return -5;
-            freeStack(stack);
-        }
-
-        if (priorityCurrentCharacter == 3) // Opening parenthesis
+        if (input[i] == '(')
         {
             if ((errorCode = push(stack, input[i])) != 0)
             {
                 freeStack(stack);
                 return errorCode;
             }
+            continue;
         }
 
-        if (priorityCurrentCharacter == 4) // Closing parenthesis
+        if (input[i] == ')')
         {
             if (isEmpty(stack))
             {
                 freeStack(stack);
-                return -6;
+                return -4;
             }
             pop(stack, &topElementStack);
             while (topElementStack != '(')
@@ -83,12 +78,20 @@ int infixToPostfix(char input[], char *output, int lengthInput)
                 if (isEmpty(stack))
                 {
                     freeStack(stack);
-                    return -7;
+                    return -4;
                 }
                 output[currentOutput++] = topElementStack;
                 output[currentOutput++] = ' ';
                 pop(stack, &topElementStack);
             }
+            continue;
+        }
+
+        priorityCurrentCharacter = getPriority(input[i]);
+        if (priorityCurrentCharacter == 3) // Extra character(s)
+        {
+            return -4;
+            freeStack(stack);
         }
 
         if (priorityCurrentCharacter == 1 || priorityCurrentCharacter == 2) // Operations
@@ -99,7 +102,7 @@ int infixToPostfix(char input[], char *output, int lengthInput)
                 continue;
             }
             top(stack, &topElementStack);
-            while (priorities(topElementStack) <= priorityCurrentCharacter)
+            while (getPriority(topElementStack) <= priorityCurrentCharacter)
             {
                 pop(stack, &topElementStack);
                 output[currentOutput++] = topElementStack;
@@ -121,10 +124,10 @@ int infixToPostfix(char input[], char *output, int lengthInput)
     while (!isEmpty(stack)) // If there are still elements left in the stack, then we put them in the output
     {
         pop(stack, &topElementStack);
-        if (priorities(topElementStack) == 3)
+        if (topElementStack == '(')
         {
             freeStack(stack);
-            return -8;
+            return -4;
         }
         output[currentOutput++] = topElementStack;
         output[currentOutput++] = ' ';
@@ -167,6 +170,22 @@ bool testInfixToPostfix()
         }
     }
 
+    char inputTest3[] = "9 + 7 * 3 - 6 / 2";
+    char outputTest3[16] = {0};
+    char correctOutput3[] = "9 7 3 * + 6 2 / - ";
+    if (infixToPostfix(inputTest3, outputTest3, 17) != 0)
+    {
+        printf("The infixToPostfix function failed with error.\n");
+        return false;
+    }
+    for (int i = 0; i < 15; ++i)
+    {
+        if (outputTest3[i] != correctOutput3[i])
+        {
+            return false;
+        }
+    }
+
     return true;
 }
 
@@ -175,7 +194,7 @@ int main()
     if (!testInfixToPostfix())
     {
         printf("Tests failed!\n");
-        return 0;
+        return -1;
     }
 
     char input[maximumExpression] = {0};
@@ -186,14 +205,15 @@ int main()
     if (lengthInput == 0)
     {
         printf("Input error.\n");
-        return 0;
+        return -1;
     }
 
     int errorCode = 0;
     if ((errorCode = infixToPostfix(input, output, lengthInput)) != 0)
     {
         printf("The infixToPostfix function failed with error %d.\n", errorCode);
-        return 0;
+        printError();
+        return -1;
     }
     printf("Your expression is in reverse Polish notation:\n");
     printf("%s", output);
