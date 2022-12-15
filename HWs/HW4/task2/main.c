@@ -98,6 +98,7 @@ int main()
         {
             printf("Incorrect file structure.\n");
             fclose(file);
+            free(array);
             return -1;
         }
     }
