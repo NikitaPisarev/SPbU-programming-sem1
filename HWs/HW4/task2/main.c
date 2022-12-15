@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include "qsort.h"
 
+#define maximumSize 256
+
 int mostCommonInSortedArray(int array[], int length, int *counterMaximum)
 {
     int counter = 1;
@@ -67,9 +69,9 @@ int main()
     }
 
     int arraySize = 0;
-    int temp = 0;
+    char temp[maximumSize] = {0};
 
-    while (fscanf(file, "%d", &temp) == 1)
+    while (fscanf(file, "%s", &temp) == 1)
     {
         ++arraySize;
     }
@@ -88,9 +90,16 @@ int main()
         return 0;
     }
 
+    int scanResult = 0;
     for (int i = 0; i < arraySize; ++i)
     {
-        fscanf(file, "%d", &array[i]);
+        scanResult = fscanf(file, "%d", &array[i]);
+        if (scanResult == 0)
+        {
+            printf("Incorrect file structure.\n");
+            fclose(file);
+            return -1;
+        }
     }
     fclose(file);
 
