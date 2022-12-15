@@ -78,7 +78,7 @@ bool testOperations()
         printf("Stack creation error.\n");
         return false;
     }
-    
+
     for (int i = 0; i < 13; ++i)
     {
         unsigned char currentСharacter = testEntry[i];
@@ -98,7 +98,7 @@ bool testOperations()
             }
 
             continue;
-        } 
+        }
 
         if (push(stack, (int)currentСharacter - (int)'0') != 0)
         {
@@ -107,7 +107,7 @@ bool testOperations()
             return false;
         }
     }
-    
+
     int resultTest = 0;
     if (pop(stack, &resultTest) != 0)
     {
@@ -116,7 +116,7 @@ bool testOperations()
         return false;
     }
 
-    freeStack(stack); 
+    freeStack(stack);
     return resultTest == 9;
 }
 
@@ -164,9 +164,9 @@ int main()
             }
 
             continue;
-        } 
+        }
 
-        if ((int)currentСharacter < 48 || (int)currentСharacter > 57)
+        if (currentСharacter < '0' || currentСharacter > '9')
         {
             printf("Reading error, enter only \"+, -, *, /\" and digits 0-9.\n");
             freeStack(stack);
