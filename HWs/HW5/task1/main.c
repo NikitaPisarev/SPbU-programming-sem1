@@ -173,7 +173,7 @@ int main()
             return 0;
         }
 
-        if ((errorCode = push(stack, (int)currentСharacter - (int)'0')) != 0)
+        if ((errorCode = push(stack, (int)(currentСharacter - '0'))) != 0)
         {
             printf("The push function failed with error %d.\n", errorCode);
             freeStack(stack);
@@ -187,6 +187,13 @@ int main()
         printf("The pop function failed with error %d.\n", errorCode);
         freeStack(stack);
         return 0;
+    }
+
+    if (isEmpty(stack))
+    {
+        printf("");
+        freeStack(stack);
+        return -1;
     }
 
     freeStack(stack);

@@ -33,20 +33,7 @@ int push(Stack *stack, int value)
         return -1;
     }
 
-    if (stack->head == NULL)
-    {
-        stack->head = calloc(1, sizeof(StackElement));
-        if (stack->head == NULL)
-        {
-            return -2;
-        }
-
-        stack->head->value = value;
-        return 0;
-    }
-
     StackElement *newElement = calloc(1, sizeof(StackElement));
-
     if (newElement == NULL)
     {
         return -3;

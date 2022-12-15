@@ -29,10 +29,10 @@ int checkBalanced(char sequence[], int lengthSequence)
         if (sequence[i] == ')')
         {
             if ((errorCode = pop(stack, &topElement)) != 0 ||
-                (topElement != (sequence[i] - 1))) // In the encoding, the numbers of brackets () differ by one
+                (topElement != sequence[i] - 1)) // In the encoding, the numbers of brackets () differ by one
             {
                 freeStack(stack);
-                return 0;
+                return 1;
             }
 
             continue;
@@ -41,10 +41,10 @@ int checkBalanced(char sequence[], int lengthSequence)
         if (sequence[i] == ']' || sequence[i] == '}')
         {
             if ((errorCode = pop(stack, &topElement)) != 0 ||
-                (topElement != (sequence[i] - 2))) // In the encoding, the numbers of brackets {} and [] differ by two
+                (topElement != sequence[i] - 2)) // In the encoding, the numbers of brackets {} and [] differ by two
             {
                 freeStack(stack);
-                return 0;
+                return 1;
             }
         }
     }
@@ -52,33 +52,34 @@ int checkBalanced(char sequence[], int lengthSequence)
     if (!isEmpty(stack))
     {
         freeStack(stack);
-        return 0;
+        return 1;
     }
-    return 1;
+    freeStack(stack);
+    return 0;
 }
 
 bool testCheckBalanced()
 {
     char sequence1[7] = "({[]})";
-    if (!checkBalanced(sequence1, 7))
+    if (checkBalanced(sequence1, 7))
     {
         return false;
     }
 
     char sequence2[5] = "([})";
-    if (checkBalanced(sequence2, 5))
+    if (!checkBalanced(sequence2, 5))
     {
         return false;
     }
 
     char sequence3[6] = "([a])";
-    if (!checkBalanced(sequence3, 5))
+    if (checkBalanced(sequence3, 5))
     {
         return false;
     }
 
     char sequence4[1] = "";
-    if (!checkBalanced(sequence4, 1))
+    if (checkBalanced(sequence4, 1))
     {
         return false;
     }
@@ -111,11 +112,11 @@ int main()
     scanf("%s", sequence);
 
     int errorCode = checkBalanced(sequence, lengthSequence);
-    if (errorCode == 1)
+    if (errorCode == 0)
     {
         printf("Good bracket sequence!\n");
     }
-    else if (errorCode == 0)
+    else if (errorCode == 1)
     {
         printf("Bad bracket sequence.\n");
     }
