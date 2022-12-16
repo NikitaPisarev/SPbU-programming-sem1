@@ -53,30 +53,30 @@ int compare(List *firstElement, List *secondElement, int key)
 
 void merge(List *leftList, List *rightList, List **resultList, int key)
 {
-    (*resultList) = NULL;
+    *resultList = NULL;
     if (leftList == NULL)
     {
-        (*resultList) = rightList;
+        *resultList = rightList;
         return;
     }
     if (rightList == NULL)
     {
-        (*resultList) = leftList;
+        *resultList = leftList;
         return;
     }
 
     if (compare(leftList, rightList, key) < 0)
     {
-        (*resultList) = leftList;
+        *resultList = leftList;
         leftList = leftList->next;
     }
     else
     {
-        (*resultList) = rightList;
+        *resultList = rightList;
         rightList = rightList->next;
     }
 
-    List *headResultList = (*resultList);
+    List *headResultList = *resultList;
 
     while (leftList != NULL && rightList != NULL)
     {
@@ -97,17 +97,17 @@ void merge(List *leftList, List *rightList, List **resultList, int key)
     {
         (*resultList)->next = leftList;
         leftList = leftList->next;
-        (*resultList) = (*resultList)->next;
+        *resultList = (*resultList)->next;
     }
 
     while (rightList != NULL)
     {
         (*resultList)->next = rightList;
         rightList = rightList->next;
-        (*resultList) = (*resultList)->next;
+        *resultList = (*resultList)->next;
     }
 
-    (*resultList) = headResultList;
+    *resultList = headResultList;
 }
 
 void splitList(List *list, List **leftList, List **rightList)

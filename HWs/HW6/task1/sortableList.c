@@ -66,6 +66,10 @@ Error deleteElement(List *list, Value value)
     }
 
     Node *currentElement = list->head;
+    if (currentElement == NULL)
+    {
+        return -3;
+    }
     Node *previousElement = NULL;
     while (currentElement->value != value && currentElement->next != NULL)
     {
@@ -95,13 +99,14 @@ Error printList(List *list)
         return -1;
     }
 
+    printf("[ ");
     Node *currentElement = list->head;
     while (currentElement != NULL)
     {
         printf("%d ", currentElement->value);
         currentElement = currentElement->next;
     }
-    printf("\n");
+    printf("]\n");
     return 0;
 }
 
