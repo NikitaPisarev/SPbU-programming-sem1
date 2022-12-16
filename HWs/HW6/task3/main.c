@@ -1,6 +1,13 @@
 #include <stdio.h>
 #include "mergeSortList.h"
 
+void printError()
+{
+    printf("Error codes:\n");
+    printf("-1: File opening error\n");
+    printf("-2: Memory allocation error\n");
+}
+
 int main()
 {
     List *list = NULL;
@@ -8,6 +15,7 @@ int main()
     if ((errorCode = fillList(&list, "data.txt")) != 0)
     {
         printf("The fillList function failed with error %d.\n", errorCode);
+        printError();
         return 0;
     }
 

@@ -1,6 +1,13 @@
 #include <stdio.h>
 #include "circularList.h"
 
+void printError()
+{
+    printf("Error codes:\n");
+    printf("-1: List not created\n");
+    printf("-2: Memory allocation error\n");
+}
+
 int survivor(int numberOfWarriors, int step)
 {
     List *list = listCreate();
@@ -21,7 +28,7 @@ int survivor(int numberOfWarriors, int step)
 
     int killingPosition = step - 1;
     int survivor = 0;
-    while(!isOneElementLeft(list))
+    while (!isOneElementLeft(list))
     {
         if ((errorCode = pop(list, killingPosition, &survivor)) != 0)
         {
@@ -73,6 +80,7 @@ int main()
     else
     {
         printf("The program finished with error %d.\n", numberSurvivor);
+        printError();
     }
     return 0;
 }

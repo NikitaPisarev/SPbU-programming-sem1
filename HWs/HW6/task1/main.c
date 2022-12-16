@@ -3,6 +3,14 @@
 #include <stdbool.h>
 #include "sortableList.h"
 
+void printError()
+{
+    printf("Error codes:\n");
+    printf("-1: List not created\n");
+    printf("-2: Memory allocation error\n");
+    printf("-3: No such value found\n");
+}
+
 void printActions()
 {
     printf(" ------------------------------------\n");
@@ -48,6 +56,7 @@ int main()
             if ((errorCode = addElement(list, addValue)) != 0)
             {
                 printf("The addElement function failed with error %d.\n", errorCode);
+                printError();
                 isContinue = false;
             }
             printf("The value %d was successfully added.\n", addValue);
@@ -65,6 +74,7 @@ int main()
             else if (errorCode != 0)
             {
                 printf("The deleteElement function failed with error %d.\n", errorCode);
+                printError();
                 isContinue = false;
             }
             printf("Value %d has been successfully deleted.\n", deleteValue);
