@@ -29,16 +29,6 @@ Error addElement(List *list, Value value)
     {
         return -1;
     }
-    if (list->head == NULL)
-    {
-        list->head = calloc(1, sizeof(Node));
-        if (list->head == NULL)
-        {
-            return -2;
-        }
-        list->head->value = value;
-        return 0;
-    }
 
     Node *currentElement = list->head;
     Node *previousElement = NULL;
