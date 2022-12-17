@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "sortableList.h"
 
 typedef int Error;
@@ -126,4 +127,76 @@ void freeList(List *list)
         previousElement = currentElement;
     }
     free(list);
+}
+
+bool testAdd()
+{
+    List *list = listCreate();
+    if (list == NULL)
+    {
+        return false;
+    }
+
+    addElement(list, 10);
+    bool testFlag1 = list->head->value == 10;
+
+    addElement(list, 2);
+    bool testFlag2 = list->head->value == 2 && list->head->next->value == 10;
+
+    addElement(list, 7);
+    bool testFlag3 = list->head->value == 2 && list->head->next->value == 7 &&
+                     list->head->next->next->value == 10;
+
+    free(list);
+    return testFlag1 && testFlag2 && testFlag3;
+}
+
+bool testDelete()
+{
+    List *list = listCreate();
+    if (list == NULL)
+    {
+        return false;
+    }
+
+    list->head = calloc(1, sizeof(Node));
+    if (list->head == NULL)
+    {
+        return false;
+    }
+    list->head->value = 10;
+
+    list->head->next = calloc(1, sizeof(Node));
+    if (list->head->next == NULL)
+    {
+        return false;
+    }
+    list->head->next->value = 20;
+
+    list->head->next->next = calloc(1, sizeof(Node));
+    if (list->head->next->next == NULL)
+    {
+        return false;
+    }
+    list->head->next->next->value = 30;
+
+    deleteElement(list, 20);
+    bool testFlag1 = list->head->value == 10 && list->head->next->value == 30;
+
+    deleteElement(list, 10);
+    bool testFlag2 = list->head->value == 30;
+
+    bool testFlag3 = deleteElement(list, 50) == -3;
+
+    deleteElement(list, 30);
+    bool testFlag4 = list->head == NULL;
+
+    bool testFlag5 = deleteElement(list, 30) == -3;
+    free(list);
+    return testFlag1 && testFlag2 && testFlag3 && testFlag4 && testFlag5;
+}
+
+bool tests()
+{
+    return testAdd() && testDelete();
 }

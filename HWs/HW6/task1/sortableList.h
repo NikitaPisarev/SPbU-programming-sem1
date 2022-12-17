@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdbool.h>
+
 typedef int Error;
 typedef int Value;
 
@@ -19,6 +21,12 @@ Error printList(List *list);
 
 // Frees up all the memory allocated for the list
 void freeList(List *list);
+
+// Tests for the addElement and deleteElement functions
+// Returns:
+// true - tests passed
+// false - tests failed
+bool tests();
 
 // Error codes:
 //  -1: List not created

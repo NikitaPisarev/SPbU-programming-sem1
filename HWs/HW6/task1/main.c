@@ -24,6 +24,12 @@ void printActions()
 
 int main()
 {
+    if (!tests())
+    {
+        printf("Tests failed.\n");
+        return -1;
+    }
+
     List *list = listCreate();
     if (list == NULL)
     {
