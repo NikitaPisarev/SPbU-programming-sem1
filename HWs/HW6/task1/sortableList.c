@@ -147,7 +147,7 @@ bool testAdd()
     bool testFlag3 = list->head->value == 2 && list->head->next->value == 7 &&
                      list->head->next->next->value == 10;
 
-    free(list);
+    freeList(list);
     return testFlag1 && testFlag2 && testFlag3;
 }
 
@@ -192,7 +192,7 @@ bool testDelete()
     bool testFlag4 = list->head == NULL;
 
     bool testFlag5 = deleteElement(list, 30) == -3;
-    free(list);
+    freeList(list);
     return testFlag1 && testFlag2 && testFlag3 && testFlag4 && testFlag5;
 }
 
