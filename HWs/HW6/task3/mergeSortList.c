@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 #include <stdlib.h>
 
 #define maximumSize 256
@@ -13,32 +14,17 @@ typedef struct List
     struct List *next;
 } List;
 
-Error fillList(List **list, char *fileName)
+Error addElement(List **list, char *name, char *number)
 {
-    FILE *file = fopen(fileName, "r");
-    if (file == NULL || feof(file))
+    List *person = calloc(1, sizeof(List));
+    if (person == NULL)
     {
-        return -1;
+        return -2;
     }
-
-    char name[maximumSize] = {0};
-    char number[maximumSize] = {0};
-    while (!feof(file))
-    {
-        fscanf(file, "%s", name);
-        fscanf(file, "%s", number);
-        List *person = calloc(1, sizeof(List));
-        if (person == NULL)
-        {
-            fclose(file);
-            return -2;
-        }
-        strcpy(person->name, name);
-        strcpy(person->number, number);
-        person->next = (*list);
-        (*list) = person;
-    }
-    fclose(file);
+    strcpy(person->name, name);
+    strcpy(person->number, number);
+    person->next = *list;
+    *list = person;
     return 0;
 }
 
@@ -173,4 +159,66 @@ void freeList(List **list)
         free(deleteElement);
     }
     free(*list);
+}
+
+bool testAdd()
+{
+    List *list = NULL;
+    addElement(&list, "Alex", "+123");
+    bool testFlag1 = strcmp(list->name, "Alex") == 0 && strcmp(list->number, "+123") == 0;
+
+    addElement(&list, "Ben", "+321");
+    bool testFlag2 = strcmp(list->name, "Ben") == 0 &&
+                     strcmp(list->number, "+321") == 0 &&
+                     strcmp(list->next->name, "Alex") == 0 &&
+                     strcmp(list->next->number, "+123") == 0;
+
+    freeList(&list);
+    return testFlag1 && testFlag2;
+}
+
+bool testMergeSort()
+{
+    List *list = calloc(1, sizeof(List));
+    if (list == NULL)
+    {
+        return false;
+    }
+    strcpy(list->name, "Ben");
+    strcpy(list->number, "+123");
+
+    list->next = calloc(1, sizeof(List));
+    if (list->next == NULL)
+    {
+        return false;
+    }
+    strcpy(list->next->name, "Alex");
+    strcpy(list->next->number, "+321");
+
+    list->next->next = calloc(1, sizeof(List));
+    if (list->next == NULL)
+    {
+        return false;
+    }
+    strcpy(list->next->next->name, "Carl");
+    strcpy(list->next->next->number, "+231");
+
+    mergeSorting(&list, 0);
+    bool testFlag1 = strcmp(list->name, "Alex") == 0 && strcmp(list->number, "+321") == 0 &&
+                     strcmp(list->next->name, "Ben") == 0 && strcmp(list->next->number, "+123") == 0 &&
+                     strcmp(list->next->next->name, "Carl") == 0 &&
+                     strcmp(list->next->next->number, "+231") == 0;
+
+    mergeSorting(&list, -1);
+    bool testFlag2 = strcmp(list->name, "Ben") == 0 && strcmp(list->number, "+123") == 0 &&
+                     strcmp(list->next->name, "Carl") == 0 && strcmp(list->next->number, "+231") == 0 &&
+                     strcmp(list->next->next->name, "Alex") == 0 &&
+                     strcmp(list->next->next->number, "+321") == 0;
+    freeList(&list);
+    return testFlag1 && testFlag2;
+}
+
+bool tests()
+{
+    return testAdd() && testMergeSort();
 }
