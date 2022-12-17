@@ -162,6 +162,7 @@ bool testDelete()
     list->head = calloc(1, sizeof(Node));
     if (list->head == NULL)
     {
+        freeList(list);
         return false;
     }
     list->head->value = 10;
@@ -169,6 +170,7 @@ bool testDelete()
     list->head->next = calloc(1, sizeof(Node));
     if (list->head->next == NULL)
     {
+        freeList(list);
         return false;
     }
     list->head->next->value = 20;
@@ -176,6 +178,7 @@ bool testDelete()
     list->head->next->next = calloc(1, sizeof(Node));
     if (list->head->next->next == NULL)
     {
+        freeList(list);
         return false;
     }
     list->head->next->next->value = 30;

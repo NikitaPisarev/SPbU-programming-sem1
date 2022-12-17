@@ -190,6 +190,7 @@ bool testMergeSort()
     list->next = calloc(1, sizeof(List));
     if (list->next == NULL)
     {
+        freeList(&list);
         return false;
     }
     strcpy(list->next->name, "Alex");
@@ -198,6 +199,7 @@ bool testMergeSort()
     list->next->next = calloc(1, sizeof(List));
     if (list->next == NULL)
     {
+        freeList(&list);
         return false;
     }
     strcpy(list->next->next->name, "Carl");
