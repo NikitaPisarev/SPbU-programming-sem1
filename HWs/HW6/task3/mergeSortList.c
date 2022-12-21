@@ -165,16 +165,16 @@ bool testAdd()
 {
     List *list = NULL;
     addElement(&list, "Alex", "+123");
-    bool testFlag1 = strcmp(list->name, "Alex") == 0 && strcmp(list->number, "+123") == 0;
+    bool testPassed1 = strcmp(list->name, "Alex") == 0 && strcmp(list->number, "+123") == 0;
 
     addElement(&list, "Ben", "+321");
-    bool testFlag2 = strcmp(list->name, "Ben") == 0 &&
-                     strcmp(list->number, "+321") == 0 &&
-                     strcmp(list->next->name, "Alex") == 0 &&
-                     strcmp(list->next->number, "+123") == 0;
+    bool testPassed2 = strcmp(list->name, "Ben") == 0 &&
+                       strcmp(list->number, "+321") == 0 &&
+                       strcmp(list->next->name, "Alex") == 0 &&
+                       strcmp(list->next->number, "+123") == 0;
 
     freeList(&list);
-    return testFlag1 && testFlag2;
+    return testPassed1 && testPassed2;
 }
 
 bool testMergeSort()
@@ -206,18 +206,18 @@ bool testMergeSort()
     strcpy(list->next->next->number, "+231");
 
     mergeSorting(&list, 0);
-    bool testFlag1 = strcmp(list->name, "Alex") == 0 && strcmp(list->number, "+321") == 0 &&
-                     strcmp(list->next->name, "Ben") == 0 && strcmp(list->next->number, "+123") == 0 &&
-                     strcmp(list->next->next->name, "Carl") == 0 &&
-                     strcmp(list->next->next->number, "+231") == 0;
+    bool testPassed1 = strcmp(list->name, "Alex") == 0 && strcmp(list->number, "+321") == 0 &&
+                       strcmp(list->next->name, "Ben") == 0 && strcmp(list->next->number, "+123") == 0 &&
+                       strcmp(list->next->next->name, "Carl") == 0 &&
+                       strcmp(list->next->next->number, "+231") == 0;
 
     mergeSorting(&list, -1);
-    bool testFlag2 = strcmp(list->name, "Ben") == 0 && strcmp(list->number, "+123") == 0 &&
-                     strcmp(list->next->name, "Carl") == 0 && strcmp(list->next->number, "+231") == 0 &&
-                     strcmp(list->next->next->name, "Alex") == 0 &&
-                     strcmp(list->next->next->number, "+321") == 0;
+    bool testPassed2 = strcmp(list->name, "Ben") == 0 && strcmp(list->number, "+123") == 0 &&
+                       strcmp(list->next->name, "Carl") == 0 && strcmp(list->next->number, "+231") == 0 &&
+                       strcmp(list->next->next->name, "Alex") == 0 &&
+                       strcmp(list->next->next->number, "+321") == 0;
     freeList(&list);
-    return testFlag1 && testFlag2;
+    return testPassed1 && testPassed2;
 }
 
 bool tests()

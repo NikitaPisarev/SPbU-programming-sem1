@@ -138,17 +138,17 @@ bool testAdd()
     }
 
     addElement(list, 10);
-    bool testFlag1 = list->head->value == 10;
+    bool testPassed1 = list->head->value == 10;
 
     addElement(list, 2);
-    bool testFlag2 = list->head->value == 2 && list->head->next->value == 10;
+    bool testPassed2 = list->head->value == 2 && list->head->next->value == 10;
 
     addElement(list, 7);
-    bool testFlag3 = list->head->value == 2 && list->head->next->value == 7 &&
-                     list->head->next->next->value == 10;
+    bool testPassed3 = list->head->value == 2 && list->head->next->value == 7 &&
+                       list->head->next->next->value == 10;
 
     freeList(list);
-    return testFlag1 && testFlag2 && testFlag3;
+    return testPassed1 && testPassed2 && testPassed3;
 }
 
 bool testDelete()
@@ -187,16 +187,16 @@ bool testDelete()
     bool testFlag1 = list->head->value == 10 && list->head->next->value == 30;
 
     deleteElement(list, 10);
-    bool testFlag2 = list->head->value == 30;
+    bool testPassed2 = list->head->value == 30;
 
-    bool testFlag3 = deleteElement(list, 50) == -3;
+    bool testPassed3 = deleteElement(list, 50) == -3;
 
     deleteElement(list, 30);
-    bool testFlag4 = list->head == NULL;
+    bool testPassed4 = list->head == NULL;
 
-    bool testFlag5 = deleteElement(list, 30) == -3;
+    bool testPassed5 = deleteElement(list, 30) == -3;
     freeList(list);
-    return testFlag1 && testFlag2 && testFlag3 && testFlag4 && testFlag5;
+    return testFlag1 && testPassed2 && testPassed3 && testPassed4 && testPassed5;
 }
 
 bool tests()
