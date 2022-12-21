@@ -22,10 +22,10 @@ int main()
     if (!tests())
     {
         printf("Tests failed.\n");
-        return 0;
+        return -1;
     }
 
-    Tree *tree = NULL;
+    Tree *tree = createEmptyTree();
     printf("Hi, it's a dictionary, that's what I can do:\n");
     printActions();
 

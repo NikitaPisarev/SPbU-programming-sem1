@@ -31,6 +31,11 @@ void freeTree(Tree *root)
     freeNode(root);
 }
 
+Tree *createEmptyTree()
+{
+    return NULL;
+}
+
 Tree *createTree(char *key, char *value)
 {
     Tree *newTree = calloc(1, sizeof(Tree));
@@ -196,7 +201,7 @@ Tree *insert(Tree *root, char *key, char *value, bool *isClimbing, Error *errorC
     }
 
     int comparisonResult = strcmp(root->key, key);
-    int movement = 0;
+    int balanceChange = 0;
     if (comparisonResult == 0)
     {
         *isClimbing = false;
@@ -214,12 +219,12 @@ Tree *insert(Tree *root, char *key, char *value, bool *isClimbing, Error *errorC
     else if (comparisonResult > 0)
     {
         root->leftChild = insert(root->leftChild, key, value, isClimbing, errorCode);
-        movement = -1;
+        balanceChange = -1;
     }
     else
     {
         root->rightChild = insert(root->rightChild, key, value, isClimbing, errorCode);
-        movement = 1;
+        balanceChange = 1;
     }
 
     if (!*isClimbing)
@@ -227,7 +232,7 @@ Tree *insert(Tree *root, char *key, char *value, bool *isClimbing, Error *errorC
         return root;
     }
 
-    root->balance = root->balance + movement;
+    root->balance = root->balance + balanceChange;
     // -2,2 - after the balancing function, the length will remain the same, therefore further climbing is not necessary
     // 0 - have balanced the tree
     if (root->balance == 0 || root->balance == 2 || root->balance == -2)
@@ -265,7 +270,7 @@ Tree *deleteNode(Tree *root, char *key, bool *isClimbing)
     }
 
     int comparisonResult = strcmp(root->key, key);
-    int movement = 0;
+    int balanceChange = 0;
     if (comparisonResult == 0)
     {
         if (root->leftChild == NULL)
@@ -295,17 +300,17 @@ Tree *deleteNode(Tree *root, char *key, bool *isClimbing)
         leftLargest->key = temporaryKey;
 
         root->leftChild = deleteNode(root->leftChild, leftLargest->key, isClimbing); //
-        movement = 1;
+        balanceChange = 1;
     }
     else if (comparisonResult > 0)
     {
         root->leftChild = deleteNode(root->leftChild, key, isClimbing);
-        movement = 1;
+        balanceChange = 1;
     }
     else
     {
         root->rightChild = deleteNode(root->rightChild, key, isClimbing);
-        movement = -1;
+        balanceChange = -1;
     }
 
     if (!*isClimbing)
@@ -313,7 +318,7 @@ Tree *deleteNode(Tree *root, char *key, bool *isClimbing)
         return root;
     }
 
-    root->balance = root->balance + movement;
+    root->balance = root->balance + balanceChange;
     if (root->balance == 1 || root->balance == -1) // this means that the height of the subtree has not changed and the climbing stops
     {
         *isClimbing = false;
