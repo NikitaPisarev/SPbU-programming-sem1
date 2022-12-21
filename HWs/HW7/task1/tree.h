@@ -1,8 +1,15 @@
 #pragma once
 
-typedef enum { Ok, MemoryAllocationError } Error;
+typedef enum
+{
+    Ok,
+    MemoryAllocationError
+} Error;
 
 typedef struct Tree Tree;
+
+// Create empty tree
+Tree *createTree();
 
 // Adds a value by key,
 // if such a key already exists, replaces the value with a new one

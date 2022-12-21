@@ -11,6 +11,11 @@ typedef struct Tree
     struct Tree *rightChild;
 } Tree;
 
+Tree *createTree()
+{
+    return NULL;
+}
+
 Error add(Tree **root, int key, char *value)
 {
     if ((*root) == NULL)

@@ -60,7 +60,7 @@ int main()
         return 0;
     }
 
-    Tree *tree = NULL;
+    Tree *tree = createTree();
     printf("Hi, it's a dictionary, that's what I can do:\n");
     printActions();
 
