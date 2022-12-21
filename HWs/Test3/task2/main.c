@@ -8,6 +8,7 @@ void printError()
     printf("Error codes:\n");
     printf("-1: File opening error\n");
     printf("-2: Memory allocation error\n");
+    printf("-3: Incorrect file structure\n");
 }
 
 Error fillList(List **list, char *fileName)
@@ -23,16 +24,25 @@ Error fillList(List **list, char *fileName)
     char currentCharacter = 0;
     int counter = 1;
     int errorCode = 0;
+    int scanResult = 0;
     name[0] = '\n'; // Preservation of the invariant "Name starts with '\n'"
     while (!feof(file))
     {
-        while ((currentCharacter = getc(file)) != '-')
+        while ((currentCharacter = getc(file)) != '-' && !feof(file))
         {
             name[counter] = currentCharacter;
             ++counter;
         }
+        if (feof(file))
+        {
+            return -3;
+        }
         name[counter] = '\0';
-        fscanf(file, "%d", &amount);
+        scanResult = fscanf(file, "%d", &amount);
+        if (scanResult == 0)
+        {
+            return -3;
+        }
         if ((errorCode = addElement(list, name, amount)) != 0)
         {
             return errorCode;
