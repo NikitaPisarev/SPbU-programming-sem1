@@ -11,13 +11,13 @@ typedef struct Tree
     struct Tree *rightChild;
 } Tree;
 
-Error fillTree(Tree **root, FILE *fileName)
+Error fillTree(Tree **root, FILE *file)
 {
     bool isСontinue = true;
     int errorCode = 0;
     while (isСontinue)
     {
-        char currentСharacter = getc(fileName);
+        char currentСharacter = getc(file);
         switch (currentСharacter)
         {
         case ' ':
@@ -40,12 +40,12 @@ Error fillTree(Tree **root, FILE *fileName)
             }
             (*root)->operation = currentСharacter;
 
-            if (fillTree(&(*root)->leftChild, fileName) == MemoryAllocationError)
+            if (fillTree(&(*root)->leftChild, file) == MemoryAllocationError)
             {
                 return MemoryAllocationError;
             }
 
-            if (fillTree(&(*root)->rightChild, fileName) == MemoryAllocationError)
+            if (fillTree(&(*root)->rightChild, file) == MemoryAllocationError)
             {
                 return MemoryAllocationError;
             }
@@ -57,24 +57,24 @@ Error fillTree(Tree **root, FILE *fileName)
                 return MemoryAllocationError;
             }
 
-            char nextElement = getc(fileName);
-            ungetc(nextElement, fileName);
+            char nextElement = getc(file);
+            ungetc(nextElement, file);
             if (nextElement >= '0' && nextElement <= '9') // Checking if it's a negative number
             {
                 (*root)->operation = -1; // The indicator that this node is a number
-                ungetc(currentСharacter, fileName);
-                fscanf(fileName, "%d", &(*root)->number);
+                ungetc(currentСharacter, file);
+                fscanf(file, "%d", &(*root)->number);
                 isСontinue = false;
                 break;
             }
 
             (*root)->operation = currentСharacter;
-            if (fillTree(&(*root)->leftChild, fileName) == MemoryAllocationError)
+            if (fillTree(&(*root)->leftChild, file) == MemoryAllocationError)
             {
                 return MemoryAllocationError;
             }
 
-            if (fillTree(&(*root)->rightChild, fileName) == MemoryAllocationError)
+            if (fillTree(&(*root)->rightChild, file) == MemoryAllocationError)
             {
                 return MemoryAllocationError;
             }
@@ -88,8 +88,8 @@ Error fillTree(Tree **root, FILE *fileName)
             }
 
             (*root)->operation = -1; // The indicator that this node is a number
-            ungetc(currentСharacter, fileName);
-            fscanf(fileName, "%d", &(*root)->number);
+            ungetc(currentСharacter, file);
+            fscanf(file, "%d", &(*root)->number);
             isСontinue = false;
             break;
         }
