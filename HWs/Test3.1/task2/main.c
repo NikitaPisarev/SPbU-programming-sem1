@@ -114,8 +114,8 @@ int main()
             }
         }
     }
-    char extraСharacter = fgetc(file);
-    if (extraСharacter != EOF)
+    char extraCharacter = fgetc(file);
+    if (extraCharacter != EOF)
     {
         freeMatrix(matrix, amountLines);
         printf("Incorrect file structure.\n");
