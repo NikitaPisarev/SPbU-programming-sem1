@@ -12,7 +12,6 @@ int main()
     do
     {
         flagNumber = true;
-
         printf("Enter the amount of elements in the array: ");
         scan_res = scanf("%d", &arrayLength);
 
@@ -40,6 +39,5 @@ int main()
     }
 
     printf("Number of zero elements: %d\n", counterZero);
-
     return 0;
 }

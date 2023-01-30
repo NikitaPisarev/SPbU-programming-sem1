@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 
+
 int main()
 {
     int dividend = 0;

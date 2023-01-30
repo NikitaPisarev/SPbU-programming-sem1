@@ -2,6 +2,7 @@
 
 #define digit 10
 
+
 int main()
 {
     int countSums[28] = { 0 };
