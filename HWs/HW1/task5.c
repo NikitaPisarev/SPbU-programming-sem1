@@ -8,7 +8,7 @@ const char* checkBalanced(char string[])
 
     if (string[0] == '\n')
     {
-        return "This is not a sequence.";
+        return "This is an empty string.";
     }
 
     for (int i = 0; i < lengthString; ++i)
@@ -28,24 +28,17 @@ const char* checkBalanced(char string[])
         }
     }
 
-    if (counterBalanceLine == 0)
-    {
-        return "Good sequence!";
-    }
-    else
-    {
-        return "Bad sequence!";
-    }
+    return (counterBalanceLine == 0) ? "Good sequence!" : "Bad sequence!";
 }
 
-void task5(void)
+int main()
 {
     char stringBracket[lengthString] = { '\0' };
 
-    printf("\nEnter bracket sequence (not more than %d): \n", lengthString);
-
-    getchar();
+    printf("Enter bracket sequence (not more than %d):\n", lengthString);
     fgets(stringBracket, lengthString, stdin);
 
-    printf("%s\n\n", checkBalanced(stringBracket));
+    printf("%s", checkBalanced(stringBracket));
+
+    return 0;
 }

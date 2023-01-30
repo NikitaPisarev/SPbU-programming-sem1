@@ -2,7 +2,8 @@
 
 #define digit 10
 
-void task4(void)
+
+int main()
 {
     int countSums[28] = { 0 };
     int countLuckyTickets = 0;
@@ -23,5 +24,7 @@ void task4(void)
         countLuckyTickets += countSums[i] * countSums[i];
     }
 
-    printf("\nAmount of lucky tickets: %d\n\n", countLuckyTickets);
+    printf("Amount of lucky tickets: %d\n", countLuckyTickets);
+
+    return 0;
 }

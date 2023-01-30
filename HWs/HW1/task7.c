@@ -3,7 +3,7 @@
 
 #define arraySize 9999
 
-void task7(void)
+int main()
 {
     int upperPrimeNumber = 0;
     bool primers[arraySize] = { false };
@@ -15,18 +15,17 @@ void task7(void)
     {
         flagNumber = true;
 
-        printf("\nEnter the number up to which you want to see prime numbers: ");
-        scan_res = scanf_s("%d", &upperPrimeNumber);
+        printf("Enter the number up to which you want to see prime numbers: ");
+        scan_res = scanf("%d", &upperPrimeNumber);
 
-        if (!scan_res || upperPrimeNumber <= 2 || upperPrimeNumber >= 10000)
+        if (!scan_res || upperPrimeNumber <= 1 || upperPrimeNumber >= 10000)
         {
-            printf("Incorrect input (number must be greater than 2 and no more than %d). Try again! ", arraySize);
-            scanf_s("%*[^\n]");
+            printf("Invalid input (the number must be at least 2 and no more than %d). Try again!\n", arraySize);
+            scanf("%*[^\n]");
             flagNumber = false;
         }
     } while (!scan_res || !flagNumber);
 
-    //Решето Эратосфена
     for (int i = 2; i * i <= upperPrimeNumber; ++i)
     {
         if (!primers[i])
@@ -38,7 +37,7 @@ void task7(void)
         }
     }
 
-    printf("Prime numbers: ");
+    printf("Prime number(s): ");
 
     for (int i = 2; i <= upperPrimeNumber; ++i)
     {
@@ -47,5 +46,6 @@ void task7(void)
             printf("%d ", i);
         }
     }
-    printf("\n\n");
+
+    return 0;
 }
