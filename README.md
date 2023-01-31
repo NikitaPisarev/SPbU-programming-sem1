@@ -1,1 +1,2 @@
-SPbU Programming Homework 1 semester
+# SPbU-C-course
+Repository for submitting assignments for the C programming course at SPbU.
