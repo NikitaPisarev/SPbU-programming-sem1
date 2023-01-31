@@ -4,39 +4,39 @@
 
 #define lengthString 100
 
-void task6(void)
+int main()
 {
     int counterEntry = 0;
     char string[lengthString] = { '\0' };
     char subString[lengthString] = { '\0' };
     
-    printf("\nEnter a string(S1) and substring(S2) separated by a space, with 1 <= S1 <= S2 <= %d:\n", lengthString);
+    printf("Enter a string(S1) and substring(S2) separated by a space, with 1 <= S1 <= S2 <= %d:\n", lengthString);
 
-    scanf_s("%s", &string, lengthString);
-    scanf_s("%s", &subString, lengthString);
+    scanf("%s", string);
+    scanf("%s", subString);
     
-    const int lengthSubStr = strlen(subString);
-    const int lengthStr = strlen(string) - lengthSubStr + 1;
-    bool flagStr = true;
+    const int lengthSubString = strlen(subString);
+    const int border = strlen(string) - lengthSubString + 1;
+    bool isEntry = true;
     
-    for (int i = 0; i < lengthStr; ++i)
+    for (int i = 0; i < border; ++i)
     {
-        for (int j = 0; j < lengthSubStr; ++j)
+        for (int j = 0; j < lengthSubString; ++j)
         {
             if (subString[j] != string[i + j])
             {
-                flagStr = false;
+                isEntry = false;
                 break;
             }
         }
 
-        if (flagStr)
+        if (isEntry)
         {
             ++counterEntry;
         }
-        
-        flagStr = true;
+        isEntry = true;
     }
 
-    printf("Amount of occurrence of \"%s\" in \"%s\": %d\n\n", subString, string, counterEntry);
+    printf("Amount of occurrence of \"%s\" in \"%s\": %d\n", subString, string, counterEntry);
+    return 0;
 }

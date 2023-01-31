@@ -5,7 +5,7 @@
 
 void reverse(int array[], int length)
 {
-    for (int i = 0; i < (length / 2); ++i)
+    for (int i = 0; i < length / 2; ++i)
     {
         int clipboard = 0;
 
@@ -13,61 +13,60 @@ void reverse(int array[], int length)
         array[i] = array[length - (i + 1)];
         array[length - (i + 1)] = clipboard;
     }
-
 }
-void task3(void)
+
+void printArray(int array[], int length, int key)
+{
+    printf("[ ");
+    for (int k = 0; k < length; ++k)
+    {
+        printf("%d ", array[k]);
+        if (k == key - 1)
+        {
+            printf("| ");
+        }
+    }
+    printf("]\n");
+}
+
+int main()
 {
     int lengthN = 0;
     int lengthM = 0;
-    int arrayInverse[arraySize] = { 0 };
-    int scanf_res = 0;
+    int array[arraySize] = { 0 };
+    int scanRes = 0;
     bool flagInput = true;
 
     do
     {
         flagInput = true;
 
-        printf("\nEnter length \"N\" then length \"M\": ");
-        scanf_res = scanf_s("%d%d", &lengthN, &lengthM);
+        printf("Enter length \"N\" then length \"M\": ");
+        scanRes = scanf("%d%d", &lengthN, &lengthM);
 
-        if (!scanf_res || lengthM <= 0 || lengthN <= 0)
+        if (!scanRes || lengthM <= 0 || lengthN <= 0 || lengthN + lengthM > arraySize)
         {
-            printf("Invalid values (length N and length M must be positive). Try again!");
-            scanf_s("%*[^\n]");
+            printf("Invalid values (length N and length M must be positive and in total no more than %d). Try again!\n", arraySize);
+            scanf("%*[^\n]");
             flagInput = false;
         }
-    } while (!scanf_res || !flagInput);
+    } while (!flagInput);
 
     printf("Enter an array, exactly %d element(s):\n", lengthM + lengthN);
-    for (int i = 0; i < (lengthM + lengthN); ++i)
+    for (int i = 0; i < lengthM + lengthN; ++i)
     {
-        scanf_s("%d", &arrayInverse[i]);
+        scanf("%d", &array[i]);
     }
-   
 
-    printf("\nThe array was like this:\n[ ");
-    for (int k = 0; k < (lengthN + lengthM); ++k)
-    {
-        printf("%d ", arrayInverse[k]);
-        if (k == (lengthM - 1))
-        {
-            printf("| ");
-        }
-    }
-    printf("]\n");
+    printf("\nThe array was like this:\n");
+    printArray(array, lengthM + lengthN, lengthM);
 
-    reverse(arrayInverse, lengthM); //Переворачиваем первую часть
-    reverse(arrayInverse, lengthM + lengthN); //Переворачиваем полностью
-    reverse(arrayInverse, lengthN); //Переворачиваем бывшую вторую часть(ныне первую)
-  
-    printf("\nThe array become like this:\n[ ");
-    for (int k = 0; k < (lengthN + lengthM); ++k)
-    {
-        printf("%d ", arrayInverse[k]);
-        if (k == (lengthN - 1))
-        {
-            printf("| ");
-        }
-    }
-    printf("]\n\n");
+    reverse(array, lengthM);
+    reverse(array, lengthM + lengthN);
+    reverse(array, lengthN);
+
+    printf("\nThe array become like this:\n");
+    printArray(array, lengthM + lengthN, lengthN);
+
+    return 0;
 }
