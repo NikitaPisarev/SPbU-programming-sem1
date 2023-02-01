@@ -4,12 +4,10 @@
 double power(int number, int degree)
 {
     int result = 1;
-
     for (int i = 1; i <= abs(degree); ++i)
     {
         result = result * number;
     }
-
     return (degree > 0) ? result : 1.0 / result;
 }
 
