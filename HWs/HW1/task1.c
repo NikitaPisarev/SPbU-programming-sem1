@@ -18,12 +18,8 @@ int main()
             scanf("%*[^\n]");
         }
     } while (!scan_res);
-
-
     numberSquar = number * number;
     result = numberSquar * (numberSquar + number) + numberSquar + number + 1.0;
-
     printf("Result for X^4 + X^3 + X^2 + X + 1 = %f\n", result);
-
     return 0;
 }
